@@ -1,0 +1,116 @@
+.login-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: calc(100svh - (var(--spacing-8) * 2));
+    border-radius: var(--roundedness-lg);
+    overflow: hidden;
+    box-shadow: var(--ambient-shadow);
+}
+
+.login-gradient {
+    background: linear-gradient(90deg, var(--primary) 0%, var(--primary-container) 60%, #db7556 100%);
+}
+
+.login-form-side {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: var(--spacing-12) var(--spacing-8);
+    background: var(--surface);
+}
+
+.login-form-side h2 {
+    margin-bottom: 6px;
+}
+
+.login-form-side p {
+    margin-bottom: var(--spacing-8);
+}
+
+.login-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: var(--spacing-4);
+}
+
+.login-field label {
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--on-surface-muted);
+}
+
+.input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface-container-highest);
+    border-radius: var(--roundedness-lg) var(--roundedness-lg) 0 0;
+    border-bottom: 2px solid var(--outline-variant);
+    padding: 0 12px;
+    transition: border-color var(--easing-standard);
+}
+
+.input-wrapper:focus-within {
+    border-bottom-color: var(--primary);
+}
+
+.input-wrapper input {
+    border: none;
+    background: transparent;
+    padding: 0.8rem 0;
+    width: 100%;
+}
+
+.input-wrapper svg {
+    flex-shrink: 0;
+    opacity: 0.45;
+}
+
+.input-wrapper button {
+    border: none;
+    background: transparent;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.login-row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-bottom: var(--spacing-4);
+}
+
+.btn-forgot {
+    background: none;
+    border: none;
+    color: var(--primary);
+    font-weight: 600;
+    font-size: 0.82rem;
+    cursor: pointer;
+}
+
+.login-button {
+    width: 100%;
+    padding: 0.9rem;
+    font-size: 1rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+@media (max-width: 768px) {
+    .login-container {
+        grid-template-columns: 1fr;
+        border-radius: 0;
+        min-height: calc(100svh - 4rem);
+    }
+
+    .login-gradient {
+        display: none;
+    }
+}

@@ -1,4 +1,13 @@
 package com.saas_aldeia.backend.dto;
 
-public record ProfessorRequest() {
-}
+import java.time.LocalDate;
+
+public record ProfessorRequest(
+        String nome,
+        LocalDate dataNascimento,
+        String email,
+        String senha,
+        String rua,
+        String complemento,
+        String telefone
+) {}

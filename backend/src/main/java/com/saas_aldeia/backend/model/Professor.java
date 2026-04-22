@@ -1,44 +1,44 @@
-package com.saas_aldeia.backend.model;
+    package com.saas_aldeia.backend.model;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import java.time.LocalDate;
-import java.util.List;
+    import jakarta.persistence.*;
+    import lombok.AllArgsConstructor;
+    import lombok.Data;
+    import lombok.NoArgsConstructor;
+    import java.time.LocalDate;
+    import java.util.List;
 
-@Entity
-@Table(name = "professor")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class Professor {
+    @Entity
+    @Table(name = "professor")
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public class Professor {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        private Long id;
 
-    @Column(nullable = false, length = 45)
-    private String nome;
+        @Column(nullable = false, length = 45)
+        private String nome;
 
-    @Column(name = "data_nascimento")
-    private LocalDate dataNascimento;
+        @Column(name = "data_nascimento")
+        private LocalDate dataNascimento;
 
-    @Column(nullable = false, length = 75, unique = true)
-    private String email;
+        @Column(nullable = false, length = 75, unique = true)
+        private String email;
 
-    @Column(nullable = false, length = 255)
-    private String senha;
+        @Column(nullable = false, length = 255)
+        private String senha;
 
-    @Column(length = 45)
-    private String rua;
+        @Column(length = 45)
+        private String rua;
 
-    @Column(length = 45)
-    private String complemento;
+        @Column(length = 45)
+        private String complemento;
 
-    @Column(length = 20)
-    private String telefone;
+        @Column(length = 20)
+        private String telefone;
 
-    @ManyToMany(mappedBy = "professores")
-    private List<Turma> turmas;
-}
+        @ManyToMany(mappedBy = "professores")
+        private List<Turma> turmas;
+    }

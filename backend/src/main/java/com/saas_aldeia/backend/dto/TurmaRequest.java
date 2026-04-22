@@ -1,4 +1,10 @@
 package com.saas_aldeia.backend.dto;
 
-public record TurmaRequest() {
-}
+import java.util.List;
+
+public record TurmaRequest(
+        String nome,
+        String periodo,
+        List<Long> professoresIds,
+        List<Long> jogosIds
+) {}

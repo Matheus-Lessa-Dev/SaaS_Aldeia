@@ -235,6 +235,14 @@ select:focus {
   animation: fade-float-up 420ms ease forwards;
 }
 
+.appLoading {
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  font-weight: 600;
+  color: var(--on-surface-muted);
+}
+
 @keyframes fade-float-up {
   to {
     opacity: 1;

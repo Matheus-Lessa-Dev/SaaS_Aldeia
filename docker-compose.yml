@@ -1,0 +1,50 @@
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: db_projeto
+    restart: always
+    environment:
+      - POSTGRES_USER=usuario
+      - POSTGRES_PASSWORD=senha
+      - POSTGRES_DB=projeto_db
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U usuario -d projeto_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  backend:
+    build: ./backend
+    container_name: spring_backend
+    restart: on-failure
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/projeto_db
+      - SPRING_DATASOURCE_USERNAME=usuario
+      - SPRING_DATASOURCE_PASSWORD=senha
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./backend:/app
+      - ~/.m2:/root/.m2
+
+  frontend:
+    build: ./frontend
+    container_name: react_frontend
+    ports:
+      - "3000:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules  # <--- ESSA LINHA É A CHAVE!
+    stdin_open: true
+    tty: true
+
+volumes:
+  db_data:

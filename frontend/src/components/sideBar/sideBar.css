@@ -1,0 +1,77 @@
+.sideBar {
+    width: 220px;
+    min-height: 100vh;
+    background-color: #F5F2EE;
+    display: flex;
+    flex-direction: column;
+    padding: 24px 0;
+    flex-shrink: 0;
+}
+
+.sideBarTitle {
+    padding: 0 20px 24px;
+    border-bottom: 1px solid #E8E4DF;
+    margin-bottom: 12px;
+}
+
+.sideBarTitle h1 {
+    font-size: 15px;
+    font-weight: 600;
+    color: #7D2B2B;
+    margin: 0;
+}
+
+.sideBarTitle h6 {
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: #999;
+    margin: 4px 0 0;
+    text-transform: uppercase;
+    font-weight: 400;
+}
+
+.sideBarNavlinks {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+}
+
+.sideBarNavlink {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    color: #444;
+    font-size: 13.5px;
+    cursor: pointer;
+    text-align: left;
+    text-decoration: none;
+    transition: background 0.15s;
+}
+
+.sideBarNavlinkIcon {
+    flex-shrink: 0;
+}
+
+.sideBarNavlink:focus-visible {
+    outline: 2px solid #7D2B2B;
+    outline-offset: 1px;
+}
+
+.sideBarNavlink:hover {
+    background-color: #EDE8E2;
+    color: #7D2B2B;
+}
+
+.sideBarNavlink.active {
+    background-color: #EDE8E2;
+    color: #7D2B2B;
+    border-right: 3px solid #7D2B2B;
+    padding-left: 9px;
+}

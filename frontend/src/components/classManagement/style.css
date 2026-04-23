@@ -1,0 +1,96 @@
+.classManagementLayout {
+  display: flex;
+  height: 100vh;
+  border-radius: 1em;
+  background-color: #f5f2ee;
+  overflow: hidden;
+  justify-content: space-between;
+}
+
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.topBar {
+  display: flex;
+  gap: 1em;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1em;
+  background-color: white;
+  border-radius: 1em;
+  margin-left: 1em;
+  margin-right: 1em;
+  margin-top: 1em;
+  align-self: stretch;
+}
+
+.adicionarTurmaBtn {
+  display: flex;
+  align-items: center;
+  background-color: #4caf50;
+  color: white;
+  padding: 0.5em 1em;
+  border: none;
+  border-radius: 9999px;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+  font-weight: 500;
+  align-self: stretch;
+  white-space: nowrap;
+}
+
+.searchClassContainer {
+  display: flex;
+  align-items: center;
+  align-self: stretch;
+  padding: 0.5em 1em;
+  border-radius: 9999px;
+  background-color: #e0e0e0;
+  width: 50%;
+}
+
+.searchClassInput {
+  border: 0;
+}
+
+.classesListContainer {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 1em;
+  padding: 1em;
+  margin-left: 1em;
+  margin-right: 1em;
+}
+
+.classesListTitle {
+  margin-bottom: 1em;
+}
+
+.classesList {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.classCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  padding: 1em;
+  background-color: white;
+  border-radius: 1em;
+  text-decoration: none;
+}
+
+.classCardTitle {
+  font-size: large;
+  font-weight: 500;
+}
+
+.classCardDescription {
+}

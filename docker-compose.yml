@@ -2,48 +2,43 @@ services:
   db:
     image: postgres:15-alpine
     container_name: db_projeto
-    command: postgres -c password_encryption=md5
-    restart: always
+    restart: unless-stopped
     environment:
-      - POSTGRES_USER=Admin
-      - POSTGRES_PASSWORD=Admin@123
-      - POSTGRES_DB=projeto_db
+      POSTGRES_USER: Admin
+      POSTGRES_PASSWORD: admin@123
+      POSTGRES_DB: projeto_db
+      POSTGRES_INITDB_ARGS: "--auth-host=md5 --auth-local=md5"
     ports:
       - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U usuario -d projeto_db"]
+      test: [ "CMD-SHELL", "pg_isready -U Admin -d projeto_db" ]
       interval: 5s
       timeout: 5s
       retries: 5
-    volumes:
-      - db_data:/var/lib/postgresql/data
 
   backend:
     build: ./backend
     container_name: spring_backend
-    restart: on-failure
+    restart: unless-stopped
     depends_on:
       db:
         condition: service_healthy
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/projeto_db
-      - SPRING_DATASOURCE_USERNAME=usuario
-      - SPRING_DATASOURCE_PASSWORD=senha
-      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/projeto_db
+      SPRING_DATASOURCE_USERNAME: Admin
+      SPRING_DATASOURCE_PASSWORD: admin@123
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
     ports:
       - "8080:8080"
-    volumes:
-      - ./backend:/app
-      - ~/.m2:/root/.m2
 
   frontend:
     build: ./frontend
     container_name: react_frontend
+    restart: unless-stopped
     ports:
       - "3000:5173"
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules  # <--- ESSA LINHA É A CHAVE!
     stdin_open: true
     tty: true
 

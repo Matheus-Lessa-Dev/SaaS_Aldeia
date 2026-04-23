@@ -1,7 +1,7 @@
 package com.saas_aldeia.backend.repository;
 
 
-import com.saas_aldeia.backend.model.Aluno; // importa sua Model
+import com.saas_aldeia.backend.model.Aluno;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

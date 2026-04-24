@@ -1,12 +1,17 @@
 import { Search } from "lucide-react";
 import Sidebar1 from "../sideBar/SideBar1";
 import "./style.css";
+import ClassCard from "./classCard";
+import genericMainList from "../genericMainList";
 
 export default function ClassManagement() {
   const classes = [
     { name: "Turma 1", students: 20, href: "/classes/turma-1" },
     { name: "Turma 2", students: 15, href: "/classes/turma-2" },
     { name: "Turma 3", students: 30, href: "/classes/turma-3" },
+    { name: "Turma 4", students: 25, href: "/classes/turma-4" },
+    { name: "Turma 5", students: 35, href: "/classes/turma-5" },
+    { name: "Turma 6", students: 40, href: "/classes/turma-6" },
   ];
   const classesElements = classes.map((classInfo) => (
     <ClassCard
@@ -32,20 +37,8 @@ export default function ClassManagement() {
             ></input>
           </div>
         </div>
-        <div className="classesListContainer">
-          <h3 className="classesListTitle">Turmas</h3>
-          <div className="classesList">{classesElements}</div>
-        </div>
+        {genericMainList(classesElements)}
       </main>
     </div>
-  );
-}
-
-function ClassCard(props: { name: string; students: number; href: string }) {
-  return (
-    <a href={props.href} className="classCard">
-      <h4 className="classCardTitle">{props.name}</h4>
-      <p className="classCardDescription">{props.students} alunos</p>
-    </a>
   );
 }

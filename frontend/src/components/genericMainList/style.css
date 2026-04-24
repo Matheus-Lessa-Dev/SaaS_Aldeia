@@ -1,0 +1,44 @@
+.classesListTitle {
+  margin-bottom: 1em;
+  margin-top: 1em;
+}
+
+.classesList {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.classCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  padding: 1em;
+  background-color: white;
+  border-radius: 1em;
+  text-decoration: none;
+}
+
+.classCardTitle {
+  font-size: large;
+  font-weight: 500;
+}
+
+.classCardDescription {
+}
+
+.classesListControls {
+  display: flex;
+  gap: 1em;
+  justify-content: right;
+}
+
+.classesListContainer {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 1em;
+  padding: 1em;
+  margin-left: 1em;
+  margin-right: 1em;
+}

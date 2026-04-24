@@ -3,6 +3,7 @@ import Sidebar1 from "../sideBar/SideBar1";
 import "./style.css";
 import ClassCard from "./classCard";
 import GenericMainList from "../genericMainList";
+import { useState } from "react";
 
 export default function ClassManagement() {
   const classes = [
@@ -13,14 +14,18 @@ export default function ClassManagement() {
     { name: "Turma 5", students: 35, href: "/classes/turma-5" },
     { name: "Turma 6", students: 40, href: "/classes/turma-6" },
   ];
-  const classesElements = classes.map((classInfo) => (
-    <ClassCard
-      key={classInfo.name}
-      name={classInfo.name}
-      students={classInfo.students}
-      href={classInfo.href}
-    />
-  ));
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const classesElements = classes
+    .filter((class_) => class_.name.includes(searchTerm))
+    .map((classInfo) => (
+      <ClassCard
+        key={classInfo.name}
+        name={classInfo.name}
+        students={classInfo.students}
+        href={classInfo.href}
+      />
+    ));
   return (
     <div className="classManagementLayout">
       <Sidebar1 />
@@ -34,6 +39,7 @@ export default function ClassManagement() {
             <input
               className="searchClassInput"
               placeholder="Pesquisar turma"
+              onChange={(e) => setSearchTerm(e.target.value)}
             ></input>
           </div>
         </div>

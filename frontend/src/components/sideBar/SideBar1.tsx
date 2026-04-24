@@ -5,7 +5,7 @@ import './sideBar.css'
 
 const navItems = [
     { label: 'Dashboard', to: '/admin/dashboard', icon: LayoutDashboard },
-    { label: 'Turmas', icon: BookOpenCheck },
+    { label: 'Turmas', to: '/classes', icon: BookOpenCheck },
     { label: 'Professores', icon: GraduationCap },
     { label: 'Alunos', icon: Users },
     { label: 'Jogos', icon: Gamepad2 },
@@ -19,6 +19,7 @@ type NavItem = {
 
 const typedNavItems: NavItem[] = navItems
 
+// renomear essa porra
 function Sidebar1() {
     return (
         <aside className="sideBar" aria-label="Navegacao principal">

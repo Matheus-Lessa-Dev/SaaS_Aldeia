@@ -2,7 +2,7 @@ import { Search } from "lucide-react";
 import Sidebar1 from "../sideBar/SideBar1";
 import "./style.css";
 import ClassCard from "./classCard";
-import genericMainList from "../genericMainList";
+import GenericMainList from "../genericMainList";
 
 export default function ClassManagement() {
   const classes = [
@@ -37,7 +37,9 @@ export default function ClassManagement() {
             ></input>
           </div>
         </div>
-        {genericMainList(classesElements)}
+        <GenericMainList props={{ title: "Turmas" }}>
+          {classesElements}
+        </GenericMainList>
       </main>
     </div>
   );

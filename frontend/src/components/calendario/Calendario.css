@@ -1,0 +1,158 @@
+.rdp-root {
+    --rdp-accent-color: var(--primary);
+    --rdp-accent-background-color: var(--secondary-container);
+
+    font-family: var(--font-body);
+    background: var(--surface-container-low);
+    border: 1px solid var(--ghost-border);
+    border-radius: var(--roundedness-lg);
+    padding: 1.25rem 1.4rem;
+    box-shadow: var(--ambient-shadow);
+    display: inline-block;
+}
+
+/* Header: navegação de mês */
+.rdp-months {
+    gap: 0;
+}
+
+.rdp-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.rdp-button_previous,
+.rdp-button_next {
+    background: transparent;
+    border: 1px solid var(--outline-variant);
+    border-radius: 0.6rem;
+    color: var(--on-surface-muted);
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color var(--easing-standard), color var(--easing-standard);
+    cursor: pointer;
+    padding: 0;
+}
+
+.rdp-button_previous:hover,
+.rdp-button_next:hover {
+    background: var(--surface-container);
+    color: var(--primary);
+    border-color: var(--outline-variant);
+}
+
+.rdp-month_caption {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+}
+
+.rdp-caption_label {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--on-surface);
+    letter-spacing: -0.01em;
+    text-transform: capitalize;
+}
+
+/* Cabeçalho dos dias da semana */
+.rdp-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    margin-bottom: 0.4rem;
+}
+
+.rdp-weekday {
+    text-align: center;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--on-surface-muted);
+    padding: 0.3rem 0;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+/* Grid de dias */
+.rdp-weeks {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.rdp-week {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+}
+
+.rdp-day {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.rdp-day_button {
+    width: 2.2rem;
+    height: 2.2rem;
+    border-radius: 50%;
+    border: none;
+    background: transparent;
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    color: var(--on-surface);
+    cursor: pointer;
+    transition: background-color var(--easing-standard), color var(--easing-standard), transform var(--easing-standard);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.rdp-day_button:hover {
+    background: var(--surface-container-highest);
+    color: var(--primary);
+    transform: scale(1.08);
+}
+
+/* Dia de hoje */
+.rdp-today .rdp-day_button {
+    font-weight: 700;
+    color: var(--primary);
+    border: 1.5px solid var(--outline-variant);
+}
+
+/* Dia selecionado */
+.rdp-selected .rdp-day_button {
+    background: var(--primary);
+    color: var(--on-primary);
+    font-weight: 600;
+}
+
+.rdp-selected .rdp-day_button:hover {
+    background: var(--primary-container);
+    color: var(--on-primary);
+    transform: scale(1.08);
+}
+
+/* Dias fora do mês */
+.rdp-outside .rdp-day_button {
+    color: var(--on-surface-muted);
+    opacity: 0.4;
+}
+
+/* Dias desabilitados */
+.rdp-disabled .rdp-day_button {
+    opacity: 0.25;
+    cursor: not-allowed;
+}
+
+.rdp-disabled .rdp-day_button:hover {
+    background: transparent;
+    transform: none;
+}

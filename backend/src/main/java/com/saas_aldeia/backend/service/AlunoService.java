@@ -13,4 +13,5 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AlunoService {
 
+    private final AlunoRepository alunoRepository;
 }

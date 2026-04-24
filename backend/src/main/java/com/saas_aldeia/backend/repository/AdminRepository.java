@@ -1,18 +1,15 @@
 package com.saas_aldeia.backend.repository;
 
-import com.saas_aldeia.backend.model.Aluno;
+import com.saas_aldeia.backend.model.Admin;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface AlunoRepository extends JpaRepository<Aluno, Long> {
+public interface AdminRepository extends JpaRepository<Admin, Long> {
 
-    Optional<Aluno> findByEmail(String email);
+    Optional<Admin> findByEmail(String email);
 
     boolean existsByEmail(String email);
-
-    List<Aluno> findByTurmaId(Long turmaId);
 }

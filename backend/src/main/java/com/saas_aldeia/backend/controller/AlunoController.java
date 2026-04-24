@@ -14,6 +14,4 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AlunoController {
 
-    private final AlunoService alunoService;
-
 }

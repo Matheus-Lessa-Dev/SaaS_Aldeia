@@ -3,6 +3,7 @@ import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom'
 
 const Login = lazy(() => import('../pages/Login'))
 const AdminDashboard = lazy(() => import('../pages/Admin/Dashboard'))
+const ClassManagement = lazy(() => import('../components/classManagement'))
 
 const router = createBrowserRouter([
     {
@@ -17,6 +18,10 @@ const router = createBrowserRouter([
         path: '/admin/dashboard',
         element: <AdminDashboard />,
     },
+    {
+        path:"/classes",
+        element: <ClassManagement />,
+    }
 ])
 
 function AppRoutes() {

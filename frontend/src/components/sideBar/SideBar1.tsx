@@ -6,7 +6,7 @@ import './sideBar.css'
 const navItems = [
     { label: 'Dashboard', to: '/dashboard', icon: LayoutDashboard },
     { label: 'Turmas', to: '/turmas', icon: BookOpenCheck },
-    { label: 'Professores', icon: GraduationCap },
+    { label: 'Professores', to: '/professores', icon: GraduationCap },
     { label: 'Alunos', to: '/alunos', icon: Users },
     { label: 'Jogos', icon: Gamepad2 },
 ]

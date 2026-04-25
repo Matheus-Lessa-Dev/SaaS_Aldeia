@@ -5,6 +5,7 @@ const Login = lazy(() => import('../pages/Login'))
 const AdminDashboard = lazy(() => import('../components/dashboard/Dashboard'))
 const ClassManagement = lazy(() => import('../components/classManagement'))
 const StudentManagement = lazy(() => import('../components/studentManagement'))
+const TeacherManagement = lazy(() => import('../components/teacherManagement'))
 
 const router = createBrowserRouter([
     {
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
     {
         path:"/alunos",
         element: <StudentManagement />,
+    },
+    {
+        path:"/professores",
+        element: <TeacherManagement />,
     }
 ])
 

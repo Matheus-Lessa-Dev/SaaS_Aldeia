@@ -1,4 +1,4 @@
-export default function StudentCard(props: {
+export default function ClassCard(props: {
   name: string;
   href: string;
 }) {

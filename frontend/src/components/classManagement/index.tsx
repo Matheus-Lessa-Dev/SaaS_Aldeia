@@ -54,14 +54,14 @@ export default function ClassManagement() {
               <Plus size={18} aria-hidden="true" />
             </button>
             <div className="searchClassContainer">
-            <Search size={16} className="searchClassIcon" aria-hidden="true" />
-            <input
-              className="searchClassInput"
-              placeholder="Pesquisar turma"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
+              <Search size={16} className="searchClassIcon" aria-hidden="true" />
+              <input
+                className="searchClassInput"
+                placeholder="Pesquisar turma"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
           </div>
           <GenericMainList props={{ title: "Turmas" }}>
             {classesElements}

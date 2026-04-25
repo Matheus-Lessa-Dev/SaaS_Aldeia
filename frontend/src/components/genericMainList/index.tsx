@@ -26,10 +26,8 @@ export default function GenericMainList({
         <button onClick={() => setPage(page - 1)} disabled={page === 1}>
           <ArrowLeft size={16} aria-hidden="true" />
         </button>
-        <button
-          onClick={() => setPage(page + 1)}
-          disabled={page * MAX_ITEMS_SHOWN >= children.length}
-        >
+        <button onClick={() => setPage(page + 1)}
+          disabled={page * MAX_ITEMS_SHOWN >= children.length}>
           <ArrowRight size={16} aria-hidden="true" />
         </button>
       </div>

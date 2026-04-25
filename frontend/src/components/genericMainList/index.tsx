@@ -7,15 +7,23 @@ export default function GenericMainList({
   props,
 }: {
   children: ReactNode[];
-  props: { title: string };
+  props: { title: string; itemsPerPage?: number };
 }) {
-  const MAX_ITEMS_SHOWN = 5;
+  const DEFAULT_ITEMS_PER_PAGE = 5;
+  const MIN_ITEMS_PER_PAGE = 1;
+  const MAX_ITEMS_PER_PAGE = 8;
+
+  const rawItemsPerPage = props.itemsPerPage ?? DEFAULT_ITEMS_PER_PAGE;
+  const itemsPerPage = Math.min(
+    MAX_ITEMS_PER_PAGE,
+    Math.max(MIN_ITEMS_PER_PAGE, Math.floor(rawItemsPerPage)),
+  );
 
   const [page, setPage] = useState(1);
 
   const itemsShown = children?.slice(
-    (page - 1) * MAX_ITEMS_SHOWN,
-    page * MAX_ITEMS_SHOWN,
+    (page - 1) * itemsPerPage,
+    page * itemsPerPage,
   );
 
   return (
@@ -27,7 +35,7 @@ export default function GenericMainList({
           <ArrowLeft size={16} aria-hidden="true" />
         </button>
         <button onClick={() => setPage(page + 1)}
-          disabled={page * MAX_ITEMS_SHOWN >= children.length}>
+          disabled={page * itemsPerPage >= children.length}>
           <ArrowRight size={16} aria-hidden="true" />
         </button>
       </div>

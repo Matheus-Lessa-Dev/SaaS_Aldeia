@@ -1,0 +1,59 @@
+.managementActionBar {
+    display: flex;
+    gap: 1em;
+    flex: 1;
+    justify-content: space-between;
+    padding: var(--spacing-4) var(--spacing-4);
+    margin-top: var(--spacing-4);
+    background-color: var(--surface);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(108, 71, 31, 0.06);
+}
+
+.managementAddButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--primary);
+    color: var(--on-primary);
+    padding: 8px 16px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.managementAddButton:hover {
+    filter: brightness(0.96);
+}
+
+.managementSearchContainer {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.65rem 1rem;
+    border-radius: 9999px;
+    background: var(--surface);
+    border: 1px solid var(--outline-variant);
+    width: min(430px, 100%);
+    margin-left: auto;
+}
+
+.managementSearchIcon {
+    color: var(--on-surface-muted);
+    flex-shrink: 0;
+}
+
+.managementSearchInput {
+    width: 100%;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+}
+
+.managementSearchInput:focus {
+    border: 0;
+    outline: none;
+}

@@ -4,6 +4,7 @@ import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom'
 const Login = lazy(() => import('../pages/Login'))
 const AdminDashboard = lazy(() => import('../components/dashboard/Dashboard'))
 const ClassManagement = lazy(() => import('../components/classManagement'))
+const StudentManagement = lazy(() => import('../components/studentManagement'))
 
 const router = createBrowserRouter([
     {
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
     {
         path:"/turmas",
         element: <ClassManagement />,
+    },
+    {
+        path:"/alunos",
+        element: <StudentManagement />,
     }
 ])
 

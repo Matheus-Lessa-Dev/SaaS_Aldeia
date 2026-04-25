@@ -1,0 +1,136 @@
+.studentManagementPage #root {
+  width: 100%;
+  max-width: none;
+  min-height: 100svh;
+  margin: 0;
+  padding: 0;
+  gap: 0;
+}
+
+.studentManagementLayout {
+  display: flex;
+  min-height: 100svh;
+  background: var(--surface-container-low);
+}
+
+.studentManagementMain {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+  background: var(--surface-container-low);
+}
+
+.studentManagementHeader {
+  width: 100%;
+	padding: clamp(1rem, 2vw, var(--spacing-4));
+  display: flex;
+  justify-content: flex-end;
+}
+
+.studentManagementHeader button {
+	padding: 8px 16px;
+	background-color: #7D2B2B;
+	color: #fff;
+	border: none;
+	border-radius: 20px;
+	cursor: pointer;
+}
+
+.adicionarTurmaBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--primary);
+  color: var(--on-primary);
+  padding: 8px 16px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.adicionarTurmaBtn:hover {
+  filter: brightness(0.96);
+}
+
+.searchStudentContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1rem;
+  border-radius: 9999px;
+  background: var(--surface);
+  border: 1px solid var(--outline-variant);
+  width: min(430px, 100%);
+  margin-left: auto;
+}
+
+.searchStudentIcon {
+  color: var(--on-surface-muted);
+  flex-shrink: 0;
+}
+
+.searchStudentInput {
+  width: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.studentManagementFunctions {
+  display: flex;
+  gap: 1em;
+  flex: 1;
+  justify-content: space-between;
+  padding: var(--spacing-4) var(--spacing-4);
+  margin-top: var(--spacing-4);
+  background-color: var(--surface);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(108, 71, 31, 0.06);
+}
+
+.studentManagementFunctions button {
+  background: var(--secondary);
+  color: var(--on-primary);
+  padding: 8px 16px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.searchStudentInput:focus {
+  border: 0;
+}
+
+.studentManagementContent {
+  flex: 1;
+  padding: 0 clamp(1.2rem, 2vw, var(--spacing-8)) var(--spacing-4);
+}
+
+.studentManagementContent .classesListContainer {
+  margin: 0;
+  padding: 0;
+}
+
+@media (max-width: 900px) {
+  .studentManagementLayout {
+    flex-direction: column;
+  }
+
+  .studentManagementHeader {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .adicionarTurmaBtn {
+    width: 100%;
+  }
+
+  .searchStudentContainer {
+    width: 100%;
+  }
+}

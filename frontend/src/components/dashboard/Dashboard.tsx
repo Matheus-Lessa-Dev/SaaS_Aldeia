@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
 import { GraduationCap, Users, BookOpen } from 'lucide-react'
-import Sidebar from '../../../components/sideBar/SideBar1'
-import Calendario from '../../../components/calendario/Calendario'
-import './style.css'
+import Sidebar from '../sideBar/SideBar1'
+import Calendario from '../calendario/Calendario'
+import './Dashboard.css'
 
 const dashboardCards = [
     { title: 'Total de Alunos', value: '23', icon: Users },

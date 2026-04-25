@@ -10,7 +10,7 @@ function Login() {
 
     function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault()
-        navigate('/admin/dashboard')
+        navigate('/dashboard')
     }
 
     return (

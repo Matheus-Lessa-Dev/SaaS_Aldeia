@@ -2,7 +2,7 @@ import { Suspense, lazy } from 'react'
 import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom'
 
 const Login = lazy(() => import('../pages/Login'))
-const AdminDashboard = lazy(() => import('../pages/Admin/Dashboard'))
+const AdminDashboard = lazy(() => import('../components/dashboard/Dashboard'))
 const ClassManagement = lazy(() => import('../components/classManagement'))
 
 const router = createBrowserRouter([
@@ -15,11 +15,11 @@ const router = createBrowserRouter([
         element: <Login />,
     },
     {
-        path: '/admin/dashboard',
+        path: '/dashboard',
         element: <AdminDashboard />,
     },
     {
-        path:"/classes",
+        path:"/turmas",
         element: <ClassManagement />,
     }
 ])

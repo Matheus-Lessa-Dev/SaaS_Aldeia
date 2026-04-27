@@ -5,3 +5,40 @@
   width: 100%;
   background-color: #f5f2ee;
 }
+
+.topBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+}
+
+.adicionarAlunoBtn {
+  display: flex;
+  align-items: center;
+  background-color: #4caf50;
+  color: white;
+  padding: 0.5em 1em;
+  border: none;
+  border-radius: 9999px;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+  font-weight: 500;
+  align-self: stretch;
+  white-space: nowrap;
+}
+
+.searchStudentContainer {
+  display: flex;
+  align-items: center;
+  align-self: stretch;
+  padding: 0.5em 1em;
+  border-radius: 9999px;
+  background-color: #e0e0e0;
+  width: 50%;
+}
+
+.searchStudentInput {
+  border: 0;
+}

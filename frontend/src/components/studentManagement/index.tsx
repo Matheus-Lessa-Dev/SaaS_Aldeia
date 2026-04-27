@@ -1,7 +1,8 @@
-import GenericHeader from "../genericHeader";
+import { Search } from "lucide-react";
 import GenericMainList from "../genericMainList";
 import StudentCard from "./studentCard";
 import "./style.css";
+import { useState } from "react";
 
 export default function StudentManagement() {
   const students = [
@@ -19,8 +20,23 @@ export default function StudentManagement() {
     <StudentCard key={student.id} name={student.name} />
   ));
 
+  const [searchTerm, setSearchTerm] = useState("");
+
   return (
     <main className="studentsLayout">
+      <div className="topBar">
+        <a href="#" className="adicionarAlunoBtn">
+          Adicionar aluno
+        </a>
+        <div className="searchStudentContainer">
+          <Search size={16} className="searchStudentIcon" aria-hidden="true" />
+          <input
+            className="searchStudentInput"
+            placeholder="Pesquisar aluno"
+            onChange={(e) => setSearchTerm(e.target.value)}
+          ></input>
+        </div>
+      </div>
       <GenericMainList props={{ title: "Alunos" }}>
         {studentItems}
       </GenericMainList>

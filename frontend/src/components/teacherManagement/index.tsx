@@ -1,10 +1,17 @@
+import { useState } from "react";
 import { useSearch } from "../../hooks/useSearch";
 import ManagementPageShell from "../shared/ManagementPageShell";
 import TeacherCard from "./teacherCard";
 import "./style.css";
 
+interface TeacherInfo {
+    name: string;
+    href: string;
+    id?: string;
+}
+
 export default function TeacherManagement() {
-    const teachers = [
+    const initialTeachers: TeacherInfo[] = [
         { name: "João", href: "/professores/1" },
         { name: "Maria", href: "/professores/2" },
         { name: "Carlos", href: "/professores/3" },
@@ -15,13 +22,22 @@ export default function TeacherManagement() {
         { name: "ASD", href: "/professores/6" },
     ];
 
+    const [teachers, setTeachers] = useState(initialTeachers);
     const { searchTerm, setSearchTerm, filteredItems } = useSearch(teachers);
+
+    const handleDeleteTeacher = (teacherInfo: TeacherInfo) => {
+        // TODO: Implementar chamada de API para deletar o professor no backend
+        // await deleteTeacherAPI(teacherInfo.id);
+        
+        setTeachers(teachers.filter((t) => t.name !== teacherInfo.name));
+    };
 
     const teacherElements = filteredItems.map((teacherInfo) => (
         <TeacherCard
             key={teacherInfo.name}
             name={teacherInfo.name}
             href={teacherInfo.href}
+            onDelete={() => handleDeleteTeacher(teacherInfo)}
         />
     ));
 
@@ -30,7 +46,7 @@ export default function TeacherManagement() {
             pageClassName="teacherManagementPage"
             layoutClassName="managementPageLayout"
             title="Professores"
-            itemsPerPage={8}
+            itemsPerPage={6}
             addButtonLabel="Adicionar Professor"
             searchPlaceholder="Pesquisar Professor"
             searchValue={searchTerm}

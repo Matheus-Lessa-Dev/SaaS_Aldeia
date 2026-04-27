@@ -11,7 +11,7 @@ export default function GenericMainList({
 }) {
   const DEFAULT_ITEMS_PER_PAGE = 5;
   const MIN_ITEMS_PER_PAGE = 1;
-  const MAX_ITEMS_PER_PAGE = 8;
+  const MAX_ITEMS_PER_PAGE = 6;
 
   const rawItemsPerPage = props.itemsPerPage ?? DEFAULT_ITEMS_PER_PAGE;
   const itemsPerPage = Math.min(

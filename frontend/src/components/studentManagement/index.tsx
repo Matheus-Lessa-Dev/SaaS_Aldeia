@@ -26,7 +26,7 @@ export default function StudentManagement() {
   const handleDeleteStudent = (studentInfo: StudentInfo) => {
     // TODO: Implementar chamada de API para deletar o aluno no backend
     // await deleteStudentAPI(studentInfo.id);
-    
+
     setStudents(students.filter((s) => s.name !== studentInfo.name));
   };
 

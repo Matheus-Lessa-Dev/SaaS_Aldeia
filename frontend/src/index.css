@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Epilogue:wght@500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Epilogue:wght@500;600;700&display=swap");
 
 :root {
   color-scheme: light;
@@ -25,10 +25,11 @@
   --ghost-border: rgba(108, 71, 31, 0.15);
 
   /* Typography */
-  --font-display: 'Epilogue', sans-serif;
-  --font-body: 'Be Vietnam Pro', sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
-    'Courier New', monospace;
+  --font-display: "Epilogue", sans-serif;
+  --font-body: "Be Vietnam Pro", sans-serif;
+  --font-mono:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
 
   --display-lg: 3.5rem;
   --display-md: 2.25rem;
@@ -68,7 +69,7 @@ body {
 
 /* Recycled-paper grain overlay for subtle texture */
 body::before {
-  content: '';
+  content: "";
   position: fixed;
   inset: 0;
   pointer-events: none;
@@ -76,13 +77,13 @@ body::before {
   background-image:
     radial-gradient(circle at 15% 25%, #000 0.4px, transparent 0.9px),
     radial-gradient(circle at 75% 70%, #000 0.45px, transparent 1px);
-  background-size: 7px 7px, 9px 9px;
+  background-size:
+    7px 7px,
+    9px 9px;
 }
 
 #root {
-  width: min(1126px, 100%);
   margin: 0 auto;
-  padding: var(--spacing-8) clamp(1.2rem, 2vw, 2rem);
   display: flex;
   flex-direction: column;
   gap: var(--spacing-8);
@@ -134,7 +135,9 @@ button {
   border: 0;
   border-radius: var(--roundedness-lg);
   cursor: pointer;
-  transition: transform var(--easing-standard), background-color var(--easing-standard);
+  transition:
+    transform var(--easing-standard),
+    background-color var(--easing-standard);
 }
 
 .button-primary {
@@ -191,12 +194,18 @@ select:focus {
 }
 
 .hero-gradient {
-  background: linear-gradient(120deg, var(--primary) 0%, var(--primary-container) 100%);
+  background: linear-gradient(
+    120deg,
+    var(--primary) 0%,
+    var(--primary-container) 100%
+  );
   color: var(--on-primary);
 }
 
 .interactive-card {
-  transition: background-color var(--easing-standard), transform var(--easing-standard);
+  transition:
+    background-color var(--easing-standard),
+    transform var(--easing-standard);
 }
 
 .interactive-card:hover {
@@ -215,17 +224,16 @@ select:focus {
 .ritual-progress__bar {
   height: 100%;
   background-color: var(--secondary);
-  background-image:
-    linear-gradient(
-      135deg,
-      rgba(252, 249, 244, 0.2) 25%,
-      transparent 25%,
-      transparent 50%,
-      rgba(252, 249, 244, 0.2) 50%,
-      rgba(252, 249, 244, 0.2) 75%,
-      transparent 75%,
-      transparent
-    );
+  background-image: linear-gradient(
+    135deg,
+    rgba(252, 249, 244, 0.2) 25%,
+    transparent 25%,
+    transparent 50%,
+    rgba(252, 249, 244, 0.2) 50%,
+    rgba(252, 249, 244, 0.2) 75%,
+    transparent 75%,
+    transparent
+  );
   background-size: 12px 12px;
 }
 

@@ -1,45 +1,56 @@
-import { Search } from "lucide-react";
-import GenericMainList from "../genericMainList";
+import { useState } from "react";
+import { useSearch } from "../../hooks/useSearch";
+import ManagementPageShell from "../shared/ManagementPageShell";
 import StudentCard from "./studentCard";
 import "./style.css";
-import { useState } from "react";
+
+interface StudentInfo {
+  name: string;
+  href: string;
+  id?: string;
+}
 
 export default function StudentManagement() {
-  const students = [
-    { name: "John Doe", id: "12345" },
-    { name: "Jane Smith", id: "67890" },
-    { name: "Alice Johnson", id: "54321" },
-    { name: "Bob Brown", id: "98765" },
-    { name: "Charlie Davis", id: "11223" },
-    { name: "Jane Smith", id: "67890" },
-    { name: "Alice Johnson", id: "54321" },
-    { name: "Bob Brown", id: "98765" },
-    { name: "Charlie Davis", id: "11223" },
+  const initialStudents: StudentInfo[] = [
+    { name: "Fernando", href: "/alunos/1" },
+    { name: "Ana", href: "/alunos/2" },
+    { name: "Claudio", href: "/alunos/3" },
+    { name: "Pedro", href: "/alunos/4" },
+    { name: "Rebeca", href: "/alunos/5" },
+    { name: "Matheus", href: "/alunos/6" },
   ];
-  const studentItems = students.map((student) => (
-    <StudentCard key={student.id} name={student.name} />
+
+  const [students, setStudents] = useState(initialStudents);
+  const { searchTerm, setSearchTerm, filteredItems } = useSearch(students);
+
+  const handleDeleteStudent = (studentInfo: StudentInfo) => {
+    // TODO: Implementar chamada de API para deletar o aluno no backend
+    // await deleteStudentAPI(studentInfo.id);
+
+    setStudents(students.filter((s) => s.name !== studentInfo.name));
+  };
+
+  const studentElements = filteredItems.map((studentInfo) => (
+    <StudentCard
+      key={studentInfo.name}
+      name={studentInfo.name}
+      href={studentInfo.href}
+      onDelete={() => handleDeleteStudent(studentInfo)}
+    />
   ));
 
-  const [searchTerm, setSearchTerm] = useState("");
-
   return (
-    <main className="studentsLayout">
-      <div className="topBar">
-        <a href="#" className="adicionarAlunoBtn">
-          Adicionar aluno
-        </a>
-        <div className="searchStudentContainer">
-          <Search size={16} className="searchStudentIcon" aria-hidden="true" />
-          <input
-            className="searchStudentInput"
-            placeholder="Pesquisar aluno"
-            onChange={(e) => setSearchTerm(e.target.value)}
-          ></input>
-        </div>
-      </div>
-      <GenericMainList props={{ title: "Alunos" }}>
-        {studentItems}
-      </GenericMainList>
-    </main>
+    <ManagementPageShell
+      pageClassName="studentManagementPage"
+      layoutClassName="managementPageLayout"
+      title="Alunos"
+      itemsPerPage={6}
+      addButtonLabel="Adicionar Aluno"
+      searchPlaceholder="Pesquisar Aluno"
+      searchValue={searchTerm}
+      onSearchChange={setSearchTerm}
+    >
+      {studentElements}
+    </ManagementPageShell>
   );
 }

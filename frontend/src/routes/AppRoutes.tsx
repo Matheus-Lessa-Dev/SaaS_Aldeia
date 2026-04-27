@@ -4,11 +4,12 @@ import {
   RouterProvider,
   createBrowserRouter,
 } from "react-router-dom";
-import StudentsPage from "../pages/Students";
 
 const Login = lazy(() => import("../pages/Login"));
-const AdminDashboard = lazy(() => import("../pages/Admin/Dashboard"));
+const AdminDashboard = lazy(() => import("../components/dashboard/Dashboard"));
 const ClassManagement = lazy(() => import("../components/classManagement"));
+const StudentManagement = lazy(() => import("../components/studentManagement"));
+const TeacherManagement = lazy(() => import("../components/teacherManagement"));
 
 const router = createBrowserRouter([
   {
@@ -20,16 +21,20 @@ const router = createBrowserRouter([
     element: <Login />,
   },
   {
-    path: "/admin/dashboard",
+    path: "/dashboard",
     element: <AdminDashboard />,
   },
   {
-    path: "/classes",
+    path: "/turmas",
     element: <ClassManagement />,
   },
   {
-    path: "/students",
-    element: <StudentsPage />,
+    path: "/alunos",
+    element: <StudentManagement />,
+  },
+  {
+    path: "/professores",
+    element: <TeacherManagement />,
   },
 ]);
 

@@ -10,11 +10,11 @@ import {
 import "./sideBar.css";
 
 const navItems = [
-  { label: "Dashboard", to: "/admin/dashboard", icon: LayoutDashboard },
-  { label: "Turmas", to: "/classes", icon: BookOpenCheck },
-  { label: "Professores", to: "/teachers", icon: GraduationCap },
-  { label: "Alunos", to: "/students", icon: Users },
-  { label: "Jogos", to: "/games", icon: Gamepad2 },
+  { label: "Dashboard", to: "/dashboard", icon: LayoutDashboard },
+  { label: "Turmas", to: "/turmas", icon: BookOpenCheck },
+  { label: "Professores", to: "/professores", icon: GraduationCap },
+  { label: "Alunos", to: "/alunos", icon: Users },
+  { label: "Jogos", icon: Gamepad2 },
 ];
 
 type NavItem = {

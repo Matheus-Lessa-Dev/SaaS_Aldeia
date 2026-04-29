@@ -1,8 +1,8 @@
 import { useEffect, type ReactNode } from 'react';
 import { GraduationCap } from 'lucide-react';
-import Sidebar1 from '../../sideBar/SideBar1';
+import Sidebar1 from '../../solos/sideBar/SideBar1';
 import ActionBar from '../ActionBar';
-import GenericMainList from '../../genericMainList';
+import GenericMainList from '../../feats/genericMainList';
 import './style.css';
 
 interface ManagementPageShellProps {

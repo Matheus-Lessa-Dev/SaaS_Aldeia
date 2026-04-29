@@ -6,11 +6,11 @@ import {
 } from "react-router-dom";
 
 const Login = lazy(() => import("../pages/Login"));
-const AdminDashboard = lazy(() => import("../components/adminDashboard/Dashboard"));
-const ClassManagement = lazy(() => import("../components/classManagement"));
-const StudentManagement = lazy(() => import("../components/studentManagement"));
-const StudentCreatePage = lazy(() => import("../components/studentNew"));
-const TeacherManagement = lazy(() => import("../components/teacherManagement"));
+const AdminDashboard = lazy(() => import("../components/feats/adminDashboard/Dashboard"));
+const ClassManagement = lazy(() => import("../components/feats/classManagement"));
+const StudentManagement = lazy(() => import("../components/feats/studentManagement"));
+const StudentCreatePage = lazy(() => import("../components/feats/studentNew"));
+const TeacherManagement = lazy(() => import("../components/feats/teacherManagement"));
 
 const router = createBrowserRouter([
   {

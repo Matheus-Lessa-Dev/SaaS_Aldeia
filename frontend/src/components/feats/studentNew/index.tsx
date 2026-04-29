@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { GraduationCap, UserRound, Users } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
-import Sidebar1 from '../../components/sideBar/SideBar1'
-import { FormActions } from '../../components/shared/formActions'
-import { FormField } from '../../components/shared/formField'
-import { FormSection } from '../../components/shared/formSection'
-import '../../components/shared/ManagementPageShell/style.css'
+import Sidebar1 from '../../solos/sideBar/SideBar1'
+import { FormActions } from '../../shared/formActions'
+import { FormField } from '../../shared/formField'
+import { FormSection } from '../../shared/formSection'
+import '../../shared/ManagementPageShell/style.css'
 import './style.css'
 
 type StudentFormState = {

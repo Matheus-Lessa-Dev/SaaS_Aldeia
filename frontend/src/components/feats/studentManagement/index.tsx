@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSearch } from "../../hooks/useSearch";
-import ManagementPageShell from "../shared/ManagementPageShell";
+import { useSearch } from "../../../hooks/useSearch";
+import ManagementPageShell from "../../shared/ManagementPageShell";
 import StudentCard from "./studentCard";
 import "./style.css";
 

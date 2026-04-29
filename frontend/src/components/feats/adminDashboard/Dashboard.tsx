@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { GraduationCap, Users, BookOpen } from 'lucide-react'
-import Sidebar from '../sideBar/SideBar1'
-import Calendario from '../calendario/Calendario'
+import Sidebar from '../../solos/sideBar/SideBar1'
+import Calendario from '../../solos/calendario/Calendario'
 import './Dashboard.css'
 
 const dashboardCards = [

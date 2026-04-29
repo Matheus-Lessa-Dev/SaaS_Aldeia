@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { useSearch } from "../../hooks/useSearch";
-import ManagementPageShell from "../shared/ManagementPageShell";
+import { useSearch } from "../../../hooks/useSearch";
+import ManagementPageShell from "../../shared/ManagementPageShell";
 import ClassCard from "./classCard";
 import "./style.css";
 

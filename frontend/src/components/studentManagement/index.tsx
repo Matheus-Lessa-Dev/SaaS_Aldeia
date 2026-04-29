@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useSearch } from "../../hooks/useSearch";
 import ManagementPageShell from "../shared/ManagementPageShell";
 import StudentCard from "./studentCard";
@@ -11,6 +12,8 @@ interface StudentInfo {
 }
 
 export default function StudentManagement() {
+  const navigate = useNavigate();
+
   const initialStudents: StudentInfo[] = [
     { name: "Fernando", href: "/alunos/1" },
     { name: "Ana", href: "/alunos/2" },
@@ -49,6 +52,7 @@ export default function StudentManagement() {
       searchPlaceholder="Pesquisar Aluno"
       searchValue={searchTerm}
       onSearchChange={setSearchTerm}
+      onAddClick={() => navigate("/alunos/novo")}
     >
       {studentElements}
     </ManagementPageShell>

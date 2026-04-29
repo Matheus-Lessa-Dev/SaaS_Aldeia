@@ -1,0 +1,52 @@
+/* components/FormField.css */
+.form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.form-field__label {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--on-surface-muted);
+}
+
+.form-field__required {
+    color: #c0392b;
+    margin-left: 2px;
+}
+
+.form-field__input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface-container-highest);
+    border-radius: var(--roundedness-lg) var(--roundedness-lg) 0 0;
+    border-bottom: 2px solid var(--outline-variant);
+    padding: 0 12px;
+    transition: border-color var(--easing-standard);
+}
+
+.form-field__input-wrapper:focus-within {
+    border-bottom-color: var(--primary);
+}
+
+.form-field__input {
+    border: none;
+    background: transparent;
+    padding: 0.8rem 0;
+    width: 100%;
+    font: inherit;
+    color: var(--on-surface);
+    outline: none;
+}
+
+.form-field__input--error {
+    border-bottom-color: #c0392b;
+    background: var(--surface-container-highest);
+}
+
+.form-field__error-message {
+    font-size: 0.75rem;
+    color: #c0392b;
+}

@@ -14,49 +14,47 @@ function Login() {
     }
 
     return (
-        <div className="login-container">
-            <div className="login-gradient" />
+        <div className="login-page">
+            <div className="login-container">
+                <div className="login-gradient" />
 
-            <form className="login-form-side" onSubmit={handleSubmit}>
-                <h2>Bem-vindo</h2>
-                <p>Acesse sua conta para continuar sua jornada pedagógica.</p>
+                <form className="login-form-side" onSubmit={handleSubmit}>
+                    <h2>Bem-vindo</h2>
+                    <p>Acesse sua conta para continuar sua jornada pedagógica.</p>
 
-                <div className="login-field">
-                    <label htmlFor="email">E-mail</label>
-                    <div className="input-wrapper">
-                        <User size={18} aria-hidden="true" />
-                        <input id="email" type="email" placeholder="nome@exemplo.com.br" required />
+                    <div className="login-field">
+                        <label htmlFor="email">E-mail</label>
+                        <div className="input-wrapper">
+                            <User size={18} aria-hidden="true" />
+                            <input id="email" type="email" placeholder="nome@exemplo.com.br" required />
+                        </div>
                     </div>
-                </div>
 
-                <div className="login-field">
-                    <label htmlFor="password">Senha</label>
-                    <div className="input-wrapper">
-                        <Lock size={18} aria-hidden="true" />
-                        <input
-                            id="password"
-                            type={showPassword ? 'text' : 'password'}
-                            placeholder="********"
-                            required
-                        />
-                        <button
-                            type="button"
-                            aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
-                            onClick={() => setShowPassword((current) => !current)}
-                        >
-                            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                        </button>
+                    <div className="login-field">
+                        <label htmlFor="password">Senha</label>
+                        <div className="input-wrapper">
+                            <Lock size={18} aria-hidden="true" />
+                            <input
+                                id="password"
+                                type={showPassword ? 'text' : 'password'}
+                                placeholder="********"
+                                required
+                            />
+                            <button
+                                type="button"
+                                aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
+                                onClick={() => setShowPassword((current) => !current)}
+                            >
+                                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                            </button>
+                        </div>
                     </div>
-                </div>
 
-                <div className="login-row">
-                    <button className="btn-forgot">Esqueci minha senha</button>
-                </div>
-
-                <button className="button-primary login-button" type="submit">
-                    Entrar <ArrowRight size={18} aria-hidden="true" />
-                </button>
-            </form>
+                    <button className="button-primary login-button" type="submit">
+                        Entrar <ArrowRight size={18} aria-hidden="true" />
+                    </button>
+                </form>
+            </div>
         </div>
     )
 }

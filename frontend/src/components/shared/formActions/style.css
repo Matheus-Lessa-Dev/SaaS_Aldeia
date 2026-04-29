@@ -1,0 +1,61 @@
+/* components/FormActions.css */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--outline-variant);
+    margin-top: 0;
+}
+
+.form-actions__cancel {
+    padding: 0.7rem 1.25rem;
+    border-radius: var(--roundedness-lg);
+    border: none;
+    background: transparent;
+    color: var(--on-surface-muted);
+    font-size: 0.9rem;
+    font-family: inherit;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color var(--easing-standard), color var(--easing-standard);
+}
+
+.form-actions__cancel:hover {
+    background: #dc2626;
+    color: #fff;
+}
+
+.form-actions__cancel:active {
+    transform: scale(0.98);
+}
+
+.form-actions__submit {
+    padding: 0.7rem 1.25rem;
+    border-radius: var(--roundedness-lg);
+    border: none;
+    background: var(--secondary);
+    color: var(--on-primary);
+    font-size: 0.9rem;
+    font-family: inherit;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: filter var(--easing-standard);
+}
+
+.form-actions__submit:hover {
+    filter: brightness(0.92);
+}
+
+.form-actions__submit:active {
+    transform: scale(0.98);
+}
+
+.form-actions__submit:disabled,
+.form-actions__cancel:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}

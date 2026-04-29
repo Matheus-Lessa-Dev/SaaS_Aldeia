@@ -6,9 +6,10 @@ import {
 } from "react-router-dom";
 
 const Login = lazy(() => import("../pages/Login"));
-const AdminDashboard = lazy(() => import("../components/dashboard/Dashboard"));
+const AdminDashboard = lazy(() => import("../components/adminDashboard/Dashboard"));
 const ClassManagement = lazy(() => import("../components/classManagement"));
 const StudentManagement = lazy(() => import("../components/studentManagement"));
+const StudentCreatePage = lazy(() => import("../components/studentNew"));
 const TeacherManagement = lazy(() => import("../components/teacherManagement"));
 
 const router = createBrowserRouter([
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
   {
     path: "/alunos",
     element: <StudentManagement />,
+  },
+  {
+    path: "/alunos/novo",
+    element: <StudentCreatePage />,
   },
   {
     path: "/professores",

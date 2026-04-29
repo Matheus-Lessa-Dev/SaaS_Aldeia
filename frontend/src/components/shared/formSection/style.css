@@ -1,0 +1,46 @@
+/* components/FormSection.module.css */
+.form-section {
+    border: none;
+    padding: 0;
+    margin: 0 0 1.5rem 0;
+    min-width: 0;
+}
+
+.form-section__legend {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--primary);
+    margin-bottom: 1rem;
+    padding: 0 0 0rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.form-section__legend::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid var(--outline-variant);
+    transform: translateY(1px);
+}
+
+.form-section__icon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary);
+}
+
+.form-section__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+@media (max-width: 600px) {
+    .form-section__grid {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,4 +1,4 @@
-import { createContext, useState, type ReactNode } from "react";
+import { createContext, useEffect, useState, type ReactNode } from "react";
 
 export enum Role {
   Student = "student",
@@ -29,10 +29,28 @@ export const AuthContext = createContext<AuthContextType | undefined>(
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
 
-  const login = (u: User) => setUser(u);
-  const logout = () => setUser(null);
-  const setRole = (role: Role) =>
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
+
+  const login = (u: User) => {
+    setUser(u);
+    localStorage.setItem("user", JSON.stringify(u));
+  };
+  const logout = () => {
+    setUser(null);
+    localStorage.removeItem("user");
+  };
+  const setRole = (role: Role) => {
     setUser((prev) => (prev ? { ...prev, role } : prev));
+    if (user) {
+      const updatedUser = { ...user, role };
+      localStorage.setItem("user", JSON.stringify(updatedUser));
+    }
+  };
 
   const isAuthenticated = Boolean(user);
   const hasRole = (role: Role) => user?.role === role;

@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { Trash } from "lucide-react";
+import { Trash, Edit } from "lucide-react";
 
 export default function ClassCard(props: {
   name: string;
   students?: number;
   href: string;
   onDelete?: () => void;
+  onEdit?: () => void;
 }) {
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
@@ -14,6 +15,14 @@ export default function ClassCard(props: {
     e.stopPropagation();
     if (props.onDelete) {
       setIsConfirmOpen(true);
+    }
+  };
+
+  const handleEditClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (props.onEdit) {
+      props.onEdit();
     }
   };
 
@@ -39,6 +48,17 @@ export default function ClassCard(props: {
             )}
           </div>
         </div>
+        {props.onEdit && (
+          <button
+            type="button"
+            className="cardEditButton"
+            onClick={handleEditClick}
+            title="Editar turma"
+            aria-label="Editar turma"
+          >
+            <Edit size={18} />
+          </button>
+        )}
         {props.onDelete && (
           <button
             type="button"

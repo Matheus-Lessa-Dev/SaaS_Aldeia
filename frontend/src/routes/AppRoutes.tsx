@@ -4,6 +4,7 @@ import {
   RouterProvider,
   createBrowserRouter,
 } from "react-router-dom";
+import TeacherCreatePage from "../components/feats/teacherNew";
 
 const Login = lazy(() => import("../pages/Login"));
 const AdminDashboard = lazy(() => import("../components/feats/adminDashboard/Dashboard"));
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
     path: "/professores",
     element: <TeacherManagement />,
   },
+  {
+    path: "/professores/novo",
+    element: <TeacherCreatePage />,
+  }
 ]);
 
 function AppRoutes() {

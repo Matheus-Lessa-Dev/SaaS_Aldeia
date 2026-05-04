@@ -3,6 +3,7 @@ import { useSearch } from "../../../hooks/useSearch";
 import ManagementPageShell from "../../shared/ManagementPageShell";
 import TeacherCard from "./teacherCard";
 import "./style.css";
+import { useNavigate } from "react-router-dom";
 
 interface TeacherInfo {
     name: string;
@@ -21,6 +22,7 @@ export default function TeacherManagement() {
         { name: "ASDASAASDASna", href: "/professores/6" },
         { name: "ASD", href: "/professores/6" },
     ];
+    const navigate = useNavigate();
 
     const [teachers, setTeachers] = useState(initialTeachers);
     const { searchTerm, setSearchTerm, filteredItems } = useSearch(teachers);
@@ -51,6 +53,7 @@ export default function TeacherManagement() {
             searchPlaceholder="Pesquisar Professor"
             searchValue={searchTerm}
             onSearchChange={setSearchTerm}
+            onAddClick={() => navigate("/professores/novo")}
         >
             {teacherElements}
         </ManagementPageShell>

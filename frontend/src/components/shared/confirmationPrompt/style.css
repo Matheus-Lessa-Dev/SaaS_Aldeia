@@ -1,0 +1,37 @@
+.confirmation-prompt {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.confirmation-prompt__content {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--surface);
+  padding: var(--spacing-4);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(108, 71, 31, 0.06);
+  max-width: 400px;
+  width: 100%;
+  gap: var(--spacing-2);
+}
+
+.confirmation-prompt__buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-4);
+  margin-top: var(--spacing-4);
+}
+
+.confirmation-prompt__cancel-btn,
+.confirmation-prompt__confirm-btn {
+  padding: var(--spacing-2);
+  border: none;
+  border-radius: 1em;
+}

@@ -7,11 +7,19 @@ import {
 import TeacherCreatePage from "../components/feats/teacherNew";
 
 const Login = lazy(() => import("../pages/Login"));
-const AdminDashboard = lazy(() => import("../components/feats/adminDashboard/Dashboard"));
-const ClassManagement = lazy(() => import("../components/feats/classManagement"));
-const StudentManagement = lazy(() => import("../components/feats/studentManagement"));
+const AdminDashboard = lazy(
+  () => import("../components/feats/adminDashboard/Dashboard"),
+);
+const ClassManagement = lazy(
+  () => import("../components/feats/classManagement"),
+);
+const StudentManagement = lazy(
+  () => import("../components/feats/studentManagement"),
+);
 const StudentCreatePage = lazy(() => import("../components/feats/studentNew"));
-const TeacherManagement = lazy(() => import("../components/feats/teacherManagement"));
+const TeacherManagement = lazy(
+  () => import("../components/feats/teacherManagement"),
+);
 
 const router = createBrowserRouter([
   {
@@ -45,7 +53,7 @@ const router = createBrowserRouter([
   {
     path: "/professores/novo",
     element: <TeacherCreatePage />,
-  }
+  },
 ]);
 
 function AppRoutes() {

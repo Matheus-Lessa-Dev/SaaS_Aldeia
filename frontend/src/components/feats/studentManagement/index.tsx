@@ -39,6 +39,7 @@ export default function StudentManagement() {
       name={studentInfo.name}
       href={studentInfo.href}
       onDelete={() => handleDeleteStudent(studentInfo)}
+      onEdit={() => navigate(studentInfo.href)}
     />
   ));
 

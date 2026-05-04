@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, type JSX } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSearch } from "../../../hooks/useSearch";
 import ManagementPageShell from "../../shared/ManagementPageShell";
 import StudentCard from "./studentCard";
 import "./style.css";
+import ConfirmationPrompt from "../../shared/confirmationPrompt";
 
 interface StudentInfo {
   name: string;
@@ -25,12 +26,30 @@ export default function StudentManagement() {
 
   const [students, setStudents] = useState(initialStudents);
   const { searchTerm, setSearchTerm, filteredItems } = useSearch(students);
+  const [confirmationPrompt, setConfirmationPrompt] =
+    useState<JSX.Element | null>(null);
+
+  const handlePromptDeleteStudent = (studentInfo: StudentInfo) => {
+    const confirmDelete = (
+      <ConfirmationPrompt
+        promptTitle="Deletar Aluno"
+        promptMessage={`Tem certeza que deseja deletar o aluno ${studentInfo.name}?`}
+        onConfirm={() => handleDeleteStudent(studentInfo)}
+        onCancel={() => {
+          setConfirmationPrompt(null);
+        }}
+      />
+    );
+    setConfirmationPrompt(confirmDelete);
+  };
 
   const handleDeleteStudent = (studentInfo: StudentInfo) => {
     // TODO: Implementar chamada de API para deletar o aluno no backend
     // await deleteStudentAPI(studentInfo.id);
 
     setStudents(students.filter((s) => s.name !== studentInfo.name));
+
+    setConfirmationPrompt(null);
   };
 
   const studentElements = filteredItems.map((studentInfo) => (
@@ -38,7 +57,7 @@ export default function StudentManagement() {
       key={studentInfo.name}
       name={studentInfo.name}
       href={studentInfo.href}
-      onDelete={() => handleDeleteStudent(studentInfo)}
+      onDelete={() => handlePromptDeleteStudent(studentInfo)}
     />
   ));
 
@@ -55,6 +74,7 @@ export default function StudentManagement() {
       onAddClick={() => navigate("/alunos/novo")}
     >
       {studentElements}
+      {confirmationPrompt}
     </ManagementPageShell>
   );
 }

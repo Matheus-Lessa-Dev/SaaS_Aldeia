@@ -41,7 +41,7 @@ export default function ClassManagement() {
       students={classInfo.students}
       href={classInfo.href}
       onDelete={() => handleDeleteClass(classInfo)}
-      onEdit={() => navigate(`${classInfo.href}/editar`)}
+      onEdit={() => navigate(classInfo.href)}
     />
   ));
 

@@ -40,7 +40,7 @@ export default function TeacherManagement() {
             name={teacherInfo.name}
             href={teacherInfo.href}
             onDelete={() => handleDeleteTeacher(teacherInfo)}
-            onEdit={() => navigate(`${teacherInfo.href}/editar`)}
+            onEdit={() => navigate(teacherInfo.href)}
         />
     ));
 

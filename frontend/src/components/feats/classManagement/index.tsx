@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useSearch } from "../../../hooks/useSearch";
 import ManagementPageShell from "../../shared/ManagementPageShell";
 import ClassCard from "./classCard";
@@ -12,6 +13,7 @@ interface ClassInfo {
 }
 
 export default function ClassManagement() {
+  const navigate = useNavigate();
   const initialClasses: ClassInfo[] = [
     { name: "Turma 1", students: 20, href: "/turmas/turma-1" },
     { name: "Turma 2", students: 15, href: "/turmas/turma-2" },
@@ -52,6 +54,7 @@ export default function ClassManagement() {
       searchPlaceholder="Pesquisar turma"
       searchValue={searchTerm}
       onSearchChange={setSearchTerm}
+      onAddClick={() => navigate("/turmas/novo")}
     >
       {classesElements}
     </ManagementPageShell>

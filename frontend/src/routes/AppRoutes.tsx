@@ -8,9 +8,11 @@ import {
 const Login = lazy(() => import("../pages/Login"));
 const AdminDashboard = lazy(() => import("../components/feats/adminDashboard/Dashboard"));
 const ClassManagement = lazy(() => import("../components/feats/classManagement"));
+const ClassCreatePage = lazy(() => import("../components/feats/classNew"));
 const StudentManagement = lazy(() => import("../components/feats/studentManagement"));
 const StudentCreatePage = lazy(() => import("../components/feats/studentNew"));
 const TeacherManagement = lazy(() => import("../components/feats/teacherManagement"));
+const TeacherCreatePage = lazy(() => import("../components/feats/teacherNew"));
 
 const router = createBrowserRouter([
   {
@@ -30,6 +32,10 @@ const router = createBrowserRouter([
     element: <ClassManagement />,
   },
   {
+    path: "/turmas/novo",
+    element: <ClassCreatePage />,
+  },
+  {
     path: "/alunos",
     element: <StudentManagement />,
   },
@@ -40,6 +46,10 @@ const router = createBrowserRouter([
   {
     path: "/professores",
     element: <TeacherManagement />,
+  },
+  {
+    path: "/professores/novo",
+    element: <TeacherCreatePage />,
   },
 ]);
 

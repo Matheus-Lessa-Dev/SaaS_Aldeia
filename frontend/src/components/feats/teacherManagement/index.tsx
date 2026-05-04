@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useSearch } from "../../../hooks/useSearch";
 import ManagementPageShell from "../../shared/ManagementPageShell";
 import TeacherCard from "./teacherCard";
@@ -11,6 +12,7 @@ interface TeacherInfo {
 }
 
 export default function TeacherManagement() {
+    const navigate = useNavigate();
     const initialTeachers: TeacherInfo[] = [
         { name: "João", href: "/professores/1" },
         { name: "Maria", href: "/professores/2" },
@@ -51,6 +53,7 @@ export default function TeacherManagement() {
             searchPlaceholder="Pesquisar Professor"
             searchValue={searchTerm}
             onSearchChange={setSearchTerm}
+            onAddClick={() => navigate("/professores/novo")}
         >
             {teacherElements}
         </ManagementPageShell>

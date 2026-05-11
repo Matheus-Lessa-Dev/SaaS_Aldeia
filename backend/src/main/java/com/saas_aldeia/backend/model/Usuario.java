@@ -33,7 +33,6 @@ public class Usuario implements UserDetails {
     @Column(nullable = false, length = 20)
     private TipoUsuario tipo;
 
-    // ── UserDetails ──────────────────────────────────────────────────────────
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

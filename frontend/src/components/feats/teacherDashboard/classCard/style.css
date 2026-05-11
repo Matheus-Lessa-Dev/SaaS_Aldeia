@@ -1,0 +1,11 @@
+.classCard {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border-radius: var(--border-radius);
+  padding: var(--spacing-4);
+  box-shadow: var(--box-shadow);
+  border-radius: 1em;
+  gap: var(--spacing-2);
+  text-decoration: none;
+}

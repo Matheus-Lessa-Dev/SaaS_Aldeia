@@ -1,0 +1,232 @@
+#root {
+  width: 100%;
+  max-width: none;
+  min-height: 100svh;
+  margin: 0;
+  padding: 0;
+  gap: 0;
+}
+
+.dashBoardPainel {
+  display: flex;
+  flex-direction: row;
+  min-height: 100svh;
+  background: var(--surface-container-low);
+}
+
+.dashboardLayout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+  flex: 1;
+  overflow: hidden;
+  box-shadow: none;
+  background: var(--surface-container-low);
+}
+
+.dashboardHeader {
+  width: 100%;
+  padding: clamp(1rem, 2vw, var(--spacing-4));
+  display: flex;
+  justify-content: flex-end;
+}
+
+.dashboardHeader button {
+  padding: 8px 16px;
+  background-color: #7d2b2b;
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.dashboardHeaderBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dashboardContent {
+  flex: 1;
+  padding: var(--spacing-4) clamp(1.2rem, 2vw, var(--spacing-8));
+}
+
+.dashboardContent h1 {
+  font-size: clamp(1.4rem, 3vw, 2rem);
+}
+
+.dashboardContent h4 {
+  font-size: clamp(0.5rem, 2.5vw, 1.5rem);
+  color: #999;
+}
+
+.dashboardContentCards {
+  margin-top: var(--spacing-4);
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.dashboardCard {
+  flex: 1;
+  min-width: 220px;
+  padding: var(--spacing-4);
+  background: var(--surface);
+  border: 1px solid var(--outline-variant);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(108, 71, 31, 0.06);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.dashboardCard h3 {
+  margin: 0;
+  font-size: 16px;
+  color: var(--on-surface-muted);
+  font-weight: 500;
+}
+
+.dashboardCard p {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--on-surface);
+}
+
+.dashboardCardIcon {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  color: var(--primary);
+}
+
+.dashboardContentMiddle {
+  margin-top: var(--spacing-8);
+  display: flex;
+  gap: var(--spacing-4);
+  justify-content: flex-end;
+  align-items: flex-start;
+}
+
+.bannerPlaceholder {
+  flex: 1;
+  min-height: 22rem;
+  align-self: flex-start;
+  position: relative;
+  overflow: hidden;
+  background: var(--primary);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(108, 71, 31, 0.06);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.bannerPlaceholder::before {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  background: rgba(252, 249, 244, 0.16);
+  width: 600px;
+  height: 1000px;
+  top: -230px;
+  right: -50px;
+}
+
+.bannerContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.bannerTitle {
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  color: white;
+  margin: 0;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.bannerDescription {
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.bannerButton {
+  align-self: flex-start;
+  padding: 12px 24px;
+  background-color: white;
+  color: var(--primary);
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 0.5rem;
+}
+
+.bannerButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+@media (max-width: 900px) {
+  .adminLayout {
+    flex-direction: column;
+  }
+}
+
+.dashboardClassesCountCard {
+  background-color: white;
+  flex: 1;
+  padding: 1.5em;
+  border-radius: 1em;
+  align-self: stretch;
+}
+
+.dashboardClassesCountCard span {
+  font-size: 1.2em;
+  color: var(--primary);
+}
+
+.dashboardClassesCountCard h2 {
+  font-size: 4em;
+  margin: 0.5em 0 0;
+  color: var(--on-surface);
+}
+
+.classesCountCardContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.classesCountCardIcon {
+  display: flex;
+  align-self: stretch;
+  align-items: end;
+  justify-content: end;
+  width: 100%;
+}
+
+.dashboardClasses {
+}
+
+.dashboardClasses h1 {
+  font-size: 2em;
+  margin-bottom: 1em;
+  margin-top: 1em;
+}
+.classesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5em;
+}

@@ -2,7 +2,8 @@ package com.saas_aldeia.backend.controller;
 
 import com.saas_aldeia.backend.dto.AuthResponse;
 import com.saas_aldeia.backend.dto.LoginRequest;
-import com.saas_aldeia.backend.dto.RegisterRequest;
+import com.saas_aldeia.backend.dto.RegisterAlunoRequest;
+import com.saas_aldeia.backend.dto.RegisterProfessorRequest;
 import com.saas_aldeia.backend.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,9 +21,14 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(authService.register(request));
+    @PostMapping("/register/aluno")
+    public ResponseEntity<AuthResponse> registerAluno(@Valid @RequestBody RegisterAlunoRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(authService.registerAluno(request));
+    }
+
+    @PostMapping("/register/professor")
+    public ResponseEntity<AuthResponse> registerProfessor(@Valid @RequestBody RegisterProfessorRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(authService.registerProfessor(request));
     }
 
     @PostMapping("/login")

@@ -1,3 +1,3 @@
 package com.saas_aldeia.backend.dto;
 
-public record AuthResponse(String token, String role, String email) {}
+public record AuthResponse(String token, String refreshToken, String role, String email) {}

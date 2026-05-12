@@ -2,6 +2,8 @@ package com.saas_aldeia.backend.controller;
 
 import com.saas_aldeia.backend.dto.AuthResponse;
 import com.saas_aldeia.backend.dto.LoginRequest;
+import com.saas_aldeia.backend.dto.RefreshTokenRequest;
+import com.saas_aldeia.backend.dto.RegisterAdminRequest;
 import com.saas_aldeia.backend.dto.RegisterAlunoRequest;
 import com.saas_aldeia.backend.dto.RegisterProfessorRequest;
 import com.saas_aldeia.backend.service.AuthService;
@@ -21,6 +23,11 @@ public class AuthController {
 
     private final AuthService authService;
 
+    @PostMapping("/register/admin")
+    public ResponseEntity<AuthResponse> registerAdmin(@Valid @RequestBody RegisterAdminRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(authService.registerAdmin(request));
+    }
+
     @PostMapping("/register/aluno")
     public ResponseEntity<AuthResponse> registerAluno(@Valid @RequestBody RegisterAlunoRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(authService.registerAluno(request));
@@ -34,5 +41,10 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
         return ResponseEntity.ok(authService.login(request));
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<AuthResponse> refresh(@Valid @RequestBody RefreshTokenRequest request) {
+        return ResponseEntity.ok(authService.refresh(request.refreshToken()));
     }
 }

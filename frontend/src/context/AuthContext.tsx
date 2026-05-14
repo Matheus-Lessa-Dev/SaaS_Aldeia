@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState, type ReactNode } from "react";
 
-export enum Role {
+export const enum Role {
   Student = "student",
   Teacher = "teacher",
   Admin = "admin",
@@ -15,16 +15,14 @@ export interface User {
 
 export interface AuthContextType {
   user: User | null;
-  login: (user: User) => void;
+  login: (user: User, token: string, refreshToken: string) => void;
   logout: () => void;
   setRole: (role: Role) => void;
   isAuthenticated: boolean;
   hasRole: (role: Role) => boolean;
 }
 
-export const AuthContext = createContext<AuthContextType | undefined>(
-  undefined,
-);
+export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -36,14 +34,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
-  const login = (u: User) => {
+  const login = (u: User, token: string, refreshToken: string) => {
     setUser(u);
     localStorage.setItem("user", JSON.stringify(u));
+    localStorage.setItem("token", token);
+    localStorage.setItem("refreshToken", refreshToken);
   };
+
   const logout = () => {
     setUser(null);
     localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    localStorage.removeItem("refreshToken");
   };
+
   const setRole = (role: Role) => {
     setUser((prev) => (prev ? { ...prev, role } : prev));
     if (user) {
@@ -56,9 +60,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const hasRole = (role: Role) => user?.role === role;
 
   return (
-    <AuthContext.Provider
-      value={{ user, login, logout, setRole, isAuthenticated, hasRole }}
-    >
+    <AuthContext.Provider value={{ user, login, logout, setRole, isAuthenticated, hasRole }}>
       {children}
     </AuthContext.Provider>
   );

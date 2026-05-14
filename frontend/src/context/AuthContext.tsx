@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState, type ReactNode } from "react";
 
-export enum Role {
+export const enum Role {
   Student = "student",
   Teacher = "teacher",
   Admin = "admin",

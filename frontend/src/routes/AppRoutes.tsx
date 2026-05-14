@@ -1,4 +1,5 @@
 import { Suspense, lazy } from "react";
+import type { ReactNode } from "react";
 import { Navigate, RouterProvider, createBrowserRouter } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import { Role } from "../context/AuthContext";
@@ -19,7 +20,7 @@ const TeacherCreatePage = lazy(() => import("../components/feats/teacherNew"));
 
 // Protege rotas: redireciona para login se não autenticado
 // Se allowedRoles for informado, redireciona para /unauthorized se não tiver o role
-function PrivateRoute({ children, allowedRoles }: { children: JSX.Element; allowedRoles?: Role[] }) {
+function PrivateRoute({ children, allowedRoles }: { children: ReactNode; allowedRoles?: Role[] }) {
   const { isAuthenticated, hasRole } = useAuth();
 
   if (!isAuthenticated) return <Navigate to="/login" replace />;
@@ -48,23 +49,23 @@ const router = createBrowserRouter([
   },
   {
     path: "/turmas",
-    element: <PrivateRoute allowedRoles={[Role.Admin]}><ClassManagement /></PrivateRoute>,
+    element: <PrivateRoute allowedRoles={[Role.Admin, Role.Teacher]}><ClassManagement /></PrivateRoute>,
   },
   {
     path: "/turmas/novo",
-    element: <PrivateRoute allowedRoles={[Role.Admin]}><ClassCreatePage /></PrivateRoute>,
+    element: <PrivateRoute allowedRoles={[Role.Admin, Role.Teacher]}><ClassCreatePage /></PrivateRoute>,
   },
   {
     path: "/alunos",
-    element: <PrivateRoute allowedRoles={[Role.Admin]}><StudentManagement /></PrivateRoute>,
+    element: <PrivateRoute allowedRoles={[Role.Admin, Role.Teacher]}><StudentManagement /></PrivateRoute>,
   },
   {
     path: "/alunos/novo",
-    element: <PrivateRoute allowedRoles={[Role.Admin]}><StudentCreatePage /></PrivateRoute>,
+    element: <PrivateRoute allowedRoles={[Role.Admin, Role.Teacher]}><StudentCreatePage /></PrivateRoute>,
   },
   {
     path: "/professores",
-    element: <PrivateRoute allowedRoles={[Role.Admin]}><TeacherManagement /></PrivateRoute>,
+    element: <PrivateRoute allowedRoles={[Role.Admin, Role.Teacher]}><TeacherManagement /></PrivateRoute>,
   },
   {
     path: "/professores/novo",

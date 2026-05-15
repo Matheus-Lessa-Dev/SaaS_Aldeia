@@ -1,12 +1,7 @@
-import AuthProvider from "./context/AuthContext";
-import AppRoutes from "./routes/AppRoutes";
+import AlunoDashboard from "./components/feats/alunoDashboard/Dashboard";
 
 function App() {
-  return (
-    <AuthProvider>
-      <AppRoutes />
-    </AuthProvider>
-  );
+  return <AlunoDashboard />;
 }
 
 export default App;

@@ -5,7 +5,7 @@ import Calendario from '../../solos/calendario/Calendario'
 import './Dashboard.css'
 
 const dashboardCards = [
-    { title: 'Total de Alunos', value: '23', icon: Users },
+    { title: 'Total de Alunos', value: '42', icon: Users },
     { title: 'Total de Professores', value: '8', icon: GraduationCap },
     { title: 'Total de Turmas', value: '5', icon: BookOpen },
 ]

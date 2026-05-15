@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom'
 import { User, Lock, Eye, EyeOff, ArrowRight } from 'lucide-react'
 import { useAuth } from '../../hooks/useAuth'
 import { loginRequest } from '../../services/authService'
-import { Role } from '../../context/AuthContext'
 import './style.css'
 
 function Login() {
@@ -25,9 +24,8 @@ function Login() {
         try {
             const data = await loginRequest(email, senha)
 
-            // Monta o objeto User para o contexto
             const user = {
-                id: data.email, // a API não retorna id, usamos email por enquanto
+                id: data.email, 
                 name: data.email,
                 email: data.email,
                 role: data.role,
@@ -35,12 +33,8 @@ function Login() {
 
             login(user, data.token, data.refreshToken)
 
-            // Redireciona conforme o role
-            switch (data.role) {
-                case Role.Admin: navigate('/dashboard'); break;
-                case Role.Teacher: navigate('/dashboard/professor'); break;
-                case Role.Student: navigate('/dashboard/aluno'); break;
-            }
+            navigate('/dashboard');
+            
         } catch (err: any) {
             const msg = err?.response?.data?.message
             setError(msg || 'E-mail ou senha inválidos.')

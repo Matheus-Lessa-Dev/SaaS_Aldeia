@@ -32,6 +32,17 @@ function PrivateRoute({ children, allowedRoles }: { children: ReactNode; allowed
   return children;
 }
 
+function DashBoardRouter() {
+  const { user } = useAuth();
+
+  switch(user?.role) {
+    case Role.Admin: return <AdminDashboard />;
+    case Role.Teacher: return <TeacherDashboard />;
+    case Role.Student: return <StudentDashboard />;
+    default: return <Navigate to="/login" replace />
+  }
+}
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -42,10 +53,9 @@ const router = createBrowserRouter([
     element: <Login />,
   },
 
-  // Rotas do Admin
   {
     path: "/dashboard",
-    element: <PrivateRoute allowedRoles={[Role.Admin]}><AdminDashboard /></PrivateRoute>,
+    element: <PrivateRoute> <DashBoardRouter /> </PrivateRoute>,
   },
   {
     path: "/turmas",
@@ -71,17 +81,9 @@ const router = createBrowserRouter([
     path: "/professores/novo",
     element: <PrivateRoute allowedRoles={[Role.Admin]}><TeacherCreatePage /></PrivateRoute>,
   },
-
-  // Rotas do Professor
   {
-    path: "/dashboard/professor",
-    element: <PrivateRoute allowedRoles={[Role.Teacher]}><TeacherDashboard /></PrivateRoute>,
-  },
-
-  // Rotas do Aluno
-  {
-    path: "/dashboard/aluno",
-    element: <PrivateRoute allowedRoles={[Role.Student]}><StudentDashboard /></PrivateRoute>,
+  path: "/alunos/:id/editar",
+  element: <PrivateRoute allowedRoles={[Role.Admin, Role.Teacher]}><StudentCreatePage /></PrivateRoute>,
   },
 
   // Página de acesso negado

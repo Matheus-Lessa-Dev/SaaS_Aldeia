@@ -1,19 +1,15 @@
 package com.saas_aldeia.backend.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-
+import lombok.*;
 import java.time.LocalDate;
 import java.util.List;
 
 @Entity
 @Table(name = "professor")
 @PrimaryKeyJoinColumn(name = "usuario_id")
-@Data
-@EqualsAndHashCode(callSuper = true)
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Professor extends Usuario {

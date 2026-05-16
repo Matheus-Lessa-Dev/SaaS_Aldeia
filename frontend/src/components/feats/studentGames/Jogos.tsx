@@ -1,5 +1,5 @@
-import { LayoutDashboard, Users, Gamepad2, LogOut, UserCircle, Play } from 'lucide-react'
-import { NavLink } from 'react-router-dom'
+import { UserCircle, Play } from 'lucide-react'
+import SideBar from '../../solos/sideBar/SideBar2'
 import './Jogos.css'
 
 type Jogo = {
@@ -53,51 +53,7 @@ const jogosGrid = jogos.filter((j) => !j.destaque && j.id !== jogoSecundario?.id
 function AlunoJogos() {
     return (
         <div className="jogosPage">
-
-            {/* SIDEBAR */}
-            <aside className="jogossidebar">
-                <div className="jogossidebarTop">
-                    <div className="jogossidebarTitle">
-                        <h1>Portal Aldeia</h1>
-                        <h6>Educação</h6>
-                    </div>
-                    <nav className="jogossidebarNav">
-                        <NavLink
-                            to="/aluno/dashboard"
-                            className={({ isActive }) =>
-                                `jogossidebarLink${isActive ? ' active' : ''}`
-                            }
-                        >
-                            <LayoutDashboard size={17} aria-hidden="true" />
-                            Dashboard
-                        </NavLink>
-                        <NavLink
-                            to="/aluno/turma"
-                            className={({ isActive }) =>
-                                `jogossidebarLink${isActive ? ' active' : ''}`
-                            }
-                        >
-                            <Users size={17} aria-hidden="true" />
-                            Turma
-                        </NavLink>
-                        <NavLink
-                            to="/aluno/jogos"
-                            className={({ isActive }) =>
-                                `jogossidebarLink${isActive ? ' active' : ''}`
-                            }
-                        >
-                            <Gamepad2 size={17} aria-hidden="true" />
-                            Jogos
-                        </NavLink>
-                    </nav>
-                </div>
-                <div className="jogossidebarBottom">
-                    <button className="jogossairBtn">
-                        <LogOut size={16} aria-hidden="true" />
-                        Sair
-                    </button>
-                </div>
-            </aside>
+            <SideBar />
 
             {/* MAIN */}
             <div className="jogosMain">

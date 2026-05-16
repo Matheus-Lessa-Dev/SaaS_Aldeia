@@ -25,7 +25,6 @@ type NavItem = {
 
 const typedNavItems: NavItem[] = navItems;
 
-// renomear essa porra
 function Sidebar1() {
   return (
     <aside className="sideBar" aria-label="Navegacao principal">

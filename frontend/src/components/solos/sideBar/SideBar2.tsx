@@ -4,8 +4,8 @@ import { BookOpenCheck, Gamepad2, LayoutDashboard } from 'lucide-react'
 import './sideBar.css'
 
 const navItems = [
-    { label: 'Dashboard', to: '/dashboard/aluno', icon: LayoutDashboard },
-    { label: 'Turmas', icon: BookOpenCheck },
+    { label: 'Dashboard', to: '/dashboard', icon: LayoutDashboard },
+    { label: 'Turmas', to: '', icon: BookOpenCheck },
     { label: 'Jogos', to: '/jogos', icon: Gamepad2 },
 ]
 

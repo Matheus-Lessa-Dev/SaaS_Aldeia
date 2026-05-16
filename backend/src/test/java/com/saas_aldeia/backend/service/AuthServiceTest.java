@@ -17,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,10 +35,14 @@ class AuthServiceTest {
     @Mock JwtService jwtService;
     @InjectMocks AuthService authService;
 
+    private static final LocalDate DATA_NASCIMENTO_ALUNO    = LocalDate.of(2010, 3, 15);
+    private static final LocalDate DATA_NASCIMENTO_PROFESSOR = LocalDate.of(1990, 5, 20);
+
     @Test
     void registerAluno_success() {
         when(usuarioRepository.existsByEmail(any())).thenReturn(false);
         when(passwordEncoder.encode(any())).thenReturn("hashed");
+
         Aluno aluno = new Aluno();
         aluno.setEmail("aluno@test.com");
         aluno.setSenha("hashed");
@@ -45,9 +50,18 @@ class AuthServiceTest {
         aluno.setNome("João");
         when(alunoRepository.save(any())).thenReturn(aluno);
         when(jwtService.generateToken(any())).thenReturn("token");
+        when(jwtService.generateRefreshToken(any())).thenReturn("refreshToken");
 
         var response = authService.registerAluno(new RegisterAlunoRequest(
-                "aluno@test.com", "senha123", "João", null, null, null, null, null, null));
+                "aluno@test.com",       // email
+                "João",                 // nome
+                DATA_NASCIMENTO_ALUNO,  // dataNascimento
+                "Rua A",                // rua
+                "Casa 1",               // complemento
+                "Responsável",          // nomeResponsavel
+                "(44) 99999-9999",      // telefoneResponsavel
+                "resp@email.com"        // emailResponsavel
+        ));
 
         assertThat(response.token()).isEqualTo("token");
         assertThat(response.role()).isEqualTo("ALUNO");
@@ -58,7 +72,15 @@ class AuthServiceTest {
         when(usuarioRepository.existsByEmail("aluno@test.com")).thenReturn(true);
 
         assertThatThrownBy(() -> authService.registerAluno(new RegisterAlunoRequest(
-                "aluno@test.com", "senha123", "João", null, null, null, null, null, null)))
+                "aluno@test.com",
+                "João",
+                DATA_NASCIMENTO_ALUNO,
+                "Rua A",
+                "Casa 1",
+                "Responsável",
+                "(44) 99999-9999",
+                "resp@email.com"
+        )))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Email já cadastrado");
     }
@@ -67,6 +89,7 @@ class AuthServiceTest {
     void registerProfessor_success() {
         when(usuarioRepository.existsByEmail(any())).thenReturn(false);
         when(passwordEncoder.encode(any())).thenReturn("hashed");
+
         Professor prof = new Professor();
         prof.setEmail("prof@test.com");
         prof.setSenha("hashed");
@@ -74,9 +97,16 @@ class AuthServiceTest {
         prof.setNome("Maria");
         when(professorRepository.save(any())).thenReturn(prof);
         when(jwtService.generateToken(any())).thenReturn("token");
+        when(jwtService.generateRefreshToken(any())).thenReturn("refreshToken");
 
         var response = authService.registerProfessor(new RegisterProfessorRequest(
-                "prof@test.com", "senha123", "Maria", null, null, null, null));
+                "prof@test.com",            // email
+                "Maria",                    // nome
+                DATA_NASCIMENTO_PROFESSOR,  // dataNascimento
+                "Rua B",                    // rua
+                "Apto 2",                   // complemento
+                "(44) 98888-0000"           // telefone
+        ));
 
         assertThat(response.token()).isEqualTo("token");
         assertThat(response.role()).isEqualTo("PROFESSOR");
@@ -91,6 +121,7 @@ class AuthServiceTest {
         when(usuarioRepository.findByEmail("aluno@test.com")).thenReturn(Optional.of(aluno));
         when(passwordEncoder.matches("senha123", "hashed")).thenReturn(true);
         when(jwtService.generateToken(aluno)).thenReturn("token");
+        when(jwtService.generateRefreshToken(aluno)).thenReturn("refreshToken");
 
         var response = authService.login(new LoginRequest("aluno@test.com", "senha123"));
 

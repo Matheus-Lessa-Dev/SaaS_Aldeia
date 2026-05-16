@@ -1,23 +1,13 @@
 package com.saas_aldeia.backend.service;
 
-import com.saas_aldeia.backend.dto.AuthResponse;
-import com.saas_aldeia.backend.dto.LoginRequest;
-import com.saas_aldeia.backend.dto.RegisterAdminRequest;
-import com.saas_aldeia.backend.dto.RegisterAlunoRequest;
-import com.saas_aldeia.backend.dto.RegisterProfessorRequest;
-import com.saas_aldeia.backend.model.Admin;
-import com.saas_aldeia.backend.model.Aluno;
-import com.saas_aldeia.backend.model.Professor;
-import com.saas_aldeia.backend.model.TipoUsuario;
-import com.saas_aldeia.backend.model.Usuario;
-import com.saas_aldeia.backend.repository.AdminRepository;
-import com.saas_aldeia.backend.repository.AlunoRepository;
-import com.saas_aldeia.backend.repository.ProfessorRepository;
-import com.saas_aldeia.backend.repository.UsuarioRepository;
+import com.saas_aldeia.backend.dto.*;
+import com.saas_aldeia.backend.model.*;
+import com.saas_aldeia.backend.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import java.time.format.DateTimeFormatter;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +21,8 @@ public class AuthService {
     private final JwtService jwtService;
     private final UserDetailsServiceImpl userDetailsService;
 
+    private static final DateTimeFormatter SENHA_FORMATADA = DateTimeFormatter.ofPattern("ddMMuuuu");
+
     public AuthResponse registerAdmin(RegisterAdminRequest request) {
         if (usuarioRepository.existsByEmail(request.email())) {
             throw new IllegalArgumentException("Email já cadastrado");
@@ -40,6 +32,7 @@ public class AuthService {
         admin.setSenha(passwordEncoder.encode(request.senha()));
         admin.setTipo(TipoUsuario.ADMIN);
         admin.setNome(request.nome());
+        admin.setPrimeiroAcesso(false);
         adminRepository.save(admin);
         return toResponse(admin);
     }
@@ -48,9 +41,12 @@ public class AuthService {
         if (usuarioRepository.existsByEmail(request.email())) {
             throw new IllegalArgumentException("Email já cadastrado");
         }
+
+        String senhaGerada = request.dataNascimento().format(SENHA_FORMATADA);
+
         Aluno aluno = new Aluno();
         aluno.setEmail(request.email());
-        aluno.setSenha(passwordEncoder.encode(request.senha()));
+        aluno.setSenha(passwordEncoder.encode(senhaGerada)); 
         aluno.setTipo(TipoUsuario.ALUNO);
         aluno.setNome(request.nome());
         aluno.setDataNascimento(request.dataNascimento());
@@ -59,6 +55,7 @@ public class AuthService {
         aluno.setNomeResponsavel(request.nomeResponsavel());
         aluno.setTelefoneResponsavel(request.telefoneResponsavel());
         aluno.setEmailResponsavel(request.emailResponsavel());
+        aluno.setPrimeiroAcesso(true);
         alunoRepository.save(aluno);
         return toResponse(aluno);
     }
@@ -67,15 +64,19 @@ public class AuthService {
         if (usuarioRepository.existsByEmail(request.email())) {
             throw new IllegalArgumentException("Email já cadastrado");
         }
+
+        String senhaGerada = request.dataNascimento().format(SENHA_FORMATADA);
+
         Professor professor = new Professor();
         professor.setEmail(request.email());
-        professor.setSenha(passwordEncoder.encode(request.senha()));
+        professor.setSenha(passwordEncoder.encode(senhaGerada)); 
         professor.setTipo(TipoUsuario.PROFESSOR);
         professor.setNome(request.nome());
         professor.setDataNascimento(request.dataNascimento());
         professor.setRua(request.rua());
         professor.setComplemento(request.complemento());
         professor.setTelefone(request.telefone());
+        professor.setPrimeiroAcesso(true);
         professorRepository.save(professor);
         return toResponse(professor);
     }
@@ -90,7 +91,6 @@ public class AuthService {
         return toResponse(usuario);
     }
 
-    /** Recebe um Refresh Token válido e devolve um novo par de tokens */
     public AuthResponse refresh(String refreshToken) {
         String email;
         try {
@@ -111,6 +111,7 @@ public class AuthService {
     private AuthResponse toResponse(Usuario usuario) {
         String token        = jwtService.generateToken(usuario);
         String refreshToken = jwtService.generateRefreshToken(usuario);
-        return new AuthResponse(token, refreshToken, usuario.getTipo().name(), usuario.getEmail());
+        // adicionado primeiroAcesso no construtor
+        return new AuthResponse(token, refreshToken, usuario.getTipo().name(), usuario.getEmail(), usuario.isPrimeiroAcesso());
     }
 }

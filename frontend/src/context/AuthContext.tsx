@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState, type ReactNode } from "react";
 
-export const enum Role {
+export enum Role {
   Student = "student",
   Teacher = "teacher",
   Admin = "admin",
@@ -11,6 +11,7 @@ export interface User {
   name: string;
   email?: string;
   role: Role;
+  primeiroAcesso: boolean;
 }
 
 export interface AuthContextType {

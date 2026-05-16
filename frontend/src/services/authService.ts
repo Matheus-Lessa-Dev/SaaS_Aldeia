@@ -6,6 +6,7 @@ interface LoginResponse {
   refreshToken: string;
   role: string;
   email: string;
+  primeiroAcesso: boolean;
 }
 
 function mapRole(apiRole: string): Role {
@@ -25,5 +26,10 @@ export async function loginRequest(email: string, senha: string) {
     refreshToken: data.refreshToken,
     email: data.email,
     role: mapRole(data.role),
+    primeiroAcesso: data.primeiroAcesso, 
   };
+}
+
+export async function trocarSenha(senhaAtual: string, novaSenha: string) {
+  await api.put('/perfil/senha', { senhaAtual, novaSenha });
 }

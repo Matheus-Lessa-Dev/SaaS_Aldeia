@@ -5,97 +5,91 @@ import { useAuth } from "../hooks/useAuth";
 import { Role } from "../context/AuthContext";
 
 const Login = lazy(() => import("../pages/Login"));
+const Perfil = lazy(() => import("../pages/Perfil"));
 const AdminDashboard = lazy(() => import("../components/feats/adminDashboard/Dashboard"));
 const TeacherDashboard = lazy(() => import("../components/feats/teacherDashboard/Dashboard"));
 const StudentDashboard = lazy(() => import("../components/feats/studentDashboard/Dashboard"));
-
 const ClassManagement = lazy(() => import("../components/feats/classManagement"));
 const ClassCreatePage = lazy(() => import("../components/feats/classNew"));
-
 const StudentManagement = lazy(() => import("../components/feats/studentManagement"));
 const StudentCreatePage = lazy(() => import("../components/feats/studentNew"));
-const StudentGames = lazy(() => import("../components/feats/studentGames/Jogos"));
-
 const TeacherManagement = lazy(() => import("../components/feats/teacherManagement"));
 const TeacherCreatePage = lazy(() => import("../components/feats/teacherNew"));
 
-// Protege rotas: redireciona para login se não autenticado
-// Se allowedRoles for informado, redireciona para /unauthorized se não tiver o role
 function PrivateRoute({ children, allowedRoles }: { children: ReactNode; allowedRoles?: Role[] }) {
   const { isAuthenticated, hasRole } = useAuth();
-
   if (!isAuthenticated) return <Navigate to="/login" replace />;
-
-  if (allowedRoles && !allowedRoles.some(hasRole)) {
-    return <Navigate to="/unauthorized" replace />;
-  }
-
+  if (allowedRoles && !allowedRoles.some(hasRole)) return <Navigate to="/unauthorized" replace />;
   return children;
 }
 
-function DashBoardRouter() {
-  const { user } = useAuth();
+// Redireciona para /perfil se for primeiro acesso
+function ProtectedRoute({ children, allowedRoles }: { children: ReactNode; allowedRoles?: Role[] }) {
+  const { isAuthenticated, hasRole, user } = useAuth();
+  if (!isAuthenticated) return <Navigate to="/login" replace />;
+  if (user?.primeiroAcesso) return <Navigate to="/perfil" replace />;
+  if (allowedRoles && !allowedRoles.some(hasRole)) return <Navigate to="/unauthorized" replace />;
+  return children;
+}
 
-  switch(user?.role) {
-    case Role.Admin: return <AdminDashboard />;
+// Renderiza o dashboard correto baseado no role
+function DashboardRouter() {
+  const { user } = useAuth();
+  switch (user?.role) {
+    case Role.Admin:   return <AdminDashboard />;
     case Role.Teacher: return <TeacherDashboard />;
     case Role.Student: return <StudentDashboard />;
-    default: return <Navigate to="/login" replace />
+    default: return <Navigate to="/login" replace />;
   }
 }
 
 const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Navigate to="/login" replace />,
-  },
-  {
-    path: "/login",
-    element: <Login />,
-  },
+  { path: "/", element: <Navigate to="/login" replace /> },
+  { path: "/login", element: <Login /> },
 
+  // Perfil — acessível para qualquer autenticado
+  {
+    path: "/perfil",
+    element: <PrivateRoute><Perfil /></PrivateRoute>,
+  },
   {
     path: "/dashboard",
-    element: <PrivateRoute> <DashBoardRouter /> </PrivateRoute>,
+    element: <ProtectedRoute><DashboardRouter /></ProtectedRoute>,
   },
   {
     path: "/turmas",
-    element: <PrivateRoute allowedRoles={[Role.Admin, Role.Teacher]}><ClassManagement /></PrivateRoute>,
+    element: <ProtectedRoute allowedRoles={[Role.Admin, Role.Teacher]}><ClassManagement /></ProtectedRoute>,
   },
   {
     path: "/turmas/novo",
-    element: <PrivateRoute allowedRoles={[Role.Admin, Role.Teacher]}><ClassCreatePage /></PrivateRoute>,
+    element: <ProtectedRoute allowedRoles={[Role.Admin]}><ClassCreatePage /></ProtectedRoute>,
   },
   {
     path: "/alunos",
-    element: <PrivateRoute allowedRoles={[Role.Admin, Role.Teacher]}><StudentManagement /></PrivateRoute>,
+    element: <ProtectedRoute allowedRoles={[Role.Admin, Role.Teacher]}><StudentManagement /></ProtectedRoute>,
   },
   {
     path: "/alunos/novo",
-    element: <PrivateRoute allowedRoles={[Role.Admin, Role.Teacher]}><StudentCreatePage /></PrivateRoute>,
-  },
-  {
-    path: "/professores",
-    element: <PrivateRoute allowedRoles={[Role.Admin, Role.Teacher]}><TeacherManagement /></PrivateRoute>,
-  },
-  {
-    path: "/professores/novo",
-    element: <PrivateRoute allowedRoles={[Role.Admin]}><TeacherCreatePage /></PrivateRoute>,
+    element: <ProtectedRoute allowedRoles={[Role.Admin, Role.Teacher]}><StudentCreatePage /></ProtectedRoute>,
   },
   {
     path: "/alunos/:id/editar",
-    element: <PrivateRoute allowedRoles={[Role.Admin, Role.Teacher]}><StudentCreatePage /></PrivateRoute>,
+    element: <ProtectedRoute allowedRoles={[Role.Admin, Role.Teacher]}><StudentCreatePage /></ProtectedRoute>,
   },
   {
-    path: "/jogos",
-    element: <PrivateRoute allowedRoles={[Role.Student]}><StudentGames /></PrivateRoute>,
+    path: "/professores",
+    element: <ProtectedRoute allowedRoles={[Role.Admin, Role.Teacher]}><TeacherManagement /></ProtectedRoute>,
+  },
+  {
+    path: "/professores/novo",
+    element: <ProtectedRoute allowedRoles={[Role.Admin]}><TeacherCreatePage /></ProtectedRoute>,
   },
 
-  // Página de acesso negado
+  // Acesso negado
   {
     path: "/unauthorized",
     element: <div style={{ padding: 40 }}>Acesso não autorizado.</div>,
-  }
+  },
 ]);
 
 function AppRoutes() {

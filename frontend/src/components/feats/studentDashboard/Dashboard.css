@@ -1,179 +1,178 @@
-.adminDashboardPage #root {
+.studentDashboardPage #root {
     width: 100%;
     max-width: none;
     min-height: 100svh;
     margin: 0;
     padding: 0;
+    gap: 0;
 }
 
 .dashBoardPainel {
     display: flex;
+    flex-direction: row;
     min-height: 100svh;
-    background: #f9f7f3;
+    background: var(--surface-container-low);
 }
 
-/* layout principal */
 .alunoDashboardLayout {
-    flex: 1;
     display: flex;
     flex-direction: column;
+    min-height: 100svh;
+    flex: 1;
+    overflow: hidden;
+    background: var(--surface-container-low);
 }
 
-/* header */
 .alunoDashboardHeader {
     width: 100%;
+    padding: clamp(1rem, 2vw, var(--spacing-4));
     display: flex;
     justify-content: flex-end;
-    padding: 20px 30px;
 }
 
 .alunoHeaderBtn {
     display: flex;
     align-items: center;
     gap: 8px;
-    background: white;
-    border: none;
-    padding: 10px 18px;
+    padding: 8px 16px;
+    background-color: var(--surface);
+    color: var(--primary);
+    border: 1px solid var(--outline-variant);
     border-radius: 20px;
-    color: #7D2B2B;
     cursor: pointer;
-    font-weight: 500;
+    box-shadow: 0 4px 12px rgba(108, 71, 31, 0.06);
 }
 
-/* conteúdo */
 .alunoDashboardContent {
-    padding: 20px 40px;
+    flex: 1;
+    padding: var(--spacing-4) clamp(1.2rem, 2vw, var(--spacing-8));
 }
 
 .alunoDashboardContent h3 {
-    color: #7D2B2B;
-    font-size: 28px;
-    margin-bottom: 30px;
+    color: var(--on-surface-muted);
+    font-size: clamp(0.9rem, 1.6vw, 1.15rem);
+    font-weight: 500;
+    margin-bottom: 0.75rem;
 }
 
 .welcomeSection h1 {
-    font-size: 56px;
-    color: #8B3A1E;
-    margin-bottom: 10px;
+    font-size: clamp(2.4rem, 4vw, 3.5rem);
+    color: var(--primary);
+    margin-bottom: 0.5rem;
 }
 
 .welcomeSection p {
-    color: #9c8f85;
-    font-size: 20px;
-    margin-bottom: 40px;
+    color: var(--on-surface-muted);
+    font-size: clamp(1rem, 1.6vw, 1.25rem);
+    max-width: 42rem;
 }
 
-/* cards */
 .dashboardCardsArea {
+    margin-top: var(--spacing-8);
     display: flex;
-    gap: 30px;
+    gap: 16px;
     flex-wrap: wrap;
 }
 
-/* card principal */
 .gameCard {
-    flex: 2;
-    min-height: 280px;
-    background: linear-gradient(
-            rgba(125, 43, 43, 0.85),
-            rgba(125, 43, 43, 0.85)
-        ),
-        url('/forest.jpg');
-    background-size: cover;
-    background-position: center;
-    border-radius: 25px;
-    padding: 30px;
-    color: white;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+	flex: 1;
+    min-width: 24rem;
+	padding: var(--spacing-4);
+    background: var(--primary);
+    border: 1px solid rgba(252, 249, 244, 0.18);
+	border-radius: 12px;
+    box-shadow: var(--ambient-shadow);
+	display: flex;
+	flex-direction: column;
+    justify-content: center;
+	gap: 16px;
+    position: relative;
+    overflow: hidden;
 }
 
-.tag {
-    background: white;
-    color: #7D2B2B;
-    width: fit-content;
-    padding: 6px 14px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: bold;
+.gameCard::before {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    background: rgba(252, 249, 244, 0.16);
+    width: 600px;
+    height: 1000px;
+    top: -230px;
+    right: -50px;
+}
+
+.gameCard > * {
+    position: relative;
+    z-index: 1;
 }
 
 .gameCard h2 {
-    font-size: 42px;
-    max-width: 500px;
-    margin: 20px 0;
+    font-size: clamp(1.9rem, 3vw, 2.8rem);
+    max-width: 32rem;
+    margin: 0;
+    color: var(--on-primary);
 }
 
 .gameCard p {
-    max-width: 450px;
-    color: #f5e9df;
+    max-width: 30rem;
+    color: rgba(252, 249, 244, 0.9);
 }
 
-.gameCardFooter {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
-
-.gameCardFooter button {
-    background: white;
-    color: #7D2B2B;
-    border: none;
-    padding: 14px 24px;
-    border-radius: 20px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.gameCardFooter span {
-    font-size: 14px;
-}
-
-/* card turma */
 .turmaCard {
-    flex: 1;
-    min-width: 280px;
-    background: #efefef;
-    border-radius: 25px;
-    padding: 30px;
-    height: 280px;
+    flex: 0 1 24rem;
+    min-width: 34rem;
+    min-height: 22rem;
+    padding: var(--spacing-4);
+    background: var(--surface);
+    border: 1px solid var(--outline-variant);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(108, 71, 31, 0.06);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 1rem;
 }
 
 .turmaIcon {
-    width: 50px;
-    height: 50px;
-    background: #dfe8dc;
+    width: 3.6rem;
+    height: 3.6rem;
+    background: var(--secondary-container);
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 12px;
-    color: green;
-    margin-bottom: 20px;
+    border-radius: 1rem;
+    color: var(--secondary);
 }
 
 .turmaCard span {
-    color: gray;
-    font-size: 14px;
-    letter-spacing: 1px;
+    color: var(--primary);
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
 }
 
 .turmaCard h2 {
-    margin-top: 10px;
-    color: #1f1f1f;
+    margin-top: 0;
+    color: var(--on-surface);
+    font-size: clamp(2.6rem, 4vw, 4rem);
+    font-weight: 700;
+    line-height: 1;
 }
 
-/* responsivo */
 @media (max-width: 900px) {
-    .dashboardCardsArea {
+    .dashBoardPainel {
         flex-direction: column;
     }
 
-    .welcomeSection h1 {
-        font-size: 38px;
+    .dashboardCardsArea {
+        margin-top: var(--spacing-4);
+        flex-direction: column;
     }
 
-    .gameCard h2 {
-        font-size: 28px;
+    .alunoDashboardHeader {
+        justify-content: flex-start;
     }
 }

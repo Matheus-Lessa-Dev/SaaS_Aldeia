@@ -1,14 +1,23 @@
+import { useEffect } from 'react'
 import { User, Trees } from 'lucide-react'
 import Sidebar from '../../solos/sideBar/SideBar2'
 import './Dashboard.css'
 
 function AlunoDashboard() {
+    useEffect(() => {
+        document.body.classList.add('studentDashboardPage')
+
+        return () => {
+            document.body.classList.remove('studentDashboardPage')
+        }
+    }, [])
+
     return (
         <div className="dashBoardPainel">
             <Sidebar />
             <div className="alunoDashboardLayout">
                 <header className="alunoDashboardHeader">
-                    <button className="alunoHeaderBtn">
+                    <button type="button" className="alunoHeaderBtn">
                         <span>Cauã Silva</span>
                         <User size={18} />
                     </button>
@@ -24,19 +33,12 @@ function AlunoDashboard() {
 
                     <div className="dashboardCardsArea">
                         <div className="gameCard">
-                            <span className="tag">DESTAQUE DA SEMANA</span>
-
                             <h2>O Mistério das Sementes Sagradas</h2>
 
                             <p>
                                 Ajude a comunidade a identificar as sementes
                                 ancestrais para o próximo plantio ritual.
                             </p>
-
-                            <div className="gameCardFooter">
-                                <button>▶ Jogar Agora</button>
-                                <span>+50 Pontos de Sabedoria</span>
-                            </div>
                         </div>
 
                         <div className="turmaCard">

@@ -14,6 +14,7 @@ const ClassCreatePage = lazy(() => import("../components/feats/classNew"));
 
 const StudentManagement = lazy(() => import("../components/feats/studentManagement"));
 const StudentCreatePage = lazy(() => import("../components/feats/studentNew"));
+const StudentGames = lazy(() => import("../components/feats/studentGames/Jogos"));
 
 const TeacherManagement = lazy(() => import("../components/feats/teacherManagement"));
 const TeacherCreatePage = lazy(() => import("../components/feats/teacherNew"));
@@ -82,15 +83,19 @@ const router = createBrowserRouter([
     element: <PrivateRoute allowedRoles={[Role.Admin]}><TeacherCreatePage /></PrivateRoute>,
   },
   {
-  path: "/alunos/:id/editar",
-  element: <PrivateRoute allowedRoles={[Role.Admin, Role.Teacher]}><StudentCreatePage /></PrivateRoute>,
+    path: "/alunos/:id/editar",
+    element: <PrivateRoute allowedRoles={[Role.Admin, Role.Teacher]}><StudentCreatePage /></PrivateRoute>,
+  },
+  {
+    path: "/jogos",
+    element: <PrivateRoute allowedRoles={[Role.Student]}><StudentGames /></PrivateRoute>,
   },
 
   // Página de acesso negado
   {
     path: "/unauthorized",
     element: <div style={{ padding: 40 }}>Acesso não autorizado.</div>,
-  },
+  }
 ]);
 
 function AppRoutes() {

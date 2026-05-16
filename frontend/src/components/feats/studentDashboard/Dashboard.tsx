@@ -1,61 +1,57 @@
-import { useEffect } from 'react'
-import { GraduationCap, Users, BookOpen } from 'lucide-react'
+import { User, Trees } from 'lucide-react'
 import Sidebar from '../../solos/sideBar/SideBar2'
-import Calendario from '../../solos/calendario/Calendario'
 import './Dashboard.css'
 
-const dashboardCards = [
-    { title: 'Total de Alunos', value: '67', icon: Users },
-    { title: 'Total de Professores', value: '8', icon: GraduationCap },
-    { title: 'Total de Turmas', value: '5', icon: BookOpen },
-]
-
-function StudentDashboard() {
-    useEffect(() => {
-        document.body.classList.add('adminDashboardPage')
-
-        return () => {
-            document.body.classList.remove('adminDashboardPage')
-        }
-    }, [])
-
+function AlunoDashboard() {
     return (
-        <div className='dashBoardPainel'>
+        <div className="dashBoardPainel">
             <Sidebar />
-            <div className="dashboardLayout">
-                <header className="dashboardHeader">
-                    <button type="button" className="dashboardHeaderBtn">
-                        <span>Educador</span>
-                        <GraduationCap size={18} aria-hidden="true" />
+            <div className="alunoDashboardLayout">
+                <header className="alunoDashboardHeader">
+                    <button className="alunoHeaderBtn">
+                        <span>Cauã Silva</span>
+                        <User size={18} />
                     </button>
                 </header>
-                <main className="dashboardContent">
-                    <h1>Bom dia, educador!</h1>
-                    <h4>Acompanhe as informações gerais do sistema</h4>
-                    <div className='dashboardContentCards'>
-                        {dashboardCards.map((card) => {
-                            const Icon = card.icon
-                            return (
-                                <div key={card.title} className="dashboardCard">
-                                    <h3>{card.title}</h3>
-                                    <p>{card.value}</p>
-                                    <div className="dashboardCardIcon">
-                                        <Icon size={32} aria-hidden="true" />
-                                    </div>
-                                </div>
-                            )
-                        })}
-                    </div>
-                    <div className="dashboardContentBottom">
-                        <div className='bannerPlaceholder'>  
 
+                <main className="alunoDashboardContent">
+                    <h3>Página inicial</h3>
+
+                    <div className="welcomeSection">
+                        <h1>Olá, Cauã!</h1>
+                        <p>Bem-vindo de volta à sua jornada de conhecimento.</p>
+                    </div>
+
+                    <div className="dashboardCardsArea">
+                        <div className="gameCard">
+                            <span className="tag">DESTAQUE DA SEMANA</span>
+
+                            <h2>O Mistério das Sementes Sagradas</h2>
+
+                            <p>
+                                Ajude a comunidade a identificar as sementes
+                                ancestrais para o próximo plantio ritual.
+                            </p>
+
+                            <div className="gameCardFooter">
+                                <button>▶ Jogar Agora</button>
+                                <span>+50 Pontos de Sabedoria</span>
+                            </div>
                         </div>
-                        <Calendario />
+
+                        <div className="turmaCard">
+                            <div className="turmaIcon">
+                                <Trees size={22} />
+                            </div>
+
+                            <span>MINHA TURMA</span>
+                            <h2>Turma 1</h2>
+                        </div>
                     </div>
                 </main>
             </div>
         </div>
     )
 }
-    
-export default StudentDashboard;
+
+export default AlunoDashboard

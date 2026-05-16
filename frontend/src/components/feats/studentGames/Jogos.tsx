@@ -1,6 +1,6 @@
 import { LayoutDashboard, Users, Gamepad2, LogOut, UserCircle, Play } from 'lucide-react'
 import { NavLink } from 'react-router-dom'
-import './AlunoJogos.css'
+import './Jogos.css'
 
 type Jogo = {
     id: number

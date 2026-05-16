@@ -7,13 +7,14 @@ import { Role } from "../context/AuthContext";
 const Login = lazy(() => import("../pages/Login"));
 const AdminDashboard = lazy(() => import("../components/feats/adminDashboard/Dashboard"));
 const TeacherDashboard = lazy(() => import("../components/feats/teacherDashboard/Dashboard"));
-const StudentDashboard = lazy(() => import("../components/feats/studentDashboard/Dashboard"));
+const AlunoDashboard = lazy(() => import("../components/feats/studentDashboard/Dashboard"));
 
 const ClassManagement = lazy(() => import("../components/feats/classManagement"));
 const ClassCreatePage = lazy(() => import("../components/feats/classNew"));
 
 const StudentManagement = lazy(() => import("../components/feats/studentManagement"));
 const StudentCreatePage = lazy(() => import("../components/feats/studentNew"));
+const StudentGames = lazy(() => import("../components/feats/studentGames/Jogos"));
 
 const TeacherManagement = lazy(() => import("../components/feats/teacherManagement"));
 const TeacherCreatePage = lazy(() => import("../components/feats/teacherNew"));
@@ -71,6 +72,10 @@ const router = createBrowserRouter([
     path: "/professores/novo",
     element: <PrivateRoute allowedRoles={[Role.Admin]}><TeacherCreatePage /></PrivateRoute>,
   },
+  {
+    path: "/jogos",
+    element: <PrivateRoute allowedRoles={[Role.Student]}><StudentGames /></PrivateRoute>,
+  },
 
   // Rotas do Professor
   {
@@ -81,7 +86,7 @@ const router = createBrowserRouter([
   // Rotas do Aluno
   {
     path: "/dashboard/aluno",
-    element: <PrivateRoute allowedRoles={[Role.Student]}><StudentDashboard /></PrivateRoute>,
+    element: <PrivateRoute allowedRoles={[Role.Student]}><AlunoDashboard /></PrivateRoute>,
   },
 
   // Página de acesso negado

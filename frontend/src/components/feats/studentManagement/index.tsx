@@ -1,45 +1,72 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSearch } from "../../../hooks/useSearch";
 import ManagementPageShell from "../../shared/ManagementPageShell";
 import StudentCard from "./studentCard";
+import api from "../../../services/api";
 import "./style.css";
 
 interface StudentInfo {
+  id: number;
   name: string;
   href: string;
-  id?: string;
+}
+
+interface AlunoResponse {
+  id: number;
+  nome: string;
+  email: string;
+  nomeResponsavel: string;
+  telefoneResponsavel: string;
+  nomeTurma: string;
 }
 
 export default function StudentManagement() {
   const navigate = useNavigate();
+  const [students, setStudents] = useState<StudentInfo[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
-  const initialStudents: StudentInfo[] = [
-    { name: "Fernando", href: "/alunos/1" },
-    { name: "Ana", href: "/alunos/2" },
-    { name: "Claudio", href: "/alunos/3" },
-    { name: "Pedro", href: "/alunos/4" },
-    { name: "Rebeca", href: "/alunos/5" },
-    { name: "Matheus", href: "/alunos/6" },
-  ];
-
-  const [students, setStudents] = useState(initialStudents);
   const { searchTerm, setSearchTerm, filteredItems } = useSearch(students);
 
-  const handleDeleteStudent = (studentInfo: StudentInfo) => {
-    // TODO: Implementar chamada de API para deletar o aluno no backend
-    // await deleteStudentAPI(studentInfo.id);
+  useEffect(() => {
+    fetchStudents();
+  }, []);
 
-    setStudents(students.filter((s) => s.name !== studentInfo.name));
+  async function fetchStudents() {
+    try {
+      const { data } = await api.get<AlunoResponse[]>('/alunos');
+      setStudents(data.map((aluno) => ({
+        id: aluno.id,
+        name: aluno.nome,
+        href: `/alunos/${aluno.id}/editar`,
+      })));
+    } catch {
+      setError('Erro ao carregar alunos.');
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const handleDeleteStudent = async (studentInfo: StudentInfo) => {
+    try {
+      await api.delete(`/alunos/${studentInfo.id}`);
+      setStudents((prev) => prev.filter((s) => s.id !== studentInfo.id));
+    } catch {
+      alert('Erro ao deletar aluno. Tente novamente.');
+    }
   };
+
+  if (loading) return <div className="appLoading">Carregando alunos...</div>;
+  if (error)   return <div className="appLoading">{error}</div>;
 
   const studentElements = filteredItems.map((studentInfo) => (
     <StudentCard
-      key={studentInfo.name}
+      key={studentInfo.id}
       name={studentInfo.name}
       href={studentInfo.href}
       onDelete={() => handleDeleteStudent(studentInfo)}
-      onEdit={() => navigate(studentInfo.href)}
+      onEdit={() => navigate(`/alunos/${studentInfo.id}/editar`)}
     />
   ));
 

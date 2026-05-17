@@ -12,13 +12,15 @@ services:
     volumes:
       - db_data:/var/lib/postgresql/data
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U admin -d projeto_db" ]
+      test: ["CMD-SHELL", "pg_isready -U admin -d projeto_db"]
       interval: 5s
       timeout: 5s
       retries: 5
 
   backend:
-    build: ./backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     container_name: spring_backend
     restart: unless-stopped
     depends_on:
@@ -29,13 +31,19 @@ services:
       SPRING_DATASOURCE_USERNAME: admin
       SPRING_DATASOURCE_PASSWORD: admin@123
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      JWT_SECRET: aldeia-saas-chave-super-secreta-2026-projeto-faculdade
+      JWT_EXPIRATION_MS: 86400000
     ports:
       - "8080:8080"
 
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
     container_name: react_frontend
     restart: unless-stopped
+    depends_on:
+      - backend
     ports:
       - "3000:5173"
     stdin_open: true

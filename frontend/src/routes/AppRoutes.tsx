@@ -41,7 +41,7 @@ function PrivateRoute({
   allowedRoles?: Role[];
 }) {
   const { isAuthenticated, hasRole } = useAuth();
-  // if (!isAuthenticated) return <Navigate to="/login" replace />;
+  if (!isAuthenticated) return <Navigate to="/login" replace />;
   if (allowedRoles && !allowedRoles.some(hasRole))
     return <div style={{ padding: 40 }}>Acesso não autorizado.</div>;
   return children;
@@ -55,9 +55,14 @@ function ProtectedRoute({
   children: ReactNode;
   allowedRoles?: Role[];
 }) {
-  const { isAuthenticated, hasRole, user } = useAuth();
-  // if (!isAuthenticated) return <Navigate to="/login" replace />;
-  // if (user?.primeiroAcesso) return <Navigate to="/perfil" replace />;
+  const { isAuthenticated, hasRole, user, loading } = useAuth();
+
+  if (loading) {
+    return <div className="appLoading">Carregando...</div>;
+  }
+
+  if (!isAuthenticated) return <Navigate to="/login" replace />;
+  if (user?.primeiroAcesso) return <Navigate to="/perfil" replace />;
   if (allowedRoles && !allowedRoles.some(hasRole))
     return <div style={{ padding: 40 }}>Acesso não autorizado.</div>;
   return children;

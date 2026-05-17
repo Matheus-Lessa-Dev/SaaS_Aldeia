@@ -43,6 +43,8 @@
   --spacing-20: 7rem;
   --roundedness-lg: 1rem;
 
+  --border-radius: 1em;
+
   /* Depth and motion */
   --ambient-shadow: 0 12px 32px rgba(135, 54, 29, 0.06);
   --easing-standard: 200ms ease-in-out;

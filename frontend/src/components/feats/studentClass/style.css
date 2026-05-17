@@ -1,0 +1,151 @@
+.studentClassPage {
+  display: flex;
+}
+
+.studentClassLayout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+  flex: 1;
+  overflow: hidden;
+  box-shadow: none;
+  background: var(--surface-container-low);
+}
+
+.header {
+  width: 100%;
+  padding: clamp(1rem, 2vw, var(--spacing-4));
+  display: flex;
+  justify-content: flex-end;
+}
+
+.headerBtn {
+  padding: 8px 16px;
+  background-color: #7d2b2b;
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mainContent {
+  padding: clamp(1rem, 2vw, var(--spacing-4));
+  display: flex;
+  flex-direction: row;
+  gap: clamp(1rem, 2vw, var(--spacing-4));
+}
+
+.classContent {
+  flex: 1;
+  border-radius: 1em;
+  flex: 1 0 65%;
+}
+
+.classContentList {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--surface-container);
+  border-radius: var(--border-radius);
+  padding: 1em;
+  gap: 1em;
+}
+
+.classContent h3 {
+  font-size: var(--display-md);
+  color: var(--on-surface);
+  margin-bottom: 1em;
+}
+
+.gamesAside {
+  flex: 1 0 30%;
+}
+
+.gamesAsideContentList {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  border-radius: var(--border-radius);
+  background-color: var(--surface-container);
+
+  padding: 1em;
+}
+
+.gameCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 1rem;
+  border-radius: 16px;
+  background: white;
+}
+
+.gameCardHeader {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.gameCardStatus {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  background: rgba(125, 43, 43, 0.12);
+  color: var(--primary);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.gameCard h4 {
+  margin: 0;
+  color: var(--on-surface);
+  font-size: 1rem;
+}
+
+.gameCard p {
+  margin: 0;
+  color: var(--on-surface-muted);
+  line-height: 1.5;
+  font-size: 0.93rem;
+}
+
+.gameCardButton {
+  align-self: flex-start;
+  border: none;
+  border-radius: 999px;
+  padding: 0.7rem 1rem;
+  background: var(--on-primary);
+  color: var(--primary);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.gameCardButton:hover {
+  filter: brightness(0.95);
+}
+
+.gamesAside h3 {
+  font-size: var(--display-md);
+  color: var(--on-surface);
+  margin-bottom: 1em;
+}
+
+.title {
+  font-size: var(--display-lg);
+  color: var(--primary);
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+@media (max-width: 900px) {
+  .mainContent {
+    flex-direction: column;
+  }
+
+  .gamesAside {
+    flex-basis: auto;
+  }
+}

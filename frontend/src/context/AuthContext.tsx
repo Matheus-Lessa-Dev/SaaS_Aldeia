@@ -21,18 +21,23 @@ export interface AuthContextType {
   setRole: (role: Role) => void;
   isAuthenticated: boolean;
   hasRole: (role: Role) => boolean;
+  loading: boolean;
 }
 
-export const AuthContext = createContext<AuthContextType | undefined>(undefined);
+export const AuthContext = createContext<AuthContextType | undefined>(
+  undefined,
+);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
+    setLoading(false);
   }, []);
 
   const login = (u: User, token: string, refreshToken: string) => {
@@ -61,7 +66,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const hasRole = (role: Role) => user?.role === role;
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, setRole, isAuthenticated, hasRole }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        login,
+        logout,
+        setRole,
+        isAuthenticated,
+        hasRole,
+        loading,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

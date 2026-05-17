@@ -36,11 +36,14 @@
   --body-md: 1rem;
 
   /* Spacing and radius */
+  --spacing-2: 0.7rem;
   --spacing-4: 1.4rem;
   --spacing-8: 2.8rem;
   --spacing-12: 4.2rem;
   --spacing-20: 7rem;
   --roundedness-lg: 1rem;
+
+  --border-radius: 1em;
 
   /* Depth and motion */
   --ambient-shadow: 0 12px 32px rgba(135, 54, 29, 0.06);

@@ -25,7 +25,7 @@ export default function StudentManagement() {
   const navigate = useNavigate();
   const [students, setStudents] = useState<StudentInfo[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const { searchTerm, setSearchTerm, filteredItems } = useSearch(students);
 
@@ -35,14 +35,16 @@ export default function StudentManagement() {
 
   async function fetchStudents() {
     try {
-      const { data } = await api.get<AlunoResponse[]>('/alunos');
-      setStudents(data.map((aluno) => ({
-        id: aluno.id,
-        name: aluno.nome,
-        href: `/alunos/${aluno.id}/editar`,
-      })));
+      const { data } = await api.get<AlunoResponse[]>("/alunos");
+      setStudents(
+        data.map((aluno) => ({
+          id: aluno.id,
+          name: aluno.nome,
+          href: `/alunos/${aluno.id}/editar`,
+        })),
+      );
     } catch {
-      setError('Erro ao carregar alunos.');
+      setError("Erro ao carregar alunos.");
     } finally {
       setLoading(false);
     }
@@ -53,12 +55,12 @@ export default function StudentManagement() {
       await api.delete(`/alunos/${studentInfo.id}`);
       setStudents((prev) => prev.filter((s) => s.id !== studentInfo.id));
     } catch {
-      alert('Erro ao deletar aluno. Tente novamente.');
+      alert("Erro ao deletar aluno. Tente novamente.");
     }
   };
 
   if (loading) return <div className="appLoading">Carregando alunos...</div>;
-  if (error)   return <div className="appLoading">{error}</div>;
+  if (error) return <div className="appLoading">{error}</div>;
 
   const studentElements = filteredItems.map((studentInfo) => (
     <StudentCard

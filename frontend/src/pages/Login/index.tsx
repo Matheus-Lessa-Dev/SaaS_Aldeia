@@ -1,28 +1,38 @@
-import { useState } from 'react'
-import type { FormEvent } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { User, Lock, Eye, EyeOff, ArrowRight } from 'lucide-react'
-import { useAuth } from '../../hooks/useAuth'
-import { loginRequest } from '../../services/authService'
-import './style.css'
+import { useEffect, useState } from "react";
+import type { FormEvent } from "react";
+import { useNavigate } from "react-router-dom";
+import { User, Lock, Eye, EyeOff, ArrowRight } from "lucide-react";
+import { useAuth } from "../../hooks/useAuth";
+import { loginRequest } from "../../services/authService";
+import "./style.css";
 
 function Login() {
-  const [showPassword, setShowPassword] = useState(false)
-  const [email, setEmail] = useState('')
-  const [senha, setSenha] = useState('')
-  const [error, setError] = useState('')
-  const [loading, setLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const { login } = useAuth()
-  const navigate = useNavigate()
+  const { login, user, loading: authLoading } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) {
+      navigate("/dashboard");
+    }
+  }, [user, navigate]);
+
+  if (authLoading) {
+    return <div>Carregando...</div>;
+  }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    setError('')
-    setLoading(true)
+    event.preventDefault();
+    setError("");
+    setLoading(true);
 
     try {
-      const data = await loginRequest(email, senha)
+      const data = await loginRequest(email, senha);
 
       const user = {
         id: data.email,
@@ -30,22 +40,21 @@ function Login() {
         email: data.email,
         role: data.role,
         primeiroAcesso: data.primeiroAcesso,
-      }
+      };
 
-      login(user, data.token, data.refreshToken)
+      login(user, data.token, data.refreshToken);
 
       if (data.primeiroAcesso) {
-        navigate('/perfil')
-        return
+        navigate("/perfil");
+        return;
       }
 
-      navigate('/dashboard')
-
+      navigate("/dashboard");
     } catch (err: any) {
-      const msg = err?.response?.data?.message
-      setError(msg || 'E-mail ou senha inválidos.')
+      const msg = err?.response?.data?.message;
+      setError(msg || "E-mail ou senha inválidos.");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   }
 
@@ -80,7 +89,7 @@ function Login() {
               <Lock size={18} aria-hidden="true" />
               <input
                 id="password"
-                type={showPassword ? 'text' : 'password'}
+                type={showPassword ? "text" : "password"}
                 placeholder="********"
                 required
                 value={senha}
@@ -88,7 +97,7 @@ function Login() {
               />
               <button
                 type="button"
-                aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
+                aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
                 onClick={() => setShowPassword((c) => !c)}
               >
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -96,13 +105,18 @@ function Login() {
             </div>
           </div>
 
-          <button className="button-primary login-button" type="submit" disabled={loading}>
-            {loading ? 'Entrando...' : 'Entrar'} <ArrowRight size={18} aria-hidden="true" />
+          <button
+            className="button-primary login-button"
+            type="submit"
+            disabled={loading}
+          >
+            {loading ? "Entrando..." : "Entrar"}{" "}
+            <ArrowRight size={18} aria-hidden="true" />
           </button>
         </form>
       </div>
     </div>
-  )
+  );
 }
 
-export default Login
+export default Login;

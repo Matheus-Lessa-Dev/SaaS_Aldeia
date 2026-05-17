@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import { Role } from "../context/AuthContext";
+import StudentClass from "../components/feats/studentClass";
 
 const Login = lazy(() => import("../pages/Login"));
 const Perfil = lazy(() => import("../pages/Perfil"));
@@ -40,9 +41,9 @@ function PrivateRoute({
   allowedRoles?: Role[];
 }) {
   const { isAuthenticated, hasRole } = useAuth();
-  if (!isAuthenticated) return <Navigate to="/login" replace />;
+  // if (!isAuthenticated) return <Navigate to="/login" replace />;
   if (allowedRoles && !allowedRoles.some(hasRole))
-    return <Navigate to="/unauthorized" replace />;
+    return <div style={{ padding: 40 }}>Acesso não autorizado.</div>;
   return children;
 }
 
@@ -55,16 +56,21 @@ function ProtectedRoute({
   allowedRoles?: Role[];
 }) {
   const { isAuthenticated, hasRole, user } = useAuth();
-  if (!isAuthenticated) return <Navigate to="/login" replace />;
-  if (user?.primeiroAcesso) return <Navigate to="/perfil" replace />;
+  // if (!isAuthenticated) return <Navigate to="/login" replace />;
+  // if (user?.primeiroAcesso) return <Navigate to="/perfil" replace />;
   if (allowedRoles && !allowedRoles.some(hasRole))
-    return <Navigate to="/unauthorized" replace />;
+    return <div style={{ padding: 40 }}>Acesso não autorizado.</div>;
   return children;
 }
 
 // Renderiza o dashboard correto baseado no role
 function DashboardRouter() {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return <div className="appLoading">Carregando...</div>;
+  }
+
   switch (user?.role) {
     case Role.Admin:
       return <AdminDashboard />;
@@ -103,6 +109,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute allowedRoles={[Role.Admin, Role.Teacher]}>
         <ClassManagement />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/turma",
+    element: (
+      <ProtectedRoute allowedRoles={[Role.Student]}>
+        <StudentClass />
       </ProtectedRoute>
     ),
   },
@@ -153,12 +167,6 @@ const router = createBrowserRouter([
         <TeacherCreatePage />
       </ProtectedRoute>
     ),
-  },
-
-  // Acesso negado
-  {
-    path: "/unauthorized",
-    element: <div style={{ padding: 40 }}>Acesso não autorizado.</div>,
   },
 ]);
 

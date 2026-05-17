@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSearch } from "../../../hooks/useSearch";
 import ManagementPageShell from "../../shared/ManagementPageShell";
-import StudentCard from "../studentClass/studentCard";
+import StudentCard from "./studentCard";
 import api from "../../../services/api";
 import "./style.css";
 

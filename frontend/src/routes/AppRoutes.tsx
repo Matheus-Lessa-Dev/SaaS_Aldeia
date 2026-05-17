@@ -173,6 +173,10 @@ const router = createBrowserRouter([
       </ProtectedRoute>
     ),
   },
+  {
+    path: "*",
+    element: <div style={{ padding: 40 }}>Página não encontrada.</div>,
+  },
 ]);
 
 function AppRoutes() {

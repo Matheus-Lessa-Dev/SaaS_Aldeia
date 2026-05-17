@@ -57,7 +57,7 @@ export default function StudentClass() {
             <h3>Jogos liberados</h3>
             <div className="gamesAsideContentList">
               {games.slice(0, 2).map((game) => (
-                <article key={game.id} className="gameCard">
+                <article key={game.id} className="contentGameCard">
                   <div className="gameCardHeader">
                     <span className="gameCardStatus">{game.status}</span>
                   </div>

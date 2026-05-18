@@ -1,62 +1,86 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSearch } from "../../../hooks/useSearch";
 import ManagementPageShell from "../../shared/ManagementPageShell";
 import TeacherCard from "./teacherCard";
+import api from "../../../services/api";
 import "./style.css";
 
 interface TeacherInfo {
-    name: string;
-    href: string;
-    id?: string;
+  id: number;
+  name: string;
+  href: string;
+}
+
+interface ProfessorResponse {
+  id: number;
+  nome: string;
+  email: string;
+  telefone: string;
 }
 
 export default function TeacherManagement() {
-    const navigate = useNavigate();
-    const initialTeachers: TeacherInfo[] = [
-        { name: "João", href: "/professores/1" },
-        { name: "Maria", href: "/professores/2" },
-        { name: "Carlos", href: "/professores/3" },
-        { name: "Ana", href: "/professores/4" },
-        { name: "DSADASD", href: "/professores/5" },
-        { name: "AASDASDASna", href: "/professores/6" },
-        { name: "ASDASAASDASna", href: "/professores/6" },
-        { name: "ASD", href: "/professores/6" },
-    ];
+  const navigate = useNavigate();
+  const [teachers, setTeachers] = useState<TeacherInfo[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
-    const [teachers, setTeachers] = useState(initialTeachers);
-    const { searchTerm, setSearchTerm, filteredItems } = useSearch(teachers);
+  const { searchTerm, setSearchTerm, filteredItems } = useSearch(teachers);
 
-    const handleDeleteTeacher = (teacherInfo: TeacherInfo) => {
-        // TODO: Implementar chamada de API para deletar o professor no backend
-        // await deleteTeacherAPI(teacherInfo.id);
-        
-        setTeachers(teachers.filter((t) => t.name !== teacherInfo.name));
-    };
+  useEffect(() => {
+    fetchTeachers();
+  }, []);
 
-    const teacherElements = filteredItems.map((teacherInfo) => (
-        <TeacherCard
-            key={teacherInfo.name}
-            name={teacherInfo.name}
-            href={teacherInfo.href}
-            onDelete={() => handleDeleteTeacher(teacherInfo)}
-            onEdit={() => navigate(teacherInfo.href)}
-        />
-    ));
+  async function fetchTeachers() {
+    try {
+      const { data } = await api.get<ProfessorResponse[]>('/professores');
+      setTeachers(data.map((p) => ({
+        id: p.id,
+        name: p.nome,
+        href: `/professores/${p.id}/editar`,
+      })));
+    } catch {
+      setError('Erro ao carregar professores.');
+    } finally {
+      setLoading(false);
+    }
+  }
 
-    return (
-        <ManagementPageShell
-            pageClassName="teacherManagementPage"
-            layoutClassName="managementPageLayout"
-            title="Professores"
-            itemsPerPage={6}
-            addButtonLabel="Adicionar Professor"
-            searchPlaceholder="Pesquisar Professor"
-            searchValue={searchTerm}
-            onSearchChange={setSearchTerm}
-            onAddClick={() => navigate("/professores/novo")}
-        >
-            {teacherElements}
-        </ManagementPageShell>
-    );
+  const handleDeleteTeacher = async (teacherInfo: TeacherInfo) => {
+    try {
+      await api.delete(`/professores/${teacherInfo.id}`);
+      setTeachers((prev) => prev.filter((t) => t.id !== teacherInfo.id));
+    } catch {
+      alert('Erro ao deletar professor. Tente novamente.');
+    }
+  };
+
+  if (loading) return <div className="appLoading">Carregando professores...</div>;
+  if (error)   return <div className="appLoading">{error}</div>;
+
+  const teacherElements = filteredItems.map((teacherInfo) => (
+    <TeacherCard
+      key={teacherInfo.id}
+      name={teacherInfo.name}
+      href={teacherInfo.href}
+      onDelete={() => handleDeleteTeacher(teacherInfo)}
+      onEdit={() => navigate(`/professores/${teacherInfo.id}/editar`)}
+    />
+  ));
+
+  return (
+    <ManagementPageShell
+      pageClassName="teacherManagementPage"
+      layoutClassName="managementPageLayout"
+      title="Professores"
+      itemsPerPage={6}
+      addButtonLabel="Adicionar Professor"
+      searchPlaceholder="Pesquisar Professor"
+      searchValue={searchTerm}
+      onSearchChange={setSearchTerm}
+      onAddClick={() => navigate("/professores/novo")}
+    >
+      {teacherElements}
+    </ManagementPageShell>
+  );
 }

@@ -66,8 +66,12 @@ public class AlunoService {
                 a.getId(),
                 a.getNome(),
                 a.getEmail(),
+                a.getDataNascimento(),          
+                a.getRua(),                     
+                a.getComplemento(),             
                 a.getNomeResponsavel(),
                 a.getTelefoneResponsavel(),
+                a.getEmailResponsavel(),        
                 a.getTurma() != null ? a.getTurma().getNome() : null
         );
     }

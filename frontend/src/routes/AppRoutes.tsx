@@ -174,6 +174,14 @@ const router = createBrowserRouter([
     ),
   },
   {
+    path: "/professores/:id/editar",
+    element: (
+      <ProtectedRoute allowedRoles={[Role.Admin]}>
+        <TeacherCreatePage />
+      </ProtectedRoute>
+    )
+  },
+  {
     path: "*",
     element: <div style={{ padding: 40 }}>Página não encontrada.</div>,
   },

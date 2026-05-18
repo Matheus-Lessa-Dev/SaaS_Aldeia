@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 
 @Service
@@ -29,7 +28,6 @@ public class ProfessorService {
     @Transactional
     public ProfessorResponse atualizar(Long id, ProfessorRequest request) {
         Professor professor = buscar(id);
-
         if (request.nome() != null)            professor.setNome(request.nome());
         if (request.dataNascimento() != null)  professor.setDataNascimento(request.dataNascimento());
         if (request.rua() != null)             professor.setRua(request.rua());
@@ -38,7 +36,6 @@ public class ProfessorService {
         if (request.email() != null)           professor.setEmail(request.email());
         if (request.senha() != null && !request.senha().isBlank())
             professor.setSenha(passwordEncoder.encode(request.senha()));
-
         return toResponse(professorRepository.save(professor));
     }
 
@@ -55,6 +52,14 @@ public class ProfessorService {
     }
 
     private ProfessorResponse toResponse(Professor p) {
-        return new ProfessorResponse(p.getId(), p.getNome(), p.getEmail(), p.getTelefone());
+        return new ProfessorResponse(
+                p.getId(),
+                p.getNome(),
+                p.getEmail(),
+                p.getDataNascimento(),  
+                p.getRua(),             
+                p.getComplemento(),     
+                p.getTelefone()
+        );
     }
 }

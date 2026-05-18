@@ -48,38 +48,37 @@ export default function StudentCreatePage() {
   const [formErrors, setFormErrors] = useState<StudentFormErrors>({})
 
   // Se for edição, busca os dados do aluno e preenche o form
-  useEffect(() => {
-    if (!isEditing) return
+useEffect(() => {
+  if (!isEditing) return
 
-    async function fetchAluno() {
-      try {
-        const { data } = await api.get(`/alunos/${id}`)
+  async function fetchAluno() {
+    try {
+      const { data } = await api.get(`/alunos/${id}`)
 
-        // A API retorna nome completo, separamos em nome e sobrenome
-        const [firstName, ...rest] = (data.nome as string).split(' ')
+      const [firstName, ...rest] = (data.nome as string).split(' ')
 
-        setFormState({
-          name: firstName ?? '',
-          surname: rest.join(' ') ?? '',
-          birthDate: data.dataNascimento ?? '',
-          addressStreet: data.rua ?? '',
-          email: data.email ?? '',
-          addressComplement: data.complemento ?? '',
-          guardianName: data.nomeResponsavel?.split(' ')[0] ?? '',
-          guardianSurname: data.nomeResponsavel?.split(' ').slice(1).join(' ') ?? '',
-          guardianPhone: data.telefoneResponsavel ?? '',
-          guardianEmail: data.emailResponsavel ?? '',
-        })
-      } catch {
-        alert('Erro ao carregar dados do aluno.')
-        navigate('/alunos')
-      } finally {
-        setLoadingData(false)
-      }
+      setFormState({
+        name: firstName ?? '',
+        surname: rest.join(' ') ?? '',
+        birthDate: data.dataNascimento ?? '',        // ✅ agora retorna
+        addressStreet: data.rua ?? '',               // ✅ agora retorna
+        email: data.email ?? '',
+        addressComplement: data.complemento ?? '',   // ✅ agora retorna
+        guardianName: data.nomeResponsavel?.split(' ')[0] ?? '',
+        guardianSurname: data.nomeResponsavel?.split(' ').slice(1).join(' ') ?? '',
+        guardianPhone: data.telefoneResponsavel ?? '',
+        guardianEmail: data.emailResponsavel ?? '',  // ✅ agora retorna
+      })
+    } catch {
+      alert('Erro ao carregar dados do aluno.')
+      navigate('/alunos')
+    } finally {
+      setLoadingData(false)
     }
+  }
 
-    fetchAluno()
-  }, [id])
+  fetchAluno()
+}, [id])
 
   const handleFieldChange = (field: keyof StudentFormState, value: string) => {
     setFormState((current) => ({ ...current, [field]: value }))

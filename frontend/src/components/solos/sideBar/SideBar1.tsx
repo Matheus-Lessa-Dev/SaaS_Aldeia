@@ -1,12 +1,14 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import type { LucideIcon } from "lucide-react";
 import {
   BookOpenCheck,
   Gamepad2,
   GraduationCap,
   LayoutDashboard,
+  LogOut,
   Users,
 } from "lucide-react";
+import { useAuth } from "../../../hooks/useAuth";
 import "./sideBar.css";
 
 const navItems = [
@@ -26,6 +28,14 @@ type NavItem = {
 const typedNavItems: NavItem[] = navItems;
 
 function Sidebar1() {
+  const { logout, user } = useAuth();
+  const navigate = useNavigate();
+
+  function handleLogout() {
+    logout();
+    navigate("/login");
+  }
+
   return (
     <aside className="sideBar" aria-label="Navegacao principal">
       <div className="sideBarTitle">
@@ -38,15 +48,10 @@ function Sidebar1() {
           const Icon = item.icon;
           const content = (
             <>
-              <Icon
-                className="sideBarNavlinkIcon"
-                size={20}
-                aria-hidden="true"
-              />
+              <Icon className="sideBarNavlinkIcon" size={20} aria-hidden="true" />
               <span>{item.label}</span>
             </>
           );
-
           if (item.to) {
             return (
               <NavLink
@@ -60,7 +65,6 @@ function Sidebar1() {
               </NavLink>
             );
           }
-
           return (
             <button key={item.label} className="sideBarNavlink" type="button">
               {content}
@@ -68,6 +72,17 @@ function Sidebar1() {
           );
         })}
       </nav>
+
+      <div className="sideBarFooter">
+        <div className="sideBarUser">
+          <span className="sideBarUserEmail">{user?.email}</span>
+          <span className="sideBarUserRole">{user?.role}</span>
+        </div>
+        <button className="sideBarLogout" type="button" onClick={handleLogout}>
+          <LogOut size={18} aria-hidden="true" />
+          <span>Sair</span>
+        </button>
+      </div>
     </aside>
   );
 }

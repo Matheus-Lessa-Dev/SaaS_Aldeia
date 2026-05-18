@@ -76,3 +76,52 @@
     padding-left: 12px;
     padding-right: 16px;
 }
+
+.sideBarFooter {
+  padding: 16px 24px;
+  border-top: 1px solid #E8E4DF;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sideBarUser {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sideBarUserEmail {
+  font-size: 13px;
+  color: #444;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sideBarUserRole {
+  font-size: 11px;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.sideBarLogout {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #E8E4DF;
+  border-radius: 8px;
+  background: transparent;
+  color: #7D2B2B;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.sideBarLogout:hover {
+  background-color: #EDE8E2;
+}

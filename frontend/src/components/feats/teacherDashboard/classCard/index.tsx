@@ -12,10 +12,10 @@ export default function ClassCard({
   href?: string;
 }) {
   return (
-    <a className="classCard" href={href}>
-      <h3>{name}</h3>
-      <p>{description}</p>
-      <p>Alunos: {alunos}</p>
+    <a className="teacherDashboardClassCard" href={href}>
+      <h3 className="teacherDashboardClassCardTitle">{name}</h3>
+      <p className="teacherDashboardClassCardDescription">{description}</p>
+      <p className="teacherDashboardClassCardStudents">Alunos: {alunos}</p>
     </a>
   );
 }

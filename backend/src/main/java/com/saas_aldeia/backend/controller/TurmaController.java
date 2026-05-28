@@ -1,5 +1,6 @@
 package com.saas_aldeia.backend.controller;
 
+import com.saas_aldeia.backend.dto.TurmaAlunosRequest;
 import com.saas_aldeia.backend.dto.TurmaRequest;
 import com.saas_aldeia.backend.dto.TurmaResponse;
 import com.saas_aldeia.backend.service.TurmaService;
@@ -35,6 +36,13 @@ public class TurmaController {
     public ResponseEntity<TurmaResponse> atualizar(@PathVariable Long id,
                                                    @RequestBody TurmaRequest request) {
         return ResponseEntity.ok(turmaService.atualizar(id, request));
+    }
+
+    @PutMapping("/{id}/alunos")
+    public ResponseEntity<Void> associarAlunos(@PathVariable Long id,
+                                               @RequestBody TurmaAlunosRequest request) {
+        turmaService.associarAlunos(id, request.alunosIds());
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")

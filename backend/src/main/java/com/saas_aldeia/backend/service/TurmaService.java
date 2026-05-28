@@ -5,6 +5,7 @@ import com.saas_aldeia.backend.dto.TurmaResponse;
 import com.saas_aldeia.backend.model.Jogo;
 import com.saas_aldeia.backend.model.Professor;
 import com.saas_aldeia.backend.model.Turma;
+import com.saas_aldeia.backend.repository.AlunoRepository;
 import com.saas_aldeia.backend.repository.JogoRepository;
 import com.saas_aldeia.backend.repository.ProfessorRepository;
 import com.saas_aldeia.backend.repository.TurmaRepository;
@@ -22,6 +23,7 @@ public class TurmaService {
     private final TurmaRepository turmaRepository;
     private final ProfessorRepository professorRepository;
     private final JogoRepository jogoRepository;
+    private final AlunoRepository alunoRepository;
 
     public List<TurmaResponse> listar() {
         return turmaRepository.findAll().stream().map(this::toResponse).toList();
@@ -63,6 +65,21 @@ public class TurmaService {
             turma.setJogos(resolverJogos(request.jogosIds()));
 
         return toResponse(turmaRepository.save(turma));
+    }
+
+    @Transactional
+    public void associarAlunos(Long id, List<Long> alunosIds) {
+        Turma turma = buscar(id);
+        if (alunosIds == null || alunosIds.isEmpty()) {
+            return;
+        }
+
+        var alunos = alunoRepository.findAllById(alunosIds);
+        if (alunos.size() != alunosIds.size())
+            throw new IllegalArgumentException("Alguns alunos não foram encontrados");
+
+        alunos.forEach(aluno -> aluno.setTurma(turma));
+        alunoRepository.saveAll(alunos);
     }
 
     @Transactional

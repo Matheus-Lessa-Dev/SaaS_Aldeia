@@ -8,6 +8,7 @@ import {
 import { useAuth } from "../hooks/useAuth";
 import { Role } from "../context/AuthContext";
 import StudentClass from "../components/feats/studentClass";
+import GamePage from "../pages/games";
 
 const Login = lazy(() => import("../pages/Login"));
 const Perfil = lazy(() => import("../pages/Perfil"));
@@ -187,7 +188,15 @@ const router = createBrowserRouter([
       <ProtectedRoute allowedRoles={[Role.Admin]}>
         <TeacherCreatePage />
       </ProtectedRoute>
-    )
+    ),
+  },
+  {
+    path: "/jogos",
+    element: (
+      <ProtectedRoute>
+        <GamePage />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "*",

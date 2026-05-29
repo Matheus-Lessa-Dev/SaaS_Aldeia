@@ -17,7 +17,10 @@ public class AlunoController {
     private final AlunoService alunoService;
 
     @GetMapping
-    public ResponseEntity<List<AlunoResponse>> listar() {
+    public ResponseEntity<List<AlunoResponse>> listar(@RequestParam(required = false) Long turmaId) {
+        if (turmaId != null) {
+            return ResponseEntity.ok(alunoService.listarPorTurma(turmaId));
+        }
         return ResponseEntity.ok(alunoService.listar());
     }
 
@@ -36,5 +39,10 @@ public class AlunoController {
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
         alunoService.deletar(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/sem-turma")
+    public ResponseEntity<List<AlunoResponse>> listarSemTurma() {
+        return ResponseEntity.ok(alunoService.listarSemTurma());
     }
 }

@@ -134,6 +134,14 @@ const router = createBrowserRouter([
     ),
   },
   {
+    path: "/turmas/:id/editar",
+    element: (
+      <ProtectedRoute allowedRoles={[Role.Admin, Role.Teacher]}>
+        <ClassCreatePage />
+      </ProtectedRoute>
+    ),
+  },
+  {
     path: "/alunos",
     element: (
       <ProtectedRoute allowedRoles={[Role.Admin, Role.Teacher]}>

@@ -26,12 +26,7 @@ public class Turma {
     @OneToMany(mappedBy = "turma")
     private List<Aluno> alunos;
 
-    @ManyToMany
-    @JoinTable(
-            name = "turma_has_professor",
-            joinColumns = @JoinColumn(name = "turma_id"),
-            inverseJoinColumns = @JoinColumn(name = "professor_id")
-    )
+    @OneToMany(mappedBy = "turma")
     private List<Professor> professores;
 
     @ManyToMany

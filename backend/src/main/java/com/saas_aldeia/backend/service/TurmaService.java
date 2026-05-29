@@ -2,6 +2,7 @@ package com.saas_aldeia.backend.service;
 
 import com.saas_aldeia.backend.dto.TurmaRequest;
 import com.saas_aldeia.backend.dto.TurmaResponse;
+import com.saas_aldeia.backend.model.Aluno;
 import com.saas_aldeia.backend.model.Jogo;
 import com.saas_aldeia.backend.model.Professor;
 import com.saas_aldeia.backend.model.Turma;
@@ -22,13 +23,15 @@ public class TurmaService {
 
     private final TurmaRepository turmaRepository;
     private final ProfessorRepository professorRepository;
-    private final JogoRepository jogoRepository;
     private final AlunoRepository alunoRepository;
+    private final JogoRepository jogoRepository;
 
+    @Transactional(readOnly = true)
     public List<TurmaResponse> listar() {
         return turmaRepository.findAll().stream().map(this::toResponse).toList();
     }
 
+    @Transactional(readOnly = true)
     public TurmaResponse buscarPorId(Long id) {
         return toResponse(buscar(id));
     }
@@ -41,11 +44,13 @@ public class TurmaService {
         Turma turma = new Turma();
         turma.setNome(request.nome());
         turma.setPeriodo(request.periodo());
-        turma.setProfessores(resolverProfessores(request.professoresIds()));
         turma.setJogos(resolverJogos(request.jogosIds()));
         turma.setAlunos(new ArrayList<>());
 
-        return toResponse(turmaRepository.save(turma));
+        Turma turmaSalva = turmaRepository.save(turma);
+        vincularProfessores(turmaSalva, request.professoresIds());
+
+        return toResponse(turmaSalva);
     }
 
     @Transactional
@@ -60,7 +65,7 @@ public class TurmaService {
         if (request.periodo() != null)
             turma.setPeriodo(request.periodo());
         if (request.professoresIds() != null)
-            turma.setProfessores(resolverProfessores(request.professoresIds()));
+            vincularProfessores(turma, request.professoresIds());
         if (request.jogosIds() != null)
             turma.setJogos(resolverJogos(request.jogosIds()));
 
@@ -68,25 +73,50 @@ public class TurmaService {
     }
 
     @Transactional
-    public void associarAlunos(Long id, List<Long> alunosIds) {
-        Turma turma = buscar(id);
-        if (alunosIds == null || alunosIds.isEmpty()) {
-            return;
-        }
+    public void vincularAlunos(Long turmaId, List<Long> alunosIds) {
+        Turma turma = buscar(turmaId);
 
-        var alunos = alunoRepository.findAllById(alunosIds);
-        if (alunos.size() != alunosIds.size())
-            throw new IllegalArgumentException("Alguns alunos não foram encontrados");
+        List<Aluno> alunosAtuais = alunoRepository.findByTurmaId(turmaId);
+        alunosAtuais.forEach(aluno -> {
+            if (!alunosIds.contains(aluno.getId())) {
+                aluno.setTurma(null);
+                alunoRepository.save(aluno);
+            }
+        });
 
-        alunos.forEach(aluno -> aluno.setTurma(turma));
-        alunoRepository.saveAll(alunos);
+        alunosIds.forEach(alunoId -> {
+            Aluno aluno = alunoRepository.findById(alunoId)
+                    .orElseThrow(() -> new IllegalArgumentException("Aluno não encontrado: " + alunoId));
+            aluno.setTurma(turma);
+            alunoRepository.save(aluno);
+        });
     }
 
     @Transactional
     public void deletar(Long id) {
-        if (!turmaRepository.existsById(id))
-            throw new IllegalArgumentException("Turma não encontrada");
+        Turma turma = buscar(id);
+
+        List<Aluno> alunos = alunoRepository.findByTurmaId(id);
+        alunos.forEach(aluno -> {
+            aluno.setTurma(null);
+            alunoRepository.save(aluno);
+        });
+
+        if (turma.getProfessores() != null) {
+            turma.getProfessores().forEach(professor -> {
+                professor.setTurma(null);
+                professorRepository.save(professor);
+            });
+        }
+
         turmaRepository.deleteById(id);
+    }
+
+    public List<TurmaResponse> listarSemTurma() {
+        return alunoRepository.findAll().stream()
+                .filter(a -> a.getTurma() == null)
+                .map(a -> new TurmaResponse(null, a.getNome(), null, null, null, 0))
+                .toList();
     }
 
     private Turma buscar(Long id) {
@@ -100,6 +130,26 @@ public class TurmaService {
                 .map(pid -> professorRepository.findById(pid)
                         .orElseThrow(() -> new IllegalArgumentException("Professor não encontrado: " + pid)))
                 .toList();
+    }
+
+    private void vincularProfessores(Turma turma, List<Long> professoresIds) {
+        List<Long> ids = professoresIds == null ? new ArrayList<>() : professoresIds;
+
+        if (turma.getProfessores() != null) {
+            turma.getProfessores().forEach(professor -> {
+                if (!ids.contains(professor.getId())) {
+                    professor.setTurma(null);
+                    professorRepository.save(professor);
+                }
+            });
+        }
+
+        List<Professor> professoresVinculados = resolverProfessores(ids);
+        professoresVinculados.forEach(professor -> {
+            professor.setTurma(turma);
+            professorRepository.save(professor);
+        });
+        turma.setProfessores(professoresVinculados);
     }
 
     private List<Jogo> resolverJogos(List<Long> ids) {
@@ -117,6 +167,7 @@ public class TurmaService {
         List<String> nomesJogos = t.getJogos() == null
                 ? new ArrayList<>()
                 : t.getJogos().stream().map(Jogo::getNome).toList();
-        return new TurmaResponse(t.getId(), t.getNome(), t.getPeriodo(), nomesProfessores, nomesJogos);
+        int totalAlunos = t.getAlunos() == null ? 0 : t.getAlunos().size();
+        return new TurmaResponse(t.getId(), t.getNome(), t.getPeriodo(), nomesProfessores, nomesJogos, totalAlunos);
     }
 }

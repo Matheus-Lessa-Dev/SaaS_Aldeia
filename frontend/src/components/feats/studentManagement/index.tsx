@@ -59,9 +59,6 @@ export default function StudentManagement() {
     }
   };
 
-  if (loading) return <div className="appLoading">Carregando alunos...</div>;
-  if (error) return <div className="appLoading">{error}</div>;
-
   const studentElements = filteredItems.map((studentInfo) => (
     <StudentCard
       key={studentInfo.id}
@@ -71,6 +68,12 @@ export default function StudentManagement() {
       onEdit={() => navigate(`/alunos/${studentInfo.id}/editar`)}
     />
   ));
+
+  const listElements = error
+    ? [<p key="students-error" className="classesListEmpty">{error}</p>]
+    : loading
+      ? []
+      : studentElements;
 
   return (
     <ManagementPageShell
@@ -84,7 +87,7 @@ export default function StudentManagement() {
       onSearchChange={setSearchTerm}
       onAddClick={() => navigate("/alunos/novo")}
     >
-      {studentElements}
+      {listElements}
     </ManagementPageShell>
   );
 }

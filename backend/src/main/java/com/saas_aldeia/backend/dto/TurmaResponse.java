@@ -7,5 +7,6 @@ public record TurmaResponse(
         String nome,
         String periodo,
         List<String> nomesProfessores,
-        List<String> nomesJogos
+        List<String> nomesJogos,
+        int totalAlunos
 ) {}

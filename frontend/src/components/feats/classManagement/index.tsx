@@ -1,49 +1,80 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSearch } from "../../../hooks/useSearch";
 import ManagementPageShell from "../../shared/ManagementPageShell";
 import ClassCard from "./classCard";
+import api from "../../../services/api";
 import "./style.css";
 
 interface ClassInfo {
+  id: number;
   name: string;
   students: number;
   href: string;
-  id?: string;
+}
+
+interface TurmaResponse {
+  id: number;
+  nome: string;
+  periodo: string;
+  nomesProfessores: string[];
+  nomesJogos: string[];
+  totalAlunos: number;
 }
 
 export default function ClassManagement() {
   const navigate = useNavigate();
-  const initialClasses: ClassInfo[] = [
-    { name: "Turma 1", students: 20, href: "/turmas/turma-1" },
-    { name: "Turma 2", students: 15, href: "/turmas/turma-2" },
-    { name: "Turma 3", students: 30, href: "/turmas/turma-3" },
-    { name: "Turma 4", students: 25, href: "/turmas/turma-4" },
-    { name: "Turma 5", students: 35, href: "/turmas/turma-5" },
-    { name: "Turma 6", students: 40, href: "/turmas/turma-6" },
-  ];
+  const [classes, setClasses] = useState<ClassInfo[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
-  const [classes, setClasses] = useState(initialClasses);
   const { searchTerm, setSearchTerm, filteredItems } = useSearch(classes);
 
-  const handleDeleteClass = (classInfo: ClassInfo) => {
-    // TODO: Implementar chamada de API para deletar a turma no backend
-    // await deleteClassAPI(classInfo.id);
-    
-    // Por enquanto, apenas remove da lista local
-    setClasses(classes.filter((c) => c.name !== classInfo.name));
+  useEffect(() => {
+    fetchClasses();
+  }, []);
+
+  async function fetchClasses() {
+    try {
+      const { data } = await api.get<TurmaResponse[]>('/turmas');
+      setClasses(data.map((t) => ({
+        id: t.id,
+        name: t.nome,
+        students: t.totalAlunos,
+        href: `/turmas/${t.id}/editar`,
+      })));
+    } catch {
+      setError('Erro ao carregar turmas.');
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const handleDeleteClass = async (classInfo: ClassInfo) => {
+    try {
+      await api.delete(`/turmas/${classInfo.id}`);
+      setClasses((prev) => prev.filter((c) => c.id !== classInfo.id));
+    } catch {
+      alert('Erro ao deletar turma. Tente novamente.');
+    }
   };
 
   const classesElements = filteredItems.map((classInfo) => (
     <ClassCard
-      key={classInfo.name}
+      key={classInfo.id}
       name={classInfo.name}
       students={classInfo.students}
       href={classInfo.href}
       onDelete={() => handleDeleteClass(classInfo)}
-      onEdit={() => navigate(classInfo.href)}
+      onEdit={() => navigate(`/turmas/${classInfo.id}/editar`)}
     />
   ));
+
+  const listElements = error
+    ? [<p key="classes-error" className="classesListEmpty">{error}</p>]
+    : loading
+      ? []
+      : classesElements;
 
   return (
     <ManagementPageShell
@@ -57,7 +88,7 @@ export default function ClassManagement() {
       onSearchChange={setSearchTerm}
       onAddClick={() => navigate("/turmas/novo")}
     >
-      {classesElements}
+      {listElements}
     </ManagementPageShell>
   );
 }

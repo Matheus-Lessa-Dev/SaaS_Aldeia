@@ -55,9 +55,6 @@ export default function TeacherManagement() {
     }
   };
 
-  if (loading) return <div className="appLoading">Carregando professores...</div>;
-  if (error)   return <div className="appLoading">{error}</div>;
-
   const teacherElements = filteredItems.map((teacherInfo) => (
     <TeacherCard
       key={teacherInfo.id}
@@ -67,6 +64,12 @@ export default function TeacherManagement() {
       onEdit={() => navigate(`/professores/${teacherInfo.id}/editar`)}
     />
   ));
+
+  const listElements = error
+    ? [<p key="teachers-error" className="classesListEmpty">{error}</p>]
+    : loading
+      ? []
+      : teacherElements;
 
   return (
     <ManagementPageShell
@@ -80,7 +83,7 @@ export default function TeacherManagement() {
       onSearchChange={setSearchTerm}
       onAddClick={() => navigate("/professores/novo")}
     >
-      {teacherElements}
+      {listElements}
     </ManagementPageShell>
   );
 }

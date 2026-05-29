@@ -40,6 +40,64 @@
   color: var(--on-surface-muted);
 }
 
+.class-selection-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.class-selection-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #E8E4DF;
+  background: #fff;
+  font-size: 14px;
+  color: #444;
+  transition: all 0.15s;
+}
+
+.class-selection-item--selected {
+  background: #F0FFF4;
+  border-color: #68D391;
+  color: #276749;
+}
+
+.class-selection-btn {
+  padding: 4px 12px;
+  border-radius: 6px;
+  border: 1px solid #7D2B2B;
+  background: transparent;
+  color: #7D2B2B;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.class-selection-btn:hover {
+  background: #EDE8E2;
+}
+
+.class-selection-btn--remove {
+  border-color: #68D391;
+  color: #276749;
+}
+
+.class-selection-btn--remove:hover {
+  background: #F0FFF4;
+}
+
+.class-empty-msg {
+  font-size: 14px;
+  color: #999;
+  text-align: center;
+  padding: 16px 0;
+}
+
 @media (max-width: 900px) {
   .class-create-page__card {
     margin-left: 0;

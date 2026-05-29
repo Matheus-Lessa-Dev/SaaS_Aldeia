@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { GraduationCap, Users, BookOpen, User } from "lucide-react";
+import { GraduationCap, User } from "lucide-react";
 import Sidebar from "../../solos/sideBar/SideBar1";
 import Calendario from "../../solos/calendario/Calendario";
 import "./Dashboard.css";

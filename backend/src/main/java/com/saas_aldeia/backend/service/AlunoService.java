@@ -28,6 +28,13 @@ public class AlunoService {
         return toResponse(buscar(id));
     }
 
+    public List<AlunoResponse> listarSemTurma() {
+        return alunoRepository.findAll().stream()
+                .filter(a -> a.getTurma() == null)
+                .map(this::toResponse)
+                .toList();
+    }
+
     @Transactional
     public AlunoResponse atualizar(Long id, AlunoRequest request) {
         Aluno aluno = buscar(id);
@@ -74,5 +81,9 @@ public class AlunoService {
                 a.getEmailResponsavel(),        
                 a.getTurma() != null ? a.getTurma().getNome() : null
         );
+    }
+
+    public List<AlunoResponse> listarPorTurma(Long turmaId) {
+        return alunoRepository.findByTurmaId(turmaId).stream().map(this::toResponse).toList();
     }
 }

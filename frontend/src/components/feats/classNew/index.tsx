@@ -1,93 +1,171 @@
-import { useState } from 'react'
-import { BookOpenCheck, Layers3, UserRound } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { BookOpenCheck, Layers3, UserRound, Users } from 'lucide-react'
+import { useNavigate, useParams } from 'react-router-dom'
 import Sidebar1 from '../../solos/sideBar/SideBar1'
 import { FormActions } from '../../shared/formActions'
 import { FormField } from '../../shared/formField'
 import { FormSection } from '../../shared/formSection'
+import api from '../../../services/api'
 import '../../shared/ManagementPageShell/style.css'
 import './style.css'
+
+interface ProfessorOption {
+    id: number
+    nome: string
+}
+
+interface AlunoOption {
+    id: number
+    nome: string
+}
 
 type ClassFormState = {
     name: string
     period: string
-    responsibleTeacher: string
 }
 
-type ClassFormErrors = {
-    name?: string
-    period?: string
-    responsibleTeacher?: string
-}
+type ClassFormErrors = Partial<Record<keyof ClassFormState, string>>
 
 const periodOptions = ['Manhã', 'Tarde', 'Noite']
 
-const teacherOptions = [
-    'João Silva',
-    'Maria Souza',
-    'Carlos Henrique',
-    'Ana Paula',
-]
-
 export default function ClassCreatePage() {
     const navigate = useNavigate()
+    const { id } = useParams<{ id: string }>()
+    const isEditing = Boolean(id)
+
     const [isSubmitting, setIsSubmitting] = useState(false)
-    const [formState, setFormState] = useState<ClassFormState>({
-        name: '',
-        period: '',
-        responsibleTeacher: '',
-    })
+    const [loadingData, setLoadingData] = useState(true)
+    const [formState, setFormState] = useState<ClassFormState>({ name: '', period: '' })
     const [formErrors, setFormErrors] = useState<ClassFormErrors>({})
+
+    const [professores, setProfessores] = useState<ProfessorOption[]>([])
+    const [selectedProfessores, setSelectedProfessores] = useState<number[]>([])
+
+    // Lista unificada de alunos: sem turma + alunos já nessa turma (edição)
+    const [alunos, setAlunos] = useState<AlunoOption[]>([])
+    const [selectedAlunos, setSelectedAlunos] = useState<number[]>([])
+
+    useEffect(() => {
+        async function fetchTudo() {
+            try {
+                // Busca professores e alunos sem turma em paralelo
+                const [profRes, alunosSemTurmaRes] = await Promise.all([
+                    api.get<{ id: number; nome: string }[]>('/professores'),
+                    api.get<{ id: number; nome: string }[]>('/alunos/sem-turma'),
+                ])
+
+                const listaProfessores = profRes.data.map((p) => ({ id: p.id, nome: p.nome }))
+                setProfessores(listaProfessores)
+
+                let listaAlunos: AlunoOption[] = alunosSemTurmaRes.data.map((a) => ({
+                    id: a.id,
+                    nome: a.nome,
+                }))
+
+                if (isEditing) {
+                    // Busca dados da turma e alunos já vinculados
+                    const [turmaRes, alunosTurmaRes] = await Promise.all([
+                        api.get(`/turmas/${id}`),
+                        api.get<{ id: number; nome: string }[]>(`/alunos?turmaId=${id}`),  // não existe ainda, usamos findByTurmaId via endpoint
+                    ])
+
+                    const turma = turmaRes.data
+                    setFormState({
+                        name: turma.nome ?? '',
+                        period: turma.periodo ?? '',
+                    })
+
+                    // 👈 seleciona professores comparando pelo nome retornado na TurmaResponse
+                    const profsSelecionados = listaProfessores
+                        .filter((p) => (turma.nomesProfessores as string[]).includes(p.nome))
+                        .map((p) => p.id)
+                    setSelectedProfessores(profsSelecionados)
+
+                    // 👈 alunos da turma vêm do endpoint /alunos/turma/{id}
+                    const alunosDaTurma: AlunoOption[] = alunosTurmaRes.data.map((a) => ({
+                        id: a.id,
+                        nome: a.nome,
+                    }))
+                    setSelectedAlunos(alunosDaTurma.map((a) => a.id))
+
+                    // Adiciona alunos da turma na lista sem duplicar
+                    const idsExistentes = new Set(listaAlunos.map((a) => a.id))
+                    const alunosExtras = alunosDaTurma.filter((a) => !idsExistentes.has(a.id))
+                    listaAlunos = [...alunosExtras, ...listaAlunos]
+                }
+
+                setAlunos(listaAlunos)
+            } catch {
+                alert('Erro ao carregar dados.')
+            } finally {
+                setLoadingData(false)
+            }
+        }
+
+        fetchTudo()
+    }, [id])
 
     const handleFieldChange = (field: keyof ClassFormState, value: string) => {
         setFormState((current) => ({ ...current, [field]: value }))
         setFormErrors((current) => ({ ...current, [field]: undefined }))
     }
 
+    const toggleProfessor = (profId: number) => {
+        setSelectedProfessores((prev) =>
+            prev.includes(profId) ? prev.filter((i) => i !== profId) : [...prev, profId]
+        )
+    }
+
+    const toggleAluno = (alunoId: number) => {
+        setSelectedAlunos((prev) =>
+            prev.includes(alunoId) ? prev.filter((i) => i !== alunoId) : [...prev, alunoId]
+        )
+    }
+
     const validate = () => {
         const nextErrors: ClassFormErrors = {}
-
-        if (!formState.name.trim()) {
-            nextErrors.name = 'Informe o nome da turma.'
-        }
-
-        if (!formState.period.trim()) {
-            nextErrors.period = 'Informe o período da turma.'
-        }
-
-        if (!formState.responsibleTeacher.trim()) {
-            nextErrors.responsibleTeacher = 'Selecione o professor responsável.'
-        }
-
+        if (!formState.name.trim()) nextErrors.name = 'Informe o nome da turma.'
+        if (!formState.period.trim()) nextErrors.period = 'Informe o período da turma.'
         setFormErrors(nextErrors)
         return Object.keys(nextErrors).length === 0
     }
 
-    const handleSubmit = () => {
-        if (!validate()) {
-            return
-        }
-
+    const handleSubmit = async () => {
+        if (!validate()) return
         setIsSubmitting(true)
 
-        const payload = {
-            nome: formState.name.trim(),
-            periodo: formState.period.trim(),
-            professorResponsavel: formState.responsibleTeacher.trim(),
-        }
+        try {
+            let turmaId = Number(id)
 
-        // TODO: integrar com endpoint de criacao de turma no backend.
-        void payload
+            if (isEditing) {
+                await api.put(`/turmas/${id}`, {
+                    nome: formState.name,
+                    periodo: formState.period,
+                    professoresIds: selectedProfessores,
+                })
+            } else {
+                const { data } = await api.post('/turmas', {
+                    nome: formState.name,
+                    periodo: formState.period,
+                    professoresIds: selectedProfessores,
+                })
+                turmaId = data.id
+            }
 
-        setTimeout(() => {
-            setIsSubmitting(false)
+            await api.put(`/turmas/${turmaId}/alunos`, {
+                alunosIds: selectedAlunos,
+            })
+
             navigate('/turmas')
-        }, 300)
+        } catch (err: any) {
+            const msg = err?.response?.data?.message
+            alert(msg || (isEditing ? 'Erro ao atualizar turma.' : 'Erro ao cadastrar turma.'))
+        } finally {
+            setIsSubmitting(false)
+        }
     }
 
-    const handleCancel = () => {
-        navigate('/turmas')
-    }
+    if (loadingData) return <div className="appLoading">Carregando dados...</div>
 
     return (
         <div className="managementPageLayout">
@@ -102,7 +180,9 @@ export default function ClassCreatePage() {
 
                 <main className="managementContent">
                     <section className="class-create-page__card" aria-label="Formulario de cadastro de turma">
-                        <h2 className="class-create-page__title">Cadastrar Nova Turma</h2>
+                        <h2 className="class-create-page__title">
+                            {isEditing ? 'Editar Turma' : 'Cadastrar Nova Turma'}
+                        </h2>
 
                         <FormSection title="Dados da turma" icon={<Layers3 size={16} aria-hidden="true" />}>
                             <FormField
@@ -110,80 +190,84 @@ export default function ClassCreatePage() {
                                 label="Nome da turma"
                                 placeholder="Ex.: Turma 1"
                                 value={formState.name}
-                                onChange={(event) => handleFieldChange('name', event.target.value)}
+                                onChange={(e) => handleFieldChange('name', e.target.value)}
                                 error={formErrors.name}
                                 required
                             />
-
                             <div className="form-field">
                                 <label htmlFor="class-period" className="form-field__label">
-                                    Período da turma
-                                    <span className="form-field__required">*</span>
+                                    Período da turma <span className="form-field__required">*</span>
                                 </label>
                                 <div className={`form-field__input-wrapper ${formErrors.period ? 'form-field__input--error' : ''}`.trim()}>
                                     <select
                                         id="class-period"
-                                        name="class-period"
                                         value={formState.period}
-                                        onChange={(event) => handleFieldChange('period', event.target.value)}
-                                        aria-invalid={!!formErrors.period}
-                                        aria-describedby={formErrors.period ? 'class-period-error' : undefined}
+                                        onChange={(e) => handleFieldChange('period', e.target.value)}
                                     >
                                         <option value="">Selecione o período</option>
                                         {periodOptions.map((option) => (
-                                            <option key={option} value={option}>
-                                                {option}
-                                            </option>
+                                            <option key={option} value={option}>{option}</option>
                                         ))}
                                     </select>
                                 </div>
                                 {formErrors.period && (
-                                    <span id="class-period-error" className="form-field__error-message" role="alert">
-                                        {formErrors.period}
-                                    </span>
+                                    <span className="form-field__error-message" role="alert">{formErrors.period}</span>
                                 )}
                             </div>
                         </FormSection>
 
-                        <FormSection title="Professor responsável" icon={<UserRound size={16} aria-hidden="true" />}>
-                            <div className="form-field">
-                                <label htmlFor="class-responsible-teacher" className="form-field__label">
-                                    Nome do professor responsável
-                                    <span className="form-field__required">*</span>
-                                </label>
-                                <div className={`form-field__input-wrapper ${formErrors.responsibleTeacher ? 'form-field__input--error' : ''}`.trim()}>
-                                    <select
-                                        id="class-responsible-teacher"
-                                        name="class-responsible-teacher"
-                                        value={formState.responsibleTeacher}
-                                        onChange={(event) => handleFieldChange('responsibleTeacher', event.target.value)}
-                                        aria-invalid={!!formErrors.responsibleTeacher}
-                                        aria-describedby={formErrors.responsibleTeacher ? 'class-responsible-teacher-error' : undefined}
-                                    >
-                                        <option value="">Selecione o professor</option>
-                                        {teacherOptions.map((teacher) => (
-                                            <option key={teacher} value={teacher}>
-                                                {teacher}
-                                            </option>
-                                        ))}
-                                    </select>
+                        <FormSection title="Professores" icon={<UserRound size={16} aria-hidden="true" />}>
+                            {professores.length === 0 ? (
+                                <p className="class-empty-msg">Nenhum professor cadastrado.</p>
+                            ) : (
+                                <div className="class-selection-list">
+                                    {professores.map((prof) => {
+                                        const selected = selectedProfessores.includes(prof.id)
+                                        return (
+                                            <div key={prof.id} className={`class-selection-item ${selected ? 'class-selection-item--selected' : ''}`}>
+                                                <span>{prof.nome}</span>
+                                                <button
+                                                    type="button"
+                                                    className={`class-selection-btn ${selected ? 'class-selection-btn--remove' : ''}`}
+                                                    onClick={() => toggleProfessor(prof.id)}
+                                                >
+                                                    {selected ? 'Remover' : 'Adicionar'}
+                                                </button>
+                                            </div>
+                                        )
+                                    })}
                                 </div>
-                                {formErrors.responsibleTeacher && (
-                                    <span
-                                        id="class-responsible-teacher-error"
-                                        className="form-field__error-message"
-                                        role="alert"
-                                    >
-                                        {formErrors.responsibleTeacher}
-                                    </span>
-                                )}
-                            </div>
+                            )}
+                        </FormSection>
+
+                        <FormSection title="Alunos" icon={<Users size={16} aria-hidden="true" />}>
+                            {alunos.length === 0 ? (
+                                <p className="class-empty-msg">Nenhum aluno disponível.</p>
+                            ) : (
+                                <div className="class-selection-list">
+                                    {alunos.map((aluno) => {
+                                        const selected = selectedAlunos.includes(aluno.id)
+                                        return (
+                                            <div key={aluno.id} className={`class-selection-item ${selected ? 'class-selection-item--selected' : ''}`}>
+                                                <span>{aluno.nome}</span>
+                                                <button
+                                                    type="button"
+                                                    className={`class-selection-btn ${selected ? 'class-selection-btn--remove' : ''}`}
+                                                    onClick={() => toggleAluno(aluno.id)}
+                                                >
+                                                    {selected ? 'Remover' : 'Adicionar'}
+                                                </button>
+                                            </div>
+                                        )
+                                    })}
+                                </div>
+                            )}
                         </FormSection>
 
                         <FormActions
-                            onCancel={handleCancel}
+                            onCancel={() => navigate('/turmas')}
                             onSubmit={handleSubmit}
-                            submitLabel="Cadastrar turma"
+                            submitLabel={isEditing ? 'Salvar alterações' : 'Cadastrar turma'}
                             loading={isSubmitting}
                         />
                     </section>

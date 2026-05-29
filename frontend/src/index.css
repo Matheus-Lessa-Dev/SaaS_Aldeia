@@ -68,6 +68,8 @@ body {
   color: var(--on-surface);
   background: var(--surface);
   position: relative;
+  height: 100vh;
+  overflow: hidden;
 }
 
 /* Recycled-paper grain overlay for subtle texture */
@@ -90,6 +92,7 @@ body::before {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-8);
+  height: 100%;
 }
 
 h1,

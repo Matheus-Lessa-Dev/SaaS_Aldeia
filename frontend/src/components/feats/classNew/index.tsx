@@ -216,53 +216,55 @@ export default function ClassCreatePage() {
                             </div>
                         </FormSection>
 
-                        <FormSection title="Professores" icon={<UserRound size={16} aria-hidden="true" />}>
-                            {professores.length === 0 ? (
-                                <p className="class-empty-msg">Nenhum professor cadastrado.</p>
-                            ) : (
-                                <div className="class-selection-list">
-                                    {professores.map((prof) => {
-                                        const selected = selectedProfessores.includes(prof.id)
-                                        return (
-                                            <div key={prof.id} className={`class-selection-item ${selected ? 'class-selection-item--selected' : ''}`}>
-                                                <span>{prof.nome}</span>
-                                                <button
-                                                    type="button"
-                                                    className={`class-selection-btn ${selected ? 'class-selection-btn--remove' : ''}`}
-                                                    onClick={() => toggleProfessor(prof.id)}
-                                                >
-                                                    {selected ? 'Remover' : 'Adicionar'}
-                                                </button>
-                                            </div>
-                                        )
-                                    })}
-                                </div>
-                            )}
-                        </FormSection>
+                        <div className="class-create-page__people-grid">
+                            <FormSection title="Professores" icon={<UserRound size={16} aria-hidden="true" />}>
+                                {professores.length === 0 ? (
+                                    <p className="class-empty-msg">Nenhum professor cadastrado.</p>
+                                ) : (
+                                    <div className="class-selection-list">
+                                        {professores.map((prof) => {
+                                            const selected = selectedProfessores.includes(prof.id)
+                                            return (
+                                                <div key={prof.id} className={`class-selection-item ${selected ? 'class-selection-item--selected' : ''}`}>
+                                                    <span>{prof.nome}</span>
+                                                    <button
+                                                        type="button"
+                                                        className={`class-selection-btn ${selected ? 'class-selection-btn--remove' : ''}`}
+                                                        onClick={() => toggleProfessor(prof.id)}
+                                                    >
+                                                        {selected ? 'Remover' : 'Adicionar'}
+                                                    </button>
+                                                </div>
+                                            )
+                                        })}
+                                    </div>
+                                )}
+                            </FormSection>
 
-                        <FormSection title="Alunos" icon={<Users size={16} aria-hidden="true" />}>
-                            {alunos.length === 0 ? (
-                                <p className="class-empty-msg">Nenhum aluno disponível.</p>
-                            ) : (
-                                <div className="class-selection-list">
-                                    {alunos.map((aluno) => {
-                                        const selected = selectedAlunos.includes(aluno.id)
-                                        return (
-                                            <div key={aluno.id} className={`class-selection-item ${selected ? 'class-selection-item--selected' : ''}`}>
-                                                <span>{aluno.nome}</span>
-                                                <button
-                                                    type="button"
-                                                    className={`class-selection-btn ${selected ? 'class-selection-btn--remove' : ''}`}
-                                                    onClick={() => toggleAluno(aluno.id)}
-                                                >
-                                                    {selected ? 'Remover' : 'Adicionar'}
-                                                </button>
-                                            </div>
-                                        )
-                                    })}
-                                </div>
-                            )}
-                        </FormSection>
+                            <FormSection title="Alunos" icon={<Users size={16} aria-hidden="true" />}>
+                                {alunos.length === 0 ? (
+                                    <p className="class-empty-msg">Nenhum aluno disponível.</p>
+                                ) : (
+                                    <div className="class-selection-list">
+                                        {alunos.map((aluno) => {
+                                            const selected = selectedAlunos.includes(aluno.id)
+                                            return (
+                                                <div key={aluno.id} className={`class-selection-item ${selected ? 'class-selection-item--selected' : ''}`}>
+                                                    <span>{aluno.nome}</span>
+                                                    <button
+                                                        type="button"
+                                                        className={`class-selection-btn ${selected ? 'class-selection-btn--remove' : ''}`}
+                                                        onClick={() => toggleAluno(aluno.id)}
+                                                    >
+                                                        {selected ? 'Remover' : 'Adicionar'}
+                                                    </button>
+                                                </div>
+                                            )
+                                        })}
+                                    </div>
+                                )}
+                            </FormSection>
+                        </div>
 
                         <FormActions
                             onCancel={() => navigate('/turmas')}

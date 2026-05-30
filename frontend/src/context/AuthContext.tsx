@@ -1,4 +1,9 @@
 import { createContext, useEffect, useState, type ReactNode } from "react";
+import {
+  AUTH_SESSION_EXPIRED_EVENT,
+  clearBrowserSession,
+  isTokenExpired,
+} from "../services/authSession";
 
 export enum Role {
   Student = "student",
@@ -34,10 +39,24 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
-    if (storedUser) {
+    const storedToken = localStorage.getItem("token");
+
+    if (storedUser && !isTokenExpired(storedToken)) {
       setUser(JSON.parse(storedUser));
+    } else {
+      clearBrowserSession();
     }
+
     setLoading(false);
+  }, []);
+
+  useEffect(() => {
+    const handleExpiredSession = () => setUser(null);
+
+    window.addEventListener(AUTH_SESSION_EXPIRED_EVENT, handleExpiredSession);
+    return () => {
+      window.removeEventListener(AUTH_SESSION_EXPIRED_EVENT, handleExpiredSession);
+    };
   }, []);
 
   const login = (u: User, token: string, refreshToken: string) => {
@@ -49,9 +68,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
-    localStorage.removeItem("refreshToken");
+    clearBrowserSession();
   };
 
   const setRole = (role: Role) => {

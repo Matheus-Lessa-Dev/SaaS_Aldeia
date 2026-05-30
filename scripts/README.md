@@ -1,0 +1,64 @@
+# Scripts de Desenvolvimento
+
+Esta pasta contem scripts auxiliares para popular e testar o banco local.
+
+## Seed de usuarios
+
+O script `seed-dev.ps1` cadastra dados iniciais para testar a aplicacao:
+
+- 1 admin
+- 10 professores
+- 40 alunos
+- nenhuma turma
+
+## Pre-requisitos
+
+Antes de executar, o backend precisa estar rodando em `http://localhost:8080`.
+
+Com Docker:
+
+```powershell
+docker compose up -d --build
+```
+
+## Como executar
+
+Na raiz do projeto, rode:
+
+```powershell
+powershell.exe -ExecutionPolicy Bypass -File scripts\seed-dev.ps1
+```
+
+Se o backend estiver em outra URL:
+
+```powershell
+powershell.exe -ExecutionPolicy Bypass -File scripts\seed-dev.ps1 -ApiBaseUrl "http://localhost:8080"
+```
+
+## Credenciais
+
+Admin:
+
+```text
+email: admin@teste.com
+senha: 123123
+```
+
+Professores:
+
+```text
+professor01@aldeia.com ate professor10@aldeia.com
+```
+
+Alunos:
+
+```text
+aluno01@aldeia.com ate aluno40@aldeia.com
+```
+
+A senha inicial de professores e alunos e a data de nascimento no formato `ddMMyyyy`.
+Exemplo: nascimento `1986-01-12` usa senha `12011986`.
+
+## Reexecutar
+
+O script pode ser executado mais de uma vez. Quando um email ja existir, ele pula o cadastro e continua.

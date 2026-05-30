@@ -128,7 +128,7 @@ const router = createBrowserRouter([
   {
     path: "/turmas/novo",
     element: (
-      <ProtectedRoute allowedRoles={[Role.Admin]}>
+      <ProtectedRoute allowedRoles={[Role.Admin, Role.Teacher]}>
         <ClassCreatePage />
       </ProtectedRoute>
     ),
@@ -168,7 +168,7 @@ const router = createBrowserRouter([
   {
     path: "/professores",
     element: (
-      <ProtectedRoute allowedRoles={[Role.Admin, Role.Teacher]}>
+      <ProtectedRoute allowedRoles={[Role.Admin]}>
         <TeacherManagement />
       </ProtectedRoute>
     ),

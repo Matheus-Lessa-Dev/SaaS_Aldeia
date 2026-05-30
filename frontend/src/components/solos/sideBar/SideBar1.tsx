@@ -8,24 +8,24 @@ import {
   LogOut,
   Users,
 } from "lucide-react";
+import { Role } from "../../../context/AuthContext";
 import { useAuth } from "../../../hooks/useAuth";
 import "./sideBar.css";
-
-const navItems = [
-  { label: "Dashboard", to: "/dashboard", icon: LayoutDashboard },
-  { label: "Turmas", to: "/turmas", icon: BookOpenCheck },
-  { label: "Professores", to: "/professores", icon: GraduationCap },
-  { label: "Alunos", to: "/alunos", icon: Users },
-  { label: "Jogos", icon: Gamepad2 },
-];
 
 type NavItem = {
   label: string;
   to?: string;
   icon: LucideIcon;
+  roles?: Role[];
 };
 
-const typedNavItems: NavItem[] = navItems;
+const navItems: NavItem[] = [
+  { label: "Dashboard", to: "/dashboard", icon: LayoutDashboard },
+  { label: "Turmas", to: "/turmas", icon: BookOpenCheck },
+  { label: "Professores", to: "/professores", icon: GraduationCap, roles: [Role.Admin] },
+  { label: "Alunos", to: "/alunos", icon: Users },
+  { label: "Jogos", icon: Gamepad2 },
+];
 
 function Sidebar1() {
   const { logout, user } = useAuth();
@@ -44,7 +44,9 @@ function Sidebar1() {
       </div>
 
       <nav className="sideBarNavlinks">
-        {typedNavItems.map((item) => {
+        {navItems
+          .filter((item) => !item.roles || (user?.role && item.roles.includes(user.role)))
+          .map((item) => {
           const Icon = item.icon;
           const content = (
             <>

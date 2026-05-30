@@ -40,6 +40,17 @@
   color: var(--on-surface-muted);
 }
 
+.class-create-page__people-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--spacing-4);
+  align-items: start;
+}
+
+.class-create-page__people-grid .form-section__grid {
+  grid-template-columns: 1fr;
+}
+
 .class-selection-list {
   display: flex;
   flex-direction: column;
@@ -102,5 +113,9 @@
   .class-create-page__card {
     margin-left: 0;
     margin-right: 0;
+  }
+
+  .class-create-page__people-grid {
+    grid-template-columns: 1fr;
   }
 }

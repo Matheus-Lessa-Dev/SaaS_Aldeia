@@ -1,4 +1,3 @@
-import { GraduationCap } from "lucide-react";
 import Sidebar2 from "../../../solos/sideBar/SideBar2";
 import "./style.css";
 import StudentCard from "./studentCard";

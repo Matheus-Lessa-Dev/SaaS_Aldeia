@@ -1,6 +1,7 @@
-import { UserCircle, Play } from "lucide-react";
+import { Play } from "lucide-react";
 import SideBar from "../../../solos/sideBar/SideBar2";
 import "./Jogos.css";
+import Header from "../../../shared/Header";
 
 type Jogo = {
   id: number;
@@ -64,13 +65,7 @@ function AlunoJogos() {
       {/* MAIN */}
       <div className="jogosMain">
         {/* TOP BAR */}
-        <div className="jogosTopBar">
-          <h2>Jogos</h2>
-          <button className="jogosProfileBtn">
-            Prof. Arandú
-            <UserCircle size={20} aria-hidden="true" />
-          </button>
-        </div>
+        <Header />
 
         {/* CONTENT */}
         <div className="jogosContent">

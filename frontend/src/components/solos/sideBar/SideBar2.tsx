@@ -39,7 +39,11 @@ function Sidebar2() {
           const Icon = item.icon;
           const content = (
             <>
-              <Icon className="sideBarNavlinkIcon" size={20} aria-hidden="true" />
+              <Icon
+                className="sideBarNavlinkIcon"
+                size={20}
+                aria-hidden="true"
+              />
               <span>{item.label}</span>
             </>
           );

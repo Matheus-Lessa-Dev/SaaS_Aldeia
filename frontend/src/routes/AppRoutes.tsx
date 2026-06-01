@@ -7,18 +7,18 @@ import {
 } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import { Role } from "../context/AuthContext";
-import StudentClass from "../components/feats/studentClass";
+import StudentClass from "../components/feats/student/studentClass";
 
 const Login = lazy(() => import("../pages/Login"));
 const Perfil = lazy(() => import("../pages/Perfil"));
 const AdminDashboard = lazy(
-  () => import("../components/feats/adminDashboard/Dashboard"),
+  () => import("../components/feats/admin/adminDashboard/Dashboard"),
 );
 const TeacherDashboard = lazy(
-  () => import("../components/feats/teacherDashboard/Dashboard"),
+  () => import("../components/feats/teacher/teacherDashboard/Dashboard"),
 );
 const StudentDashboard = lazy(
-  () => import("../components/feats/studentDashboard/Dashboard"),
+  () => import("../components/feats/student/studentDashboard/Dashboard"),
 );
 const ClassManagement = lazy(
   () => import("../components/feats/classManagement"),
@@ -29,9 +29,14 @@ const StudentManagement = lazy(
 );
 const StudentCreatePage = lazy(() => import("../components/feats/studentNew"));
 const TeacherManagement = lazy(
-  () => import("../components/feats/teacherManagement"),
+  () => import("../components/feats/admin/teacherManagement"),
 );
-const TeacherCreatePage = lazy(() => import("../components/feats/teacherNew"));
+const TeacherCreatePage = lazy(
+  () => import("../components/feats/admin/teacherNew"),
+);
+const StudentGamesPage = lazy(
+  () => import("../components/feats/student/studentGames/Jogos"),
+);
 
 function PrivateRoute({
   children,
@@ -187,7 +192,15 @@ const router = createBrowserRouter([
       <ProtectedRoute allowedRoles={[Role.Admin]}>
         <TeacherCreatePage />
       </ProtectedRoute>
-    )
+    ),
+  },
+  {
+    path: "/jogos",
+    element: (
+      <ProtectedRoute allowedRoles={[Role.Student]}>
+        <StudentGamesPage />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "*",

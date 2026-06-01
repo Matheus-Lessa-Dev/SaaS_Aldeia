@@ -1,0 +1,15 @@
+.header {
+  width: 100%;
+  padding: clamp(1rem, 2vw, var(--spacing-4));
+  display: flex;
+  justify-content: flex-end;
+}
+
+.headerBtn {
+  padding: 8px 16px;
+  background-color: #7d2b2b;
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+}

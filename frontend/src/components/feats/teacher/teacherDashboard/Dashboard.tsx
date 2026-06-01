@@ -1,9 +1,10 @@
 import { useEffect } from "react";
 import { GraduationCap, User } from "lucide-react";
-import Sidebar from "../../solos/sideBar/SideBar1";
-import Calendario from "../../solos/calendario/Calendario";
+import Sidebar from "../../../solos/sideBar/SideBar1";
+import Calendario from "../../../solos/calendario/Calendario";
 import "./Dashboard.css";
 import ClassCard from "./classCard";
+import Header from "../../../shared/Header";
 
 const classesMockData: {
   id: number;
@@ -44,12 +45,7 @@ function TeacherDashboard() {
     <div className="dashBoardPainel">
       <Sidebar />
       <div className="dashboardLayout">
-        <header className="dashboardHeader">
-          <button type="button" className="dashboardHeaderBtn">
-            <span>Educador</span>
-            <GraduationCap size={18} aria-hidden="true" />
-          </button>
-        </header>
+        <Header />
         <main className="dashboardContent">
           <div className="bannerPlaceholder">
             <div className="bannerContent">

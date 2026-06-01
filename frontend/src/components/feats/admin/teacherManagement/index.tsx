@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSearch } from "../../../hooks/useSearch";
-import ManagementPageShell from "../../shared/ManagementPageShell";
+import { useSearch } from "../../../../hooks/useSearch";
+import ManagementPageShell from "../../../shared/ManagementPageShell";
 import TeacherCard from "./teacherCard";
-import api from "../../../services/api";
+import api from "../../../../services/api";
 import "./style.css";
 
 interface TeacherInfo {
@@ -23,7 +23,7 @@ export default function TeacherManagement() {
   const navigate = useNavigate();
   const [teachers, setTeachers] = useState<TeacherInfo[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const { searchTerm, setSearchTerm, filteredItems } = useSearch(teachers);
 
@@ -33,14 +33,16 @@ export default function TeacherManagement() {
 
   async function fetchTeachers() {
     try {
-      const { data } = await api.get<ProfessorResponse[]>('/professores');
-      setTeachers(data.map((p) => ({
-        id: p.id,
-        name: p.nome,
-        href: `/professores/${p.id}/editar`,
-      })));
+      const { data } = await api.get<ProfessorResponse[]>("/professores");
+      setTeachers(
+        data.map((p) => ({
+          id: p.id,
+          name: p.nome,
+          href: `/professores/${p.id}/editar`,
+        })),
+      );
     } catch {
-      setError('Erro ao carregar professores.');
+      setError("Erro ao carregar professores.");
     } finally {
       setLoading(false);
     }
@@ -51,7 +53,7 @@ export default function TeacherManagement() {
       await api.delete(`/professores/${teacherInfo.id}`);
       setTeachers((prev) => prev.filter((t) => t.id !== teacherInfo.id));
     } catch {
-      alert('Erro ao deletar professor. Tente novamente.');
+      alert("Erro ao deletar professor. Tente novamente.");
     }
   };
 
@@ -66,7 +68,11 @@ export default function TeacherManagement() {
   ));
 
   const listElements = error
-    ? [<p key="teachers-error" className="classesListEmpty">{error}</p>]
+    ? [
+        <p key="teachers-error" className="classesListEmpty">
+          {error}
+        </p>,
+      ]
     : loading
       ? []
       : teacherElements;

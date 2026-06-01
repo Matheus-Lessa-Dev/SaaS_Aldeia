@@ -26,7 +26,7 @@ export default function ClassManagement() {
   const navigate = useNavigate();
   const [classes, setClasses] = useState<ClassInfo[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const { searchTerm, setSearchTerm, filteredItems } = useSearch(classes);
 
@@ -36,15 +36,17 @@ export default function ClassManagement() {
 
   async function fetchClasses() {
     try {
-      const { data } = await api.get<TurmaResponse[]>('/turmas');
-      setClasses(data.map((t) => ({
-        id: t.id,
-        name: t.nome,
-        students: t.totalAlunos,
-        href: `/turmas/${t.id}/editar`,
-      })));
+      const { data } = await api.get<TurmaResponse[]>("/turmas");
+      setClasses(
+        data.map((t) => ({
+          id: t.id,
+          name: t.nome,
+          students: t.totalAlunos,
+          href: `/turmas/${t.id}/editar`,
+        })),
+      );
     } catch {
-      setError('Erro ao carregar turmas.');
+      setError("Erro ao carregar turmas.");
     } finally {
       setLoading(false);
     }
@@ -55,7 +57,7 @@ export default function ClassManagement() {
       await api.delete(`/turmas/${classInfo.id}`);
       setClasses((prev) => prev.filter((c) => c.id !== classInfo.id));
     } catch {
-      alert('Erro ao deletar turma. Tente novamente.');
+      alert("Erro ao deletar turma. Tente novamente.");
     }
   };
 
@@ -71,7 +73,11 @@ export default function ClassManagement() {
   ));
 
   const listElements = error
-    ? [<p key="classes-error" className="classesListEmpty">{error}</p>]
+    ? [
+        <p key="classes-error" className="classesListEmpty">
+          {error}
+        </p>,
+      ]
     : loading
       ? []
       : classesElements;

@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { GraduationCap, Users, BookOpen } from "lucide-react";
-import Sidebar from "../../solos/sideBar/SideBar1";
-import Calendario from "../../solos/calendario/Calendario";
-import api from "../../../services/api";
+import Sidebar from "../../../solos/sideBar/SideBar1";
+import Calendario from "../../../solos/calendario/Calendario";
+import api from "../../../../services/api";
 import "./Dashboard.css";
+import Header from "../../../shared/Header";
 
 const dashboardCards = [
   { title: "Total de Alunos", key: "students", icon: Users },
@@ -31,7 +32,9 @@ function CountUp({ value, isReady }: CountUpProps) {
       return;
     }
 
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
 
     if (prefersReducedMotion || value === 0) {
       setDisplayValue(value);
@@ -106,12 +109,7 @@ function AdminDashboard() {
     <div className="dashBoardPainel">
       <Sidebar />
       <div className="dashboardLayout">
-        <header className="dashboardHeader">
-          <button type="button" className="dashboardHeaderBtn">
-            <span>Educador</span>
-            <GraduationCap size={18} aria-hidden="true" />
-          </button>
-        </header>
+        <Header />
         <main className="dashboardContent">
           <h1>Bom dia, educador!</h1>
           <h4>Acompanhe as informações gerais do sistema</h4>
@@ -122,7 +120,10 @@ function AdminDashboard() {
                 <div key={card.title} className="dashboardCard">
                   <h3>{card.title}</h3>
                   <p>
-                    <CountUp value={totals[card.key]} isReady={!loadingTotals} />
+                    <CountUp
+                      value={totals[card.key]}
+                      isReady={!loadingTotals}
+                    />
                   </p>
                   <div className="dashboardCardIcon">
                     <Icon size={32} aria-hidden="true" />
@@ -131,7 +132,11 @@ function AdminDashboard() {
               );
             })}
           </div>
-          {totalsError && <p className="dashboardError" role="alert">{totalsError}</p>}
+          {totalsError && (
+            <p className="dashboardError" role="alert">
+              {totalsError}
+            </p>
+          )}
           <div className="dashboardContentBottom">
             <div className="bannerPlaceholder"></div>
             <Calendario />

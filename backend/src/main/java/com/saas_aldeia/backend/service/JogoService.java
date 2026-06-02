@@ -30,8 +30,9 @@ public class JogoService {
         Jogo jogo = new Jogo();
         jogo.setNome(request.nome());
         jogo.setImgUrl(request.imgUrl());
-        jogo.setTempo(request.tempo());
+        jogo.setTempo(toTempoStorage(request.tempo()));
         jogo.setLinkUrl(request.linkUrl());
+        jogo.setHabilitado(request.habilitado() == null || request.habilitado());
         jogo.setTurmas(new ArrayList<>());
         return toResponse(jogoRepository.save(jogo));
     }
@@ -42,8 +43,9 @@ public class JogoService {
 
         if (request.nome() != null)    jogo.setNome(request.nome());
         if (request.imgUrl() != null)  jogo.setImgUrl(request.imgUrl());
-        if (request.tempo() != null)   jogo.setTempo(request.tempo());
+        if (request.tempo() != null)   jogo.setTempo(toTempoStorage(request.tempo()));
         if (request.linkUrl() != null) jogo.setLinkUrl(request.linkUrl());
+        if (request.habilitado() != null) jogo.setHabilitado(request.habilitado());
 
         return toResponse(jogoRepository.save(jogo));
     }
@@ -61,6 +63,19 @@ public class JogoService {
     }
 
     private JogoResponse toResponse(Jogo j) {
-        return new JogoResponse(j.getId(), j.getNome(), j.getImgUrl(), j.getTempo(), j.getLinkUrl());
+        return new JogoResponse(j.getId(), j.getNome(), j.getImgUrl(), toTempoResponse(j.getTempo()), j.getLinkUrl(), j.isHabilitado());
+    }
+
+    private String toTempoStorage(Integer tempo) {
+        return tempo == null ? null : String.valueOf(tempo);
+    }
+
+    private Integer toTempoResponse(String tempo) {
+        if (tempo == null || tempo.isBlank()) return null;
+
+        String digits = tempo.trim().replaceAll("[^0-9]", "");
+        if (digits.isBlank()) return null;
+
+        return Integer.valueOf(digits);
     }
 }

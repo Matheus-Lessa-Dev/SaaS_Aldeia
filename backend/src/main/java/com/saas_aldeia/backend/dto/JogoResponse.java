@@ -4,6 +4,7 @@ public record JogoResponse(
         Long id,
         String nome,
         String imgUrl,
-        String tempo,
-        String linkUrl
+        Integer tempo,
+        String linkUrl,
+        Boolean habilitado
 ) {}

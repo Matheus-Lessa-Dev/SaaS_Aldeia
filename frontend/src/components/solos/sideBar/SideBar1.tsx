@@ -24,7 +24,7 @@ const navItems: NavItem[] = [
   { label: "Turmas", to: "/turmas", icon: BookOpenCheck },
   { label: "Professores", to: "/professores", icon: GraduationCap, roles: [Role.Admin] },
   { label: "Alunos", to: "/alunos", icon: Users },
-  { label: "Jogos", icon: Gamepad2 },
+  { label: "Jogos", to: "/jogos", icon: Gamepad2 },
 ];
 
 function Sidebar1() {

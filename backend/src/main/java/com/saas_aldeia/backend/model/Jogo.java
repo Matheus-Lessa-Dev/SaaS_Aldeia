@@ -21,13 +21,13 @@ public class Jogo {
     @Column(nullable = false, length = 45)
     private String nome;
 
-    @Column(name = "img_url", length = 200)
+    @Column(name = "img_url", length = 1000)
     private String imgUrl;
 
     @Column(length = 45)
     private String tempo;
 
-    @Column(name = "link_url", length = 200)
+    @Column(name = "link_url", length = 1000)
     private String linkUrl;
 
     @Column(nullable = false, columnDefinition = "boolean default true")

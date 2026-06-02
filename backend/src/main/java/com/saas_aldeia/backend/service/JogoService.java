@@ -28,10 +28,10 @@ public class JogoService {
     @Transactional
     public JogoResponse criar(JogoRequest request) {
         Jogo jogo = new Jogo();
-        jogo.setNome(request.nome());
-        jogo.setImgUrl(request.imgUrl());
+        jogo.setNome(trimToNull(request.nome()));
+        jogo.setImgUrl(trimToNull(request.imgUrl()));
         jogo.setTempo(toTempoStorage(request.tempo()));
-        jogo.setLinkUrl(request.linkUrl());
+        jogo.setLinkUrl(trimToNull(request.linkUrl()));
         jogo.setHabilitado(request.habilitado() == null || request.habilitado());
         jogo.setTurmas(new ArrayList<>());
         return toResponse(jogoRepository.save(jogo));
@@ -41,10 +41,10 @@ public class JogoService {
     public JogoResponse atualizar(Long id, JogoRequest request) {
         Jogo jogo = buscar(id);
 
-        if (request.nome() != null)    jogo.setNome(request.nome());
-        if (request.imgUrl() != null)  jogo.setImgUrl(request.imgUrl());
+        if (request.nome() != null)    jogo.setNome(trimToNull(request.nome()));
+        if (request.imgUrl() != null)  jogo.setImgUrl(trimToNull(request.imgUrl()));
         if (request.tempo() != null)   jogo.setTempo(toTempoStorage(request.tempo()));
-        if (request.linkUrl() != null) jogo.setLinkUrl(request.linkUrl());
+        if (request.linkUrl() != null) jogo.setLinkUrl(trimToNull(request.linkUrl()));
         if (request.habilitado() != null) jogo.setHabilitado(request.habilitado());
 
         return toResponse(jogoRepository.save(jogo));
@@ -68,6 +68,13 @@ public class JogoService {
 
     private String toTempoStorage(Integer tempo) {
         return tempo == null ? null : String.valueOf(tempo);
+    }
+
+    private String trimToNull(String value) {
+        if (value == null) return null;
+
+        String trimmed = value.trim();
+        return trimmed.isBlank() ? null : trimmed;
     }
 
     private Integer toTempoResponse(String tempo) {

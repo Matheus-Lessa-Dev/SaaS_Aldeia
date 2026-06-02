@@ -3,6 +3,7 @@ package com.saas_aldeia.backend.controller;
 import com.saas_aldeia.backend.dto.JogoRequest;
 import com.saas_aldeia.backend.dto.JogoResponse;
 import com.saas_aldeia.backend.service.JogoService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +28,7 @@ public class JogoController {
     }
 
     @PostMapping
-    public ResponseEntity<JogoResponse> criar(@RequestBody JogoRequest request) {
+    public ResponseEntity<JogoResponse> criar(@Valid @RequestBody JogoRequest request) {
         return ResponseEntity.status(201).body(jogoService.criar(request));
     }
 

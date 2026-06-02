@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import axios from "axios";
 import { Gamepad2, GraduationCap, Link as LinkIcon } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import Sidebar1 from "../../solos/sideBar/SideBar1";
@@ -26,6 +27,9 @@ const emptyForm: GameFormState = {
   linkUrl: "",
   enabled: true,
 };
+
+const MAX_NAME_LENGTH = 45;
+const MAX_URL_LENGTH = 1000;
 
 export default function GameCreatePage() {
   const navigate = useNavigate();
@@ -80,13 +84,22 @@ export default function GameCreatePage() {
   const validate = () => {
     const nextErrors: GameFormErrors = {};
     if (!formState.name.trim()) nextErrors.name = "Informe o nome do jogo.";
+    else if (formState.name.trim().length > MAX_NAME_LENGTH) {
+      nextErrors.name = `Informe ate ${MAX_NAME_LENGTH} caracteres.`;
+    }
     if (!formState.time.trim()) nextErrors.time = "Informe o tempo estimado.";
     else if (!Number.isInteger(Number(formState.time)) || Number(formState.time) <= 0) {
       nextErrors.time = "Informe o tempo em minutos.";
     }
     if (!isValidUrl(formState.imageUrl)) nextErrors.imageUrl = "Informe uma URL valida.";
+    else if (formState.imageUrl.trim().length > MAX_URL_LENGTH) {
+      nextErrors.imageUrl = `Informe ate ${MAX_URL_LENGTH} caracteres.`;
+    }
     if (!formState.linkUrl.trim()) nextErrors.linkUrl = "Informe o link do jogo.";
     else if (!isValidUrl(formState.linkUrl)) nextErrors.linkUrl = "Informe uma URL valida.";
+    else if (formState.linkUrl.trim().length > MAX_URL_LENGTH) {
+      nextErrors.linkUrl = `Informe ate ${MAX_URL_LENGTH} caracteres.`;
+    }
     setFormErrors(nextErrors);
     return Object.keys(nextErrors).length === 0;
   };
@@ -110,8 +123,9 @@ export default function GameCreatePage() {
         await api.post("/jogos", payload);
       }
       navigate("/jogos");
-    } catch {
-      alert(isEditing ? "Erro ao atualizar jogo." : "Erro ao cadastrar jogo.");
+    } catch (error) {
+      const apiMessage = axios.isAxiosError(error) ? error.response?.data?.erro : undefined;
+      alert(apiMessage ?? (isEditing ? "Erro ao atualizar jogo." : "Erro ao cadastrar jogo."));
     } finally {
       setIsSubmitting(false);
     }
@@ -141,6 +155,7 @@ export default function GameCreatePage() {
                 id="game-name"
                 label="Nome"
                 placeholder="Ex.: Trilha das palavras"
+                maxLength={MAX_NAME_LENGTH}
                 value={formState.name}
                 onChange={(event) => handleFieldChange("name", event.target.value)}
                 error={formErrors.name}
@@ -166,6 +181,7 @@ export default function GameCreatePage() {
                 label="URL da imagem"
                 type="url"
                 placeholder="https://exemplo.com/imagem.png"
+                maxLength={MAX_URL_LENGTH}
                 value={formState.imageUrl}
                 onChange={(event) => handleFieldChange("imageUrl", event.target.value)}
                 error={formErrors.imageUrl}
@@ -175,6 +191,7 @@ export default function GameCreatePage() {
                 label="URL do jogo"
                 type="url"
                 placeholder="https://exemplo.com/jogo"
+                maxLength={MAX_URL_LENGTH}
                 value={formState.linkUrl}
                 onChange={(event) => handleFieldChange("linkUrl", event.target.value)}
                 error={formErrors.linkUrl}

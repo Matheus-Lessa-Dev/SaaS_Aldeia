@@ -13,6 +13,7 @@ type FormFieldProps = {
     required?: boolean
     inputMode?: 'none' | 'text' | 'tel' | 'url' | 'email' | 'numeric' | 'decimal' | 'search'
     pattern?: string
+    maxLength?: number
 }
 
 export function FormField({
@@ -27,6 +28,7 @@ export function FormField({
     required = false,
     inputMode,
     pattern,
+    maxLength,
 }: FormFieldProps) {
     return (
         <div className="form-field">
@@ -45,6 +47,7 @@ export function FormField({
                     onBlur={onBlur}
                     inputMode={inputMode}
                     pattern={pattern}
+                    maxLength={maxLength}
                     className="form-field__input"
                     aria-invalid={!!error}
                     aria-describedby={error ? `${id}-error` : undefined}

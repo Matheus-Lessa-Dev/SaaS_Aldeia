@@ -32,6 +32,8 @@ const TeacherManagement = lazy(
   () => import("../components/feats/teacherManagement"),
 );
 const TeacherCreatePage = lazy(() => import("../components/feats/teacherNew"));
+const GameManagement = lazy(() => import("../components/feats/gameManagement"));
+const GameCreatePage = lazy(() => import("../components/feats/gameNew"));
 
 function PrivateRoute({
   children,
@@ -188,6 +190,30 @@ const router = createBrowserRouter([
         <TeacherCreatePage />
       </ProtectedRoute>
     )
+  },
+  {
+    path: "/jogos",
+    element: (
+      <ProtectedRoute allowedRoles={[Role.Admin, Role.Teacher]}>
+        <GameManagement />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/jogos/novo",
+    element: (
+      <ProtectedRoute allowedRoles={[Role.Admin, Role.Teacher]}>
+        <GameCreatePage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/jogos/:id/editar",
+    element: (
+      <ProtectedRoute allowedRoles={[Role.Admin, Role.Teacher]}>
+        <GameCreatePage />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "*",

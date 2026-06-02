@@ -30,6 +30,9 @@ public class Jogo {
     @Column(name = "link_url", length = 200)
     private String linkUrl;
 
+    @Column(nullable = false, columnDefinition = "boolean default true")
+    private boolean habilitado = true;
+
     @ManyToMany(mappedBy = "jogos")
     private List<Turma> turmas;
 }

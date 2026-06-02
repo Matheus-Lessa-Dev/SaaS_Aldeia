@@ -11,6 +11,8 @@ type FormFieldProps = {
     onBlur?: FocusEventHandler<HTMLInputElement>
     error?: string
     required?: boolean
+    inputMode?: 'none' | 'text' | 'tel' | 'url' | 'email' | 'numeric' | 'decimal' | 'search'
+    pattern?: string
 }
 
 export function FormField({
@@ -23,6 +25,8 @@ export function FormField({
     onBlur,
     error,
     required = false,
+    inputMode,
+    pattern,
 }: FormFieldProps) {
     return (
         <div className="form-field">
@@ -39,6 +43,8 @@ export function FormField({
                     value={value}
                     onChange={onChange}
                     onBlur={onBlur}
+                    inputMode={inputMode}
+                    pattern={pattern}
                     className="form-field__input"
                     aria-invalid={!!error}
                     aria-describedby={error ? `${id}-error` : undefined}

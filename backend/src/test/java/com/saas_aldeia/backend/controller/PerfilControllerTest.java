@@ -4,6 +4,7 @@ import com.saas_aldeia.backend.dto.TrocaSenhaRequest;
 import com.saas_aldeia.backend.model.Aluno;
 import com.saas_aldeia.backend.model.TipoUsuario;
 import com.saas_aldeia.backend.repository.UsuarioRepository;
+import com.saas_aldeia.backend.service.PerfilService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -24,11 +25,9 @@ class PerfilControllerTest {
     UsuarioRepository usuarioRepository;
     @Mock
     PasswordEncoder passwordEncoder;
-    @Mock
-    PerfilController controller;
-
     @Test
     void trocarSenha_withCurrentPassword_updatesPasswordAndFirstAccess() {
+        PerfilController controller = controller();
         Aluno usuario = usuario();
         when(passwordEncoder.matches("atual", "oldHash")).thenReturn(true);
         when(passwordEncoder.encode("novaSenha")).thenReturn("newHash");
@@ -43,12 +42,17 @@ class PerfilControllerTest {
 
     @Test
     void trocarSenha_withWrongCurrentPassword_throwsException() {
+        PerfilController controller = controller();
         Aluno usuario = usuario();
         when(passwordEncoder.matches("errada", "oldHash")).thenReturn(false);
 
         assertThatThrownBy(() -> controller.trocarSenha(usuario, new TrocaSenhaRequest("errada", "novaSenha")))
                 .isInstanceOf(BadCredentialsException.class)
                 .hasMessageContaining("Senha atual incorreta");
+    }
+
+    private PerfilController controller() {
+        return new PerfilController(new PerfilService(usuarioRepository, passwordEncoder));
     }
 
     private static Aluno usuario() {

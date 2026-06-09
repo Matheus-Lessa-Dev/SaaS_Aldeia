@@ -19,6 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -43,11 +44,14 @@ class TurmaServiceTest {
         when(turmaRepository.existsByNome("5A")).thenReturn(false);
         when(professorRepository.findById(1L)).thenReturn(Optional.of(professor));
         when(jogoRepository.findById(2L)).thenReturn(Optional.of(jogo));
+        AtomicReference<Turma> turmaPersistida = new AtomicReference<>();
         when(turmaRepository.save(any(Turma.class))).thenAnswer(invocation -> {
             Turma turma = invocation.getArgument(0);
             turma.setId(10L);
+            turmaPersistida.set(turma);
             return turma;
         });
+        when(turmaRepository.findById(10L)).thenAnswer(invocation -> Optional.of(turmaPersistida.get()));
 
         var response = turmaService.criar(new TurmaRequest("5A", "Manhã", List.of(1L), List.of(2L)));
 
@@ -70,7 +74,6 @@ class TurmaServiceTest {
     void atualizar_keepsNameWhenSameAndUpdatesPeriod() {
         Turma turma = turma(10L, "5A", "Manhã");
         when(turmaRepository.findById(10L)).thenReturn(Optional.of(turma));
-        when(turmaRepository.save(turma)).thenReturn(turma);
 
         var response = turmaService.atualizar(10L, new TurmaRequest("5A", "Tarde", null, null));
 

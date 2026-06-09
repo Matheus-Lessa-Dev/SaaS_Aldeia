@@ -6,6 +6,7 @@ public record TurmaResponse(
         Long id,
         String nome,
         String periodo,
+        List<Long> professoresIds,
         List<String> nomesProfessores,
         List<String> nomesJogos,
         int totalAlunos

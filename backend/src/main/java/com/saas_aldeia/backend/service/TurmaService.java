@@ -33,14 +33,20 @@ public class TurmaService {
     }
 
     @Transactional(readOnly = true)
+    public List<TurmaResponse> listarPorProfessor(Long professorId) {
+        return turmaRepository.findByProfessoresId(professorId).stream().map(this::toResponse).toList();
+    }
+
+    @Transactional(readOnly = true)
     public TurmaResponse buscarPorId(Long id) {
         return toResponse(buscar(id));
     }
 
     @Transactional
     public TurmaResponse criar(TurmaRequest request) {
-        if (turmaRepository.existsByNome(request.nome()))
+        if (turmaRepository.existsByNome(request.nome())) {
             throw new IllegalArgumentException("Já existe uma turma com esse nome");
+        }
 
         Turma turma = new Turma();
         turma.setNome(request.nome());
@@ -51,7 +57,7 @@ public class TurmaService {
         Turma turmaSalva = turmaRepository.save(turma);
         vincularProfessores(turmaSalva, request.professoresIds());
 
-        return toResponse(turmaSalva);
+        return toResponse(buscar(turmaSalva.getId()));
     }
 
     @Transactional
@@ -59,33 +65,38 @@ public class TurmaService {
         Turma turma = buscar(id);
 
         if (request.nome() != null) {
-            if (!request.nome().equals(turma.getNome()) && turmaRepository.existsByNome(request.nome()))
+            if (!request.nome().equals(turma.getNome()) && turmaRepository.existsByNome(request.nome())) {
                 throw new IllegalArgumentException("Já existe uma turma com esse nome");
+            }
             turma.setNome(request.nome());
         }
-        if (request.periodo() != null)
+        if (request.periodo() != null) {
             turma.setPeriodo(request.periodo());
-        if (request.professoresIds() != null)
+        }
+        if (request.professoresIds() != null) {
             vincularProfessores(turma, request.professoresIds());
-        if (request.jogosIds() != null)
+        }
+        if (request.jogosIds() != null) {
             turma.setJogos(resolverJogos(request.jogosIds()));
+        }
 
-        return toResponse(turmaRepository.save(turma));
+        return toResponse(buscar(turma.getId()));
     }
 
     @Transactional
     public void vincularAlunos(Long turmaId, List<Long> alunosIds) {
         Turma turma = buscar(turmaId);
+        List<Long> ids = alunosIds == null ? new ArrayList<>() : alunosIds;
 
         List<Aluno> alunosAtuais = alunoRepository.findByTurmaId(turmaId);
         alunosAtuais.forEach(aluno -> {
-            if (!alunosIds.contains(aluno.getId())) {
+            if (!ids.contains(aluno.getId())) {
                 aluno.setTurma(null);
                 alunoRepository.save(aluno);
             }
         });
 
-        alunosIds.forEach(alunoId -> {
+        ids.forEach(alunoId -> {
             Aluno aluno = alunoRepository.findById(alunoId)
                     .orElseThrow(() -> new ResourceNotFoundException("Aluno não encontrado: " + alunoId));
             aluno.setTurma(turma);
@@ -103,21 +114,14 @@ public class TurmaService {
             alunoRepository.save(aluno);
         });
 
+        professorRepository.desvincularTurmaLegada(id);
+
         if (turma.getProfessores() != null) {
-            turma.getProfessores().forEach(professor -> {
-                professor.setTurma(null);
-                professorRepository.save(professor);
-            });
+            turma.getProfessores().clear();
+            turmaRepository.save(turma);
         }
 
         turmaRepository.deleteById(id);
-    }
-
-    public List<TurmaResponse> listarSemTurma() {
-        return alunoRepository.findAll().stream()
-                .filter(a -> a.getTurma() == null)
-                .map(a -> new TurmaResponse(null, a.getNome(), null, null, null, 0))
-                .toList();
     }
 
     private Turma buscar(Long id) {
@@ -128,29 +132,20 @@ public class TurmaService {
     private List<Professor> resolverProfessores(List<Long> ids) {
         if (ids == null || ids.isEmpty()) return new ArrayList<>();
         return ids.stream()
+                .distinct()
                 .map(pid -> professorRepository.findById(pid)
                         .orElseThrow(() -> new ResourceNotFoundException("Professor não encontrado: " + pid)))
                 .toList();
     }
 
     private void vincularProfessores(Turma turma, List<Long> professoresIds) {
-        List<Long> ids = professoresIds == null ? new ArrayList<>() : professoresIds;
-
-        if (turma.getProfessores() != null) {
-            turma.getProfessores().forEach(professor -> {
-                if (!ids.contains(professor.getId())) {
-                    professor.setTurma(null);
-                    professorRepository.save(professor);
-                }
-            });
+        if (turma.getProfessores() == null) {
+            turma.setProfessores(new ArrayList<>());
         }
 
-        List<Professor> professoresVinculados = resolverProfessores(ids);
-        professoresVinculados.forEach(professor -> {
-            professor.setTurma(turma);
-            professorRepository.save(professor);
-        });
-        turma.setProfessores(professoresVinculados);
+        turma.getProfessores().clear();
+        turma.getProfessores().addAll(resolverProfessores(professoresIds));
+        turmaRepository.save(turma);
     }
 
     private List<Jogo> resolverJogos(List<Long> ids) {
@@ -162,6 +157,9 @@ public class TurmaService {
     }
 
     private TurmaResponse toResponse(Turma t) {
+        List<Long> professoresIds = t.getProfessores() == null
+                ? new ArrayList<>()
+                : t.getProfessores().stream().map(Professor::getId).toList();
         List<String> nomesProfessores = t.getProfessores() == null
                 ? new ArrayList<>()
                 : t.getProfessores().stream().map(Professor::getNome).toList();
@@ -169,6 +167,6 @@ public class TurmaService {
                 ? new ArrayList<>()
                 : t.getJogos().stream().map(Jogo::getNome).toList();
         int totalAlunos = t.getAlunos() == null ? 0 : t.getAlunos().size();
-        return new TurmaResponse(t.getId(), t.getNome(), t.getPeriodo(), nomesProfessores, nomesJogos, totalAlunos);
+        return new TurmaResponse(t.getId(), t.getNome(), t.getPeriodo(), professoresIds, nomesProfessores, nomesJogos, totalAlunos);
     }
 }

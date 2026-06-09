@@ -107,7 +107,7 @@ class ResourceControllersTest {
     @Test
     void turmaController_delegatesCrudAndAssociationEndpoints() {
         TurmaController controller = new TurmaController(turmaService);
-        var response = new TurmaResponse(1L, "5A", "Manhã", List.of("Maria"), List.of("Memória"), 0);
+        var response = new TurmaResponse(1L, "5A", "Manhã", List.of(1L), List.of("Maria"), List.of("Memória"), 0);
         var request = new TurmaRequest("5A", "Manhã", List.of(1L), List.of(2L));
         when(turmaService.listar()).thenReturn(List.of(response));
         when(turmaService.buscarPorId(1L)).thenReturn(response);

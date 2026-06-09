@@ -20,12 +20,15 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class PerfilControllerTest {
 
-    @Mock UsuarioRepository usuarioRepository;
-    @Mock PasswordEncoder passwordEncoder;
+    @Mock
+    UsuarioRepository usuarioRepository;
+    @Mock
+    PasswordEncoder passwordEncoder;
+    @Mock
+    PerfilController controller;
 
     @Test
     void trocarSenha_withCurrentPassword_updatesPasswordAndFirstAccess() {
-        PerfilController controller = new PerfilController(usuarioRepository, passwordEncoder);
         Aluno usuario = usuario();
         when(passwordEncoder.matches("atual", "oldHash")).thenReturn(true);
         when(passwordEncoder.encode("novaSenha")).thenReturn("newHash");
@@ -40,7 +43,6 @@ class PerfilControllerTest {
 
     @Test
     void trocarSenha_withWrongCurrentPassword_throwsException() {
-        PerfilController controller = new PerfilController(usuarioRepository, passwordEncoder);
         Aluno usuario = usuario();
         when(passwordEncoder.matches("errada", "oldHash")).thenReturn(false);
 

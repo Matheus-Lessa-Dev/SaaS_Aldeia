@@ -3,6 +3,7 @@ package com.saas_aldeia.backend.controller;
 import com.saas_aldeia.backend.dto.AlunoRequest;
 import com.saas_aldeia.backend.dto.AlunoResponse;
 import com.saas_aldeia.backend.service.AlunoService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +32,7 @@ public class AlunoController {
 
     @PutMapping("/{id}")
     public ResponseEntity<AlunoResponse> atualizar(@PathVariable Long id,
-                                                   @RequestBody AlunoRequest request) {
+                                                   @Valid @RequestBody AlunoRequest request) {
         return ResponseEntity.ok(alunoService.atualizar(id, request));
     }
 

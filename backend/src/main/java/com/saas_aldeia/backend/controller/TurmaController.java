@@ -4,6 +4,7 @@
     import com.saas_aldeia.backend.dto.TurmaRequest;
     import com.saas_aldeia.backend.dto.TurmaResponse;
     import com.saas_aldeia.backend.service.TurmaService;
+    import jakarta.validation.Valid;
     import lombok.RequiredArgsConstructor;
     import org.springframework.http.ResponseEntity;
     import org.springframework.web.bind.annotation.*;
@@ -28,13 +29,13 @@
         }
 
         @PostMapping
-        public ResponseEntity<TurmaResponse> criar(@RequestBody TurmaRequest request) {
+        public ResponseEntity<TurmaResponse> criar(@Valid @RequestBody TurmaRequest request) {
             return ResponseEntity.status(201).body(turmaService.criar(request));
         }
 
         @PutMapping("/{id}")
         public ResponseEntity<TurmaResponse> atualizar(@PathVariable Long id,
-                                                    @RequestBody TurmaRequest request) {
+                                                    @Valid @RequestBody TurmaRequest request) {
             return ResponseEntity.ok(turmaService.atualizar(id, request));
         }
 

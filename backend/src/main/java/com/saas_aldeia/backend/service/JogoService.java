@@ -2,6 +2,7 @@ package com.saas_aldeia.backend.service;
 
 import com.saas_aldeia.backend.dto.JogoRequest;
 import com.saas_aldeia.backend.dto.JogoResponse;
+import com.saas_aldeia.backend.exception.ResourceNotFoundException;
 import com.saas_aldeia.backend.model.Jogo;
 import com.saas_aldeia.backend.repository.JogoRepository;
 import lombok.RequiredArgsConstructor;
@@ -53,13 +54,13 @@ public class JogoService {
     @Transactional
     public void deletar(Long id) {
         if (!jogoRepository.existsById(id))
-            throw new IllegalArgumentException("Jogo não encontrado");
+            throw new ResourceNotFoundException("Jogo não encontrado");
         jogoRepository.deleteById(id);
     }
 
     private Jogo buscar(Long id) {
         return jogoRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Jogo não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Jogo não encontrado"));
     }
 
     private JogoResponse toResponse(Jogo j) {

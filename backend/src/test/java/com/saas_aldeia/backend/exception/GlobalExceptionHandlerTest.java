@@ -19,6 +19,14 @@ class GlobalExceptionHandlerTest {
     }
 
     @Test
+    void handleResourceNotFound_returnsNotFoundWithMessage() {
+        var response = handler.handleResourceNotFound(new ResourceNotFoundException("Aluno não encontrado"));
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        assertThat(response.getBody()).containsEntry("erro", "Aluno não encontrado");
+    }
+
+    @Test
     void handleBadCredentials_returnsUnauthorizedWithMessage() {
         var response = handler.handleBadCredentials(new BadCredentialsException("Credenciais inválidas"));
 

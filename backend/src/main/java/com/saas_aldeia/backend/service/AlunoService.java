@@ -2,6 +2,7 @@ package com.saas_aldeia.backend.service;
 
 import com.saas_aldeia.backend.dto.AlunoRequest;
 import com.saas_aldeia.backend.dto.AlunoResponse;
+import com.saas_aldeia.backend.exception.ResourceNotFoundException;
 import com.saas_aldeia.backend.model.Aluno;
 import com.saas_aldeia.backend.repository.AlunoRepository;
 import com.saas_aldeia.backend.repository.TurmaRepository;
@@ -51,7 +52,7 @@ public class AlunoService {
             aluno.setSenha(passwordEncoder.encode(request.senha()));
         if (request.turmaId() != null)
             aluno.setTurma(turmaRepository.findById(request.turmaId())
-                    .orElseThrow(() -> new IllegalArgumentException("Turma não encontrada")));
+                    .orElseThrow(() -> new ResourceNotFoundException("Turma não encontrada")));
 
         return toResponse(alunoRepository.save(aluno));
     }
@@ -59,13 +60,13 @@ public class AlunoService {
     @Transactional
     public void deletar(Long id) {
         if (!alunoRepository.existsById(id))
-            throw new IllegalArgumentException("Aluno não encontrado");
+            throw new ResourceNotFoundException("Aluno não encontrado");
         alunoRepository.deleteById(id);
     }
 
     private Aluno buscar(Long id) {
         return alunoRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Aluno não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Aluno não encontrado"));
     }
 
     private AlunoResponse toResponse(Aluno a) {

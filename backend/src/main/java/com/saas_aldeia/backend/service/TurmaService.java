@@ -2,6 +2,7 @@ package com.saas_aldeia.backend.service;
 
 import com.saas_aldeia.backend.dto.TurmaRequest;
 import com.saas_aldeia.backend.dto.TurmaResponse;
+import com.saas_aldeia.backend.exception.ResourceNotFoundException;
 import com.saas_aldeia.backend.model.Aluno;
 import com.saas_aldeia.backend.model.Jogo;
 import com.saas_aldeia.backend.model.Professor;
@@ -86,7 +87,7 @@ public class TurmaService {
 
         alunosIds.forEach(alunoId -> {
             Aluno aluno = alunoRepository.findById(alunoId)
-                    .orElseThrow(() -> new IllegalArgumentException("Aluno não encontrado: " + alunoId));
+                    .orElseThrow(() -> new ResourceNotFoundException("Aluno não encontrado: " + alunoId));
             aluno.setTurma(turma);
             alunoRepository.save(aluno);
         });
@@ -121,14 +122,14 @@ public class TurmaService {
 
     private Turma buscar(Long id) {
         return turmaRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Turma não encontrada"));
+                .orElseThrow(() -> new ResourceNotFoundException("Turma não encontrada"));
     }
 
     private List<Professor> resolverProfessores(List<Long> ids) {
         if (ids == null || ids.isEmpty()) return new ArrayList<>();
         return ids.stream()
                 .map(pid -> professorRepository.findById(pid)
-                        .orElseThrow(() -> new IllegalArgumentException("Professor não encontrado: " + pid)))
+                        .orElseThrow(() -> new ResourceNotFoundException("Professor não encontrado: " + pid)))
                 .toList();
     }
 
@@ -156,7 +157,7 @@ public class TurmaService {
         if (ids == null || ids.isEmpty()) return new ArrayList<>();
         return ids.stream()
                 .map(jid -> jogoRepository.findById(jid)
-                        .orElseThrow(() -> new IllegalArgumentException("Jogo não encontrado: " + jid)))
+                        .orElseThrow(() -> new ResourceNotFoundException("Jogo não encontrado: " + jid)))
                 .toList();
     }
 

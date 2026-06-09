@@ -3,6 +3,7 @@ package com.saas_aldeia.backend.controller;
 import com.saas_aldeia.backend.dto.AdminRequest;
 import com.saas_aldeia.backend.dto.AdminResponse;
 import com.saas_aldeia.backend.service.AdminService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +29,7 @@ public class AdminController {
 
     @PutMapping("/{id}")
     public ResponseEntity<AdminResponse> atualizar(@PathVariable Long id,
-                                                   @RequestBody AdminRequest request) {
+                                                   @Valid @RequestBody AdminRequest request) {
         return ResponseEntity.ok(adminService.atualizar(id, request));
     }
 

@@ -2,6 +2,7 @@ package com.saas_aldeia.backend.service;
 
 import com.saas_aldeia.backend.dto.AdminRequest;
 import com.saas_aldeia.backend.dto.AdminResponse;
+import com.saas_aldeia.backend.exception.ResourceNotFoundException;
 import com.saas_aldeia.backend.model.Admin;
 import com.saas_aldeia.backend.repository.AdminRepository;
 import lombok.RequiredArgsConstructor;
@@ -41,13 +42,13 @@ public class AdminService {
     @Transactional
     public void deletar(Long id) {
         if (!adminRepository.existsById(id))
-            throw new IllegalArgumentException("Admin não encontrado");
+            throw new ResourceNotFoundException("Admin não encontrado");
         adminRepository.deleteById(id);
     }
 
     private Admin buscar(Long id) {
         return adminRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Admin não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Admin não encontrado"));
     }
 
     private AdminResponse toResponse(Admin a) {

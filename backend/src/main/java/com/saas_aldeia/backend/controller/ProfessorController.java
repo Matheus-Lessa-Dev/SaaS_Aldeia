@@ -3,6 +3,7 @@ package com.saas_aldeia.backend.controller;
 import com.saas_aldeia.backend.dto.ProfessorRequest;
 import com.saas_aldeia.backend.dto.ProfessorResponse;
 import com.saas_aldeia.backend.service.ProfessorService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +29,7 @@ public class ProfessorController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ProfessorResponse> atualizar(@PathVariable Long id,
-                                                       @RequestBody ProfessorRequest request) {
+                                                       @Valid @RequestBody ProfessorRequest request) {
         return ResponseEntity.ok(professorService.atualizar(id, request));
     }
 

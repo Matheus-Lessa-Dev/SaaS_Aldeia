@@ -1,6 +1,7 @@
 package com.saas_aldeia.backend.service;
 
 import com.saas_aldeia.backend.dto.ProfessorRequest;
+import com.saas_aldeia.backend.exception.ResourceNotFoundException;
 import com.saas_aldeia.backend.model.Professor;
 import com.saas_aldeia.backend.model.TipoUsuario;
 import com.saas_aldeia.backend.repository.ProfessorRepository;
@@ -72,7 +73,7 @@ class ProfessorServiceTest {
         when(professorRepository.findById(99L)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> professorService.atualizar(99L, new ProfessorRequest(null, null, null, null, null, null, null)))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessageContaining("Professor não encontrado");
     }
 

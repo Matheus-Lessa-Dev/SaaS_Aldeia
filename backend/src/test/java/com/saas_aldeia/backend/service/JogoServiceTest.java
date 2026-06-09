@@ -1,6 +1,7 @@
 package com.saas_aldeia.backend.service;
 
 import com.saas_aldeia.backend.dto.JogoRequest;
+import com.saas_aldeia.backend.exception.ResourceNotFoundException;
 import com.saas_aldeia.backend.model.Jogo;
 import com.saas_aldeia.backend.repository.JogoRepository;
 import org.junit.jupiter.api.Test;
@@ -32,13 +33,14 @@ class JogoServiceTest {
             return jogo;
         });
 
-        var response = jogoService.criar(new JogoRequest("Memória", "img.png", "10 min", "https://game.test"));
+        var response = jogoService.criar(new JogoRequest("Memória", "img.png", 10, "https://game.test", true));
 
         assertThat(response.id()).isEqualTo(1L);
         assertThat(response.nome()).isEqualTo("Memória");
         assertThat(response.imgUrl()).isEqualTo("img.png");
-        assertThat(response.tempo()).isEqualTo("10 min");
+        assertThat(response.tempo()).isEqualTo(10);
         assertThat(response.linkUrl()).isEqualTo("https://game.test");
+        assertThat(response.habilitado()).isTrue();
     }
 
     @Test
@@ -47,11 +49,11 @@ class JogoServiceTest {
         when(jogoRepository.findById(1L)).thenReturn(Optional.of(jogo));
         when(jogoRepository.save(jogo)).thenReturn(jogo);
 
-        var response = jogoService.atualizar(1L, new JogoRequest("Novo", null, "12 min", null));
+        var response = jogoService.atualizar(1L, new JogoRequest("Novo", null, 12, null, null));
 
         assertThat(response.nome()).isEqualTo("Novo");
         assertThat(response.imgUrl()).isEqualTo("old.png");
-        assertThat(response.tempo()).isEqualTo("12 min");
+        assertThat(response.tempo()).isEqualTo(12);
         assertThat(response.linkUrl()).isEqualTo("old");
     }
 
@@ -60,7 +62,7 @@ class JogoServiceTest {
         when(jogoRepository.existsById(99L)).thenReturn(false);
 
         assertThatThrownBy(() -> jogoService.deletar(99L))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessageContaining("Jogo não encontrado");
     }
 

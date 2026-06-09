@@ -1,6 +1,7 @@
 package com.saas_aldeia.backend.service;
 
 import com.saas_aldeia.backend.dto.AlunoRequest;
+import com.saas_aldeia.backend.exception.ResourceNotFoundException;
 import com.saas_aldeia.backend.model.Aluno;
 import com.saas_aldeia.backend.model.TipoUsuario;
 import com.saas_aldeia.backend.model.Turma;
@@ -94,7 +95,7 @@ class AlunoServiceTest {
         when(turmaRepository.findById(99L)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> alunoService.atualizar(1L, new AlunoRequest(null, null, null, null, null, null, null, null, null, 99L)))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessageContaining("Turma não encontrada");
     }
 
@@ -112,7 +113,7 @@ class AlunoServiceTest {
         when(alunoRepository.findById(99L)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> alunoService.buscarPorId(99L))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessageContaining("Aluno não encontrado");
     }
 

@@ -9,5 +9,6 @@ import java.util.List;
 public interface TurmaRepository extends JpaRepository<Turma, Long> {
 
     List<Turma> findByPeriodo(String periodo);
+    List<Turma> findByProfessoresId(Long professorId);
     boolean existsByNome(String nome);
 }

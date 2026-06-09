@@ -19,6 +19,16 @@ interface AlunoOption {
     nome: string
 }
 
+interface TurmaResponse {
+    id: number
+    nome: string
+    periodo: string | null
+    professoresIds: number[]
+    nomesProfessores: string[]
+    nomesJogos: string[]
+    totalAlunos: number
+}
+
 type ClassFormState = {
     name: string
     period: string
@@ -65,8 +75,8 @@ export default function ClassCreatePage() {
                 if (isEditing) {
                     // Busca dados da turma e alunos já vinculados
                     const [turmaRes, alunosTurmaRes] = await Promise.all([
-                        api.get(`/turmas/${id}`),
-                        api.get<{ id: number; nome: string }[]>(`/alunos?turmaId=${id}`),  // não existe ainda, usamos findByTurmaId via endpoint
+                        api.get<TurmaResponse>(`/turmas/${id}`),
+                        api.get<{ id: number; nome: string }[]>(`/alunos?turmaId=${id}`),
                     ])
 
                     const turma = turmaRes.data
@@ -75,13 +85,8 @@ export default function ClassCreatePage() {
                         period: turma.periodo ?? '',
                     })
 
-                    // 👈 seleciona professores comparando pelo nome retornado na TurmaResponse
-                    const profsSelecionados = listaProfessores
-                        .filter((p) => (turma.nomesProfessores as string[]).includes(p.nome))
-                        .map((p) => p.id)
-                    setSelectedProfessores(profsSelecionados)
+                    setSelectedProfessores(turma.professoresIds ?? [])
 
-                    // 👈 alunos da turma vêm do endpoint /alunos/turma/{id}
                     const alunosDaTurma: AlunoOption[] = alunosTurmaRes.data.map((a) => ({
                         id: a.id,
                         nome: a.nome,

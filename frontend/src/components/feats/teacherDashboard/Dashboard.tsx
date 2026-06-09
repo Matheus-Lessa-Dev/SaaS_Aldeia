@@ -1,44 +1,98 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { GraduationCap, User } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import Sidebar from "../../solos/sideBar/SideBar1";
 import Calendario from "../../solos/calendario/Calendario";
+import api from "../../../services/api";
 import "./Dashboard.css";
 import ClassCard from "./classCard";
 
-const classesMockData: {
+interface TurmaResponse {
+  id: number;
+  nome: string;
+  periodo: string | null;
+  professoresIds: number[];
+  nomesProfessores: string[];
+  nomesJogos: string[];
+  totalAlunos: number;
+}
+
+interface TeacherClass {
   id: number;
   name: string;
   description: string;
   alunos: number;
-}[] = [
-  {
-    id: 1,
-    name: "Turma A",
-    description: "Descrição breve da turma.",
-    alunos: 25,
-  },
-  {
-    id: 2,
-    name: "Turma B",
-    description: "Descrição breve da turma.",
-    alunos: 20,
-  },
-  {
-    id: 3,
-    name: "Turma C",
-    description: "Descrição breve da turma.",
-    alunos: 18,
-  },
-];
+}
 
 function TeacherDashboard() {
+  const navigate = useNavigate();
+  const [classes, setClasses] = useState<TeacherClass[]>([]);
+  const [loadingClasses, setLoadingClasses] = useState(true);
+  const [classesError, setClassesError] = useState("");
+
   useEffect(() => {
-    document.body.classList.add("adminDashboardPage");
+    document.body.classList.add("teacherDashboardPage");
 
     return () => {
-      document.body.classList.remove("adminDashboardPage");
+      document.body.classList.remove("teacherDashboardPage");
     };
   }, []);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function fetchTeacherClasses() {
+      try {
+        const { data } = await api.get<TurmaResponse[]>("/turmas/minhas");
+
+        if (!isMounted) return;
+
+        setClasses(
+          data.map((turma) => ({
+            id: turma.id,
+            name: turma.nome,
+            description: turma.periodo
+              ? `Período: ${turma.periodo}`
+              : "Turma cadastrada no sistema.",
+            alunos: turma.totalAlunos,
+          })),
+        );
+        setClassesError("");
+      } catch {
+        if (isMounted) {
+          setClassesError("Erro ao carregar suas turmas.");
+        }
+      } finally {
+        if (isMounted) {
+          setLoadingClasses(false);
+        }
+      }
+    }
+
+    fetchTeacherClasses();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const totalClasses = classes.length;
+  const displayedClasses = classes.slice(0, 3);
+  const classesContent = loadingClasses ? (
+    <p className="teacherDashboardState">Carregando turmas...</p>
+  ) : classesError ? (
+    <p className="teacherDashboardState">{classesError}</p>
+  ) : classes.length === 0 ? (
+    <p className="teacherDashboardState">Nenhuma turma vinculada.</p>
+  ) : (
+    displayedClasses.map((classe) => (
+      <ClassCard
+        key={classe.id}
+        {...classe}
+        href={`/turmas/${classe.id}/editar`}
+      />
+    ))
+  );
 
   return (
     <div className="dashBoardPainel">
@@ -58,16 +112,25 @@ function TeacherDashboard() {
               </h2>
               <p className="bannerDescription">
                 Sua jornada de educação ancestral continua hoje. Veja como estão
-                suas turmas e o engajamento dos alunos.
+                as turmas cadastradas e o engajamento dos alunos.
               </p>
-              <button className="bannerButton">Criar nova turma</button>
+              <button
+                type="button"
+                className="bannerButton"
+                onClick={() => navigate("/turmas/novo")}
+              >
+                Criar nova turma
+              </button>
             </div>
           </div>
           <div className="dashboardContentMiddle">
             <div className="dashboardClassesCountCard">
-              <span>Total de turmas vinculadas</span>
+              <span>Turmas vinculadas a você</span>
               <div className="classesCountCardContent">
-                <h2>5 Turmas</h2>
+                <h2>
+                  {loadingClasses ? "..." : totalClasses}{" "}
+                  {totalClasses === 1 ? "Turma" : "Turmas"}
+                </h2>
                 <div className="classesCountCardIcon">
                   <User size={100} opacity={0.5} />
                 </div>
@@ -76,11 +139,9 @@ function TeacherDashboard() {
             <Calendario />
           </div>
           <div className="dashboardClasses">
-            <h1>Suas Turmas</h1>
+            <h1>Turmas</h1>
             <div className="classesGrid">
-              {classesMockData.map((classe) => (
-                <ClassCard key={classe.id} {...classe} />
-              ))}
+              {classesContent}
             </div>
           </div>
         </main>

@@ -1,11 +1,24 @@
+:root {
+    --sidebar-width: 280px;
+}
+
 .sideBar {
-    width: 280px;
-    min-height: 100vh;
+    position: fixed;
+    inset: 0 auto 0 0;
+    z-index: 20;
+    width: var(--sidebar-width);
+    height: 100svh;
     background-color: #F5F2EE;
     display: flex;
     flex-direction: column;
     padding: 32px 0;
     flex-shrink: 0;
+    overflow-y: auto;
+}
+
+.sideBar + * {
+    margin-left: var(--sidebar-width);
+    width: calc(100% - var(--sidebar-width));
 }
 
 .sideBarTitle {

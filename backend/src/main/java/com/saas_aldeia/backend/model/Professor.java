@@ -3,6 +3,7 @@ package com.saas_aldeia.backend.model;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "professor")
@@ -28,7 +29,6 @@ public class Professor extends Usuario {
     @Column(length = 20)
     private String telefone;
 
-    @ManyToOne
-    @JoinColumn(name = "turma_id")
-    private Turma turma;
+    @ManyToMany(mappedBy = "professores")
+    private List<Turma> turmas;
 }

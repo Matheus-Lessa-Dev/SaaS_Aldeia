@@ -43,8 +43,9 @@ public class TurmaService {
 
     @Transactional
     public TurmaResponse criar(TurmaRequest request) {
-        if (turmaRepository.existsByNome(request.nome()))
+        if (turmaRepository.existsByNome(request.nome())) {
             throw new IllegalArgumentException("Já existe uma turma com esse nome");
+        }
 
         Turma turma = new Turma();
         turma.setNome(request.nome());
@@ -63,16 +64,20 @@ public class TurmaService {
         Turma turma = buscar(id);
 
         if (request.nome() != null) {
-            if (!request.nome().equals(turma.getNome()) && turmaRepository.existsByNome(request.nome()))
+            if (!request.nome().equals(turma.getNome()) && turmaRepository.existsByNome(request.nome())) {
                 throw new IllegalArgumentException("Já existe uma turma com esse nome");
+            }
             turma.setNome(request.nome());
         }
-        if (request.periodo() != null)
+        if (request.periodo() != null) {
             turma.setPeriodo(request.periodo());
-        if (request.professoresIds() != null)
+        }
+        if (request.professoresIds() != null) {
             vincularProfessores(turma, request.professoresIds());
-        if (request.jogosIds() != null)
+        }
+        if (request.jogosIds() != null) {
             turma.setJogos(resolverJogos(request.jogosIds()));
+        }
 
         return toResponse(buscar(turma.getId()));
     }

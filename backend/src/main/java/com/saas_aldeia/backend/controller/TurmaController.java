@@ -6,11 +6,19 @@ import com.saas_aldeia.backend.dto.TurmaResponse;
 import com.saas_aldeia.backend.model.TipoUsuario;
 import com.saas_aldeia.backend.model.Usuario;
 import com.saas_aldeia.backend.service.TurmaService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -41,13 +49,13 @@ public class TurmaController {
     }
 
     @PostMapping
-    public ResponseEntity<TurmaResponse> criar(@RequestBody TurmaRequest request) {
+    public ResponseEntity<TurmaResponse> criar(@Valid @RequestBody TurmaRequest request) {
         return ResponseEntity.status(201).body(turmaService.criar(request));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<TurmaResponse> atualizar(@PathVariable Long id,
-                                                   @RequestBody TurmaRequest request) {
+                                                   @Valid @RequestBody TurmaRequest request) {
         return ResponseEntity.ok(turmaService.atualizar(id, request));
     }
 

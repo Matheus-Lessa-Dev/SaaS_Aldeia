@@ -1,6 +1,7 @@
 package com.saas_aldeia.backend.service;
 
 import com.saas_aldeia.backend.dto.AdminRequest;
+import com.saas_aldeia.backend.exception.ResourceNotFoundException;
 import com.saas_aldeia.backend.model.Admin;
 import com.saas_aldeia.backend.model.TipoUsuario;
 import com.saas_aldeia.backend.repository.AdminRepository;
@@ -81,7 +82,7 @@ class AdminServiceTest {
         when(adminRepository.findById(99L)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> adminService.buscarPorId(99L))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessageContaining("Admin não encontrado");
     }
 

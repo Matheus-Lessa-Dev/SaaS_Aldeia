@@ -63,7 +63,7 @@ class ResourceControllersTest {
         when(alunoService.buscarPorId(1L)).thenReturn(response);
         when(alunoService.atualizar(1L, request)).thenReturn(response);
 
-        assertThat(controller.listar().getBody()).containsExactly(response);
+        assertThat(controller.listar(null).getBody()).containsExactly(response);
         assertThat(controller.buscar(1L).getBody()).isEqualTo(response);
         assertThat(controller.atualizar(1L, request).getBody()).isEqualTo(response);
         assertThat(controller.deletar(1L).getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
@@ -89,8 +89,8 @@ class ResourceControllersTest {
     @Test
     void jogoController_delegatesCrudEndpoints() {
         JogoController controller = new JogoController(jogoService);
-        var response = new JogoResponse(1L, "Memória", "img", "10 min", "link");
-        var request = new JogoRequest("Memória", "img", "10 min", "link");
+        var response = new JogoResponse(1L, "Memória", "img", 10, "link", true);
+        var request = new JogoRequest("Memória", "img", 10, "link", true);
         when(jogoService.listar()).thenReturn(List.of(response));
         when(jogoService.buscarPorId(1L)).thenReturn(response);
         when(jogoService.criar(request)).thenReturn(response);
@@ -107,7 +107,7 @@ class ResourceControllersTest {
     @Test
     void turmaController_delegatesCrudAndAssociationEndpoints() {
         TurmaController controller = new TurmaController(turmaService);
-        var response = new TurmaResponse(1L, "5A", "Manhã", List.of("Maria"), List.of("Memória"));
+        var response = new TurmaResponse(1L, "5A", "Manhã", List.of("Maria"), List.of("Memória"), 0);
         var request = new TurmaRequest("5A", "Manhã", List.of(1L), List.of(2L));
         when(turmaService.listar()).thenReturn(List.of(response));
         when(turmaService.buscarPorId(1L)).thenReturn(response);
@@ -118,9 +118,9 @@ class ResourceControllersTest {
         assertThat(controller.buscar(1L).getBody()).isEqualTo(response);
         assertThat(controller.criar(request).getStatusCode()).isEqualTo(HttpStatus.CREATED);
         assertThat(controller.atualizar(1L, request).getBody()).isEqualTo(response);
-        assertThat(controller.associarAlunos(1L, new TurmaAlunosRequest(List.of(10L))).getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+        assertThat(controller.vincularTurma(1L, new TurmaAlunosRequest(List.of(10L))).getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
         assertThat(controller.deletar(1L).getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
-        verify(turmaService).associarAlunos(1L, List.of(10L));
+        verify(turmaService).vincularAlunos(1L, List.of(10L));
         verify(turmaService).deletar(1L);
     }
 }

@@ -1,6 +1,7 @@
 package com.saas_aldeia.backend.service;
 
 import com.saas_aldeia.backend.dto.TurmaRequest;
+import com.saas_aldeia.backend.exception.ResourceNotFoundException;
 import com.saas_aldeia.backend.model.Aluno;
 import com.saas_aldeia.backend.model.Jogo;
 import com.saas_aldeia.backend.model.Professor;
@@ -90,48 +91,56 @@ class TurmaServiceTest {
     }
 
     @Test
-    void associarAlunos_setsClassForAllStudents() {
+    void vincularAlunos_setsClassForAllStudents() {
         Turma turma = turma(10L, "5A", "Manhã");
         Aluno aluno1 = aluno(1L);
         Aluno aluno2 = aluno(2L);
         when(turmaRepository.findById(10L)).thenReturn(Optional.of(turma));
-        when(alunoRepository.findAllById(List.of(1L, 2L))).thenReturn(List.of(aluno1, aluno2));
+        when(alunoRepository.findByTurmaId(10L)).thenReturn(List.of());
+        when(alunoRepository.findById(1L)).thenReturn(Optional.of(aluno1));
+        when(alunoRepository.findById(2L)).thenReturn(Optional.of(aluno2));
 
-        turmaService.associarAlunos(10L, List.of(1L, 2L));
+        turmaService.vincularAlunos(10L, List.of(1L, 2L));
 
         assertThat(aluno1.getTurma()).isEqualTo(turma);
         assertThat(aluno2.getTurma()).isEqualTo(turma);
-        verify(alunoRepository).saveAll(List.of(aluno1, aluno2));
+        verify(alunoRepository).save(aluno1);
+        verify(alunoRepository).save(aluno2);
     }
 
     @Test
-    void associarAlunos_missingStudent_throwsException() {
+    void vincularAlunos_missingStudent_throwsException() {
         Turma turma = turma(10L, "5A", "Manhã");
         when(turmaRepository.findById(10L)).thenReturn(Optional.of(turma));
-        when(alunoRepository.findAllById(List.of(1L, 2L))).thenReturn(List.of(aluno(1L)));
+        when(alunoRepository.findByTurmaId(10L)).thenReturn(List.of());
+        when(alunoRepository.findById(1L)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> turmaService.associarAlunos(10L, List.of(1L, 2L)))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("Alguns alunos não foram encontrados");
+        assertThatThrownBy(() -> turmaService.vincularAlunos(10L, List.of(1L)))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessageContaining("Aluno não encontrado: 1");
     }
 
     @Test
-    void associarAlunos_emptyList_doesNothingAfterFindingClass() {
+    void vincularAlunos_emptyListRemovesCurrentStudents() {
         Turma turma = turma(10L, "5A", "Manhã");
+        Aluno aluno = aluno(1L);
+        aluno.setTurma(turma);
         when(turmaRepository.findById(10L)).thenReturn(Optional.of(turma));
+        when(alunoRepository.findByTurmaId(10L)).thenReturn(List.of(aluno));
 
-        turmaService.associarAlunos(10L, List.of());
+        turmaService.vincularAlunos(10L, List.of());
 
-        verify(alunoRepository, never()).findAllById(any());
-        verify(alunoRepository, never()).saveAll(any());
+        assertThat(aluno.getTurma()).isNull();
+        verify(alunoRepository).save(aluno);
+        verify(alunoRepository, never()).findById(any());
     }
 
     @Test
     void deletar_missingClass_throwsException() {
-        when(turmaRepository.existsById(99L)).thenReturn(false);
+        when(turmaRepository.findById(99L)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> turmaService.deletar(99L))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessageContaining("Turma não encontrada");
     }
 

@@ -2,6 +2,7 @@ package com.saas_aldeia.backend.service;
 
 import com.saas_aldeia.backend.dto.ProfessorRequest;
 import com.saas_aldeia.backend.dto.ProfessorResponse;
+import com.saas_aldeia.backend.exception.ResourceNotFoundException;
 import com.saas_aldeia.backend.model.Professor;
 import com.saas_aldeia.backend.repository.ProfessorRepository;
 import lombok.RequiredArgsConstructor;
@@ -42,13 +43,13 @@ public class ProfessorService {
     @Transactional
     public void deletar(Long id) {
         if (!professorRepository.existsById(id))
-            throw new IllegalArgumentException("Professor não encontrado");
+            throw new ResourceNotFoundException("Professor não encontrado");
         professorRepository.deleteById(id);
     }
 
     private Professor buscar(Long id) {
         return professorRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Professor não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Professor não encontrado"));
     }
 
     private ProfessorResponse toResponse(Professor p) {

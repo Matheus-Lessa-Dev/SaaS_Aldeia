@@ -1,11 +1,14 @@
 package com.saas_aldeia.backend.dto;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+
 import java.time.LocalDate;
 
 public record AlunoRequest(
-        String nome,
+        @NotBlank String nome,
         LocalDate dataNascimento,
-        String email,
+        @Email String email,
         String senha,
         String rua,
         String complemento,

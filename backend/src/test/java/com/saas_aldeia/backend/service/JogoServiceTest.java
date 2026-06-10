@@ -3,6 +3,7 @@ package com.saas_aldeia.backend.service;
 import com.saas_aldeia.backend.dto.JogoRequest;
 import com.saas_aldeia.backend.exception.ResourceNotFoundException;
 import com.saas_aldeia.backend.model.Jogo;
+import com.saas_aldeia.backend.model.Turma;
 import com.saas_aldeia.backend.repository.JogoRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -59,7 +61,7 @@ class JogoServiceTest {
 
     @Test
     void deletar_missingGame_throwsException() {
-        when(jogoRepository.existsById(99L)).thenReturn(false);
+        when(jogoRepository.findById(99L)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> jogoService.deletar(99L))
                 .isInstanceOf(ResourceNotFoundException.class)
@@ -79,12 +81,28 @@ class JogoServiceTest {
     }
 
     @Test
-    void deletar_existingGame_deletesById() {
-        when(jogoRepository.existsById(1L)).thenReturn(true);
+    void deletar_existingGame_deletesEntity() {
+        Jogo jogo = jogo(1L, "Jogo", "img", "tempo", "link");
+        when(jogoRepository.findById(1L)).thenReturn(Optional.of(jogo));
 
         jogoService.deletar(1L);
 
-        verify(jogoRepository).deleteById(1L);
+        verify(jogoRepository).delete(jogo);
+    }
+
+    @Test
+    void deletar_gameWithClasses_clearsRelationshipsBeforeDelete() {
+        Jogo jogo = jogo(1L, "Jogo", "img", "tempo", "link");
+        Turma turma = new Turma();
+        turma.setJogos(new ArrayList<>(List.of(jogo)));
+        jogo.setTurmas(new ArrayList<>(List.of(turma)));
+        when(jogoRepository.findById(1L)).thenReturn(Optional.of(jogo));
+
+        jogoService.deletar(1L);
+
+        assertThat(jogo.getTurmas()).isEmpty();
+        assertThat(turma.getJogos()).doesNotContain(jogo);
+        verify(jogoRepository).delete(jogo);
     }
 
     private static Jogo jogo(Long id, String nome, String imgUrl, String tempo, String linkUrl) {

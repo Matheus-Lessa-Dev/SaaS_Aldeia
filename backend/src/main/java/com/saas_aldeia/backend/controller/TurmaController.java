@@ -92,7 +92,7 @@ public class TurmaController {
             @ApiResponse(responseCode = "404", description = "Turma nao encontrada")
     })
     public ResponseEntity<TurmaResponse> atualizar(@PathVariable Long id,
-                                                   @Valid @RequestBody TurmaRequest request) {
+                                                   @RequestBody TurmaRequest request) {
         return ResponseEntity.ok(turmaService.atualizar(id, request));
     }
 

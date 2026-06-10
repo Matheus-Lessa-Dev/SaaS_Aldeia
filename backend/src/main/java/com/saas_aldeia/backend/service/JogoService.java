@@ -53,9 +53,18 @@ public class JogoService {
 
     @Transactional
     public void deletar(Long id) {
-        if (!jogoRepository.existsById(id))
-            throw new ResourceNotFoundException("Jogo não encontrado");
-        jogoRepository.deleteById(id);
+        Jogo jogo = buscar(id);
+
+        if (jogo.getTurmas() != null) {
+            jogo.getTurmas().forEach(turma -> {
+                if (turma.getJogos() != null) {
+                    turma.getJogos().remove(jogo);
+                }
+            });
+            jogo.getTurmas().clear();
+        }
+
+        jogoRepository.delete(jogo);
     }
 
     private Jogo buscar(Long id) {

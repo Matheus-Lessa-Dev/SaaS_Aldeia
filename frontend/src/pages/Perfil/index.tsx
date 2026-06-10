@@ -45,7 +45,7 @@ function Perfil() {
 
       navigate('/dashboard')
     } catch (err: any) {
-      const msg = err?.response?.data?.message
+      const msg = err?.response?.data?.erro ?? err?.response?.data?.message
       setError(msg || 'Erro ao trocar a senha. Verifique a senha atual.')
     } finally {
       setLoading(false)

@@ -163,7 +163,7 @@ export default function ClassCreatePage() {
 
             navigate('/turmas')
         } catch (err: any) {
-            const msg = err?.response?.data?.message
+            const msg = err?.response?.data?.erro ?? err?.response?.data?.message
             alert(msg || (isEditing ? 'Erro ao atualizar turma.' : 'Erro ao cadastrar turma.'))
         } finally {
             setIsSubmitting(false)

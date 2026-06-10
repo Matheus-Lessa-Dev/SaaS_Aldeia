@@ -42,9 +42,18 @@ public class ProfessorService {
 
     @Transactional
     public void deletar(Long id) {
-        if (!professorRepository.existsById(id))
-            throw new ResourceNotFoundException("Professor não encontrado");
-        professorRepository.deleteById(id);
+        Professor professor = buscar(id);
+
+        if (professor.getTurmas() != null) {
+            professor.getTurmas().forEach(turma -> {
+                if (turma.getProfessores() != null) {
+                    turma.getProfessores().remove(professor);
+                }
+            });
+            professor.getTurmas().clear();
+        }
+
+        professorRepository.delete(professor);
     }
 
     private Professor buscar(Long id) {

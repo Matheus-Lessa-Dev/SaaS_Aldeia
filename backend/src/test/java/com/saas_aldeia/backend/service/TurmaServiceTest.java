@@ -17,6 +17,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
@@ -94,6 +95,17 @@ class TurmaServiceTest {
     }
 
     @Test
+    void atualizar_blankName_throwsException() {
+        Turma turma = turma(10L, "5A", "Manhã");
+        when(turmaRepository.findById(10L)).thenReturn(Optional.of(turma));
+
+        assertThatThrownBy(() -> turmaService.atualizar(10L, new TurmaRequest(" ", null, null, null)))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Informe o nome da turma");
+        verify(turmaRepository, never()).existsByNome(any());
+    }
+
+    @Test
     void vincularAlunos_setsClassForAllStudents() {
         Turma turma = turma(10L, "5A", "Manhã");
         Aluno aluno1 = aluno(1L);
@@ -145,6 +157,29 @@ class TurmaServiceTest {
         assertThatThrownBy(() -> turmaService.deletar(99L))
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessageContaining("Turma não encontrada");
+    }
+
+    @Test
+    void deletar_classWithTeachersStudentsAndGames_clearsRelationshipsBeforeDelete() {
+        Turma turma = turma(10L, "5A", "Manhã");
+        Professor professor = professor(1L, "Maria");
+        Jogo jogo = jogo(2L, "Memória");
+        Aluno aluno = aluno(3L);
+        aluno.setTurma(turma);
+        turma.setProfessores(new ArrayList<>(List.of(professor)));
+        turma.setJogos(new ArrayList<>(List.of(jogo)));
+        when(turmaRepository.findById(10L)).thenReturn(Optional.of(turma));
+        when(alunoRepository.findByTurmaId(10L)).thenReturn(List.of(aluno));
+
+        turmaService.deletar(10L);
+
+        assertThat(aluno.getTurma()).isNull();
+        assertThat(turma.getProfessores()).isEmpty();
+        assertThat(turma.getJogos()).isEmpty();
+        verify(alunoRepository).save(aluno);
+        verify(professorRepository).desvincularTurmaLegada(10L);
+        verify(turmaRepository).save(turma);
+        verify(turmaRepository).deleteById(10L);
     }
 
     private static Turma turma(Long id, String nome, String periodo) {

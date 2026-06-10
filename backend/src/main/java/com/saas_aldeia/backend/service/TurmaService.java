@@ -65,6 +65,9 @@ public class TurmaService {
         Turma turma = buscar(id);
 
         if (request.nome() != null) {
+            if (request.nome().isBlank()) {
+                throw new IllegalArgumentException("Informe o nome da turma");
+            }
             if (!request.nome().equals(turma.getNome()) && turmaRepository.existsByNome(request.nome())) {
                 throw new IllegalArgumentException("Já existe uma turma com esse nome");
             }
@@ -118,9 +121,13 @@ public class TurmaService {
 
         if (turma.getProfessores() != null) {
             turma.getProfessores().clear();
-            turmaRepository.save(turma);
         }
 
+        if (turma.getJogos() != null) {
+            turma.getJogos().clear();
+        }
+
+        turmaRepository.save(turma);
         turmaRepository.deleteById(id);
     }
 

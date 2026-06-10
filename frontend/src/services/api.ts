@@ -20,7 +20,7 @@ api.interceptors.response.use(
     const status = error?.response?.status;
     const requestUrl = error?.config?.url ?? '';
 
-    if ((status === 401 || status === 403) && !requestUrl.includes('/auth/login')) {
+    if (status === 401 && !requestUrl.includes('/auth/login')) {
       expireAuthSession();
     }
 

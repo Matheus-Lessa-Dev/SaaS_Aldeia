@@ -4,6 +4,7 @@ import com.saas_aldeia.backend.dto.ProfessorRequest;
 import com.saas_aldeia.backend.exception.ResourceNotFoundException;
 import com.saas_aldeia.backend.model.Professor;
 import com.saas_aldeia.backend.model.TipoUsuario;
+import com.saas_aldeia.backend.model.Turma;
 import com.saas_aldeia.backend.repository.ProfessorRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,6 +14,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -60,12 +63,28 @@ class ProfessorServiceTest {
     }
 
     @Test
-    void deletar_existingProfessor_deletesById() {
-        when(professorRepository.existsById(1L)).thenReturn(true);
+    void deletar_existingProfessor_deletesEntity() {
+        Professor professor = professor(1L, "Maria", "maria@test.com", "hash");
+        when(professorRepository.findById(1L)).thenReturn(Optional.of(professor));
 
         professorService.deletar(1L);
 
-        verify(professorRepository).deleteById(1L);
+        verify(professorRepository).delete(professor);
+    }
+
+    @Test
+    void deletar_professorWithClasses_clearsRelationshipsBeforeDelete() {
+        Professor professor = professor(1L, "Maria", "maria@test.com", "hash");
+        Turma turma = new Turma();
+        turma.setProfessores(new ArrayList<>(List.of(professor)));
+        professor.setTurmas(new ArrayList<>(List.of(turma)));
+        when(professorRepository.findById(1L)).thenReturn(Optional.of(professor));
+
+        professorService.deletar(1L);
+
+        assertThat(professor.getTurmas()).isEmpty();
+        assertThat(turma.getProfessores()).doesNotContain(professor);
+        verify(professorRepository).delete(professor);
     }
 
     @Test

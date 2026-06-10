@@ -22,7 +22,16 @@
 .profileForm {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: start;
   width: 100%;
-  gap: 1em;
+  gap: 1.5em;
+}
+
+.profileFormButton {
+  background-color: var(--primary);
+  color: var(--on-primary);
+  padding: 10px 20px;
+  border: none;
+  border-radius: 9999px;
+  cursor: pointer;
 }

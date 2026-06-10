@@ -14,20 +14,14 @@ export default function Profile() {
         <Header />
         <main className="profileContent">
           <h1>Meu Perfil</h1>
-          <form className="profileForm">
+          <form className="profileForm" onSubmit={(e) => e.preventDefault()}>
             <div>
               <label htmlFor="name">Nome:</label>
               <input type="text" id="name" value={auth.user?.name} />
             </div>
-            <div>
-              <label htmlFor="email">Email:</label>
-              <input
-                type="email"
-                id="email"
-                value={auth.user?.email}
-                disabled
-              />
-            </div>
+            <button type="submit" className="profileFormButton">
+              Salvar
+            </button>
           </form>
         </main>
       </div>

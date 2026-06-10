@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { User, Trees } from "lucide-react";
 import Sidebar from "../../solos/sideBar/SideBar2";
 import "./Dashboard.css";
-import ProfileModal from "../../shared/profileModal";
 import Header from "../../shared/Header";
 
 function AlunoDashboard() {

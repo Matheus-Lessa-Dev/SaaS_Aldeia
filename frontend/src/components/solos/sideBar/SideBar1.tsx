@@ -7,6 +7,7 @@ import {
   LayoutDashboard,
   LogOut,
   Users,
+  User,
 } from "lucide-react";
 import { Role } from "../../../context/AuthContext";
 import { useAuth } from "../../../hooks/useAuth";
@@ -22,9 +23,15 @@ type NavItem = {
 const navItems: NavItem[] = [
   { label: "Dashboard", to: "/dashboard", icon: LayoutDashboard },
   { label: "Turmas", to: "/turmas", icon: BookOpenCheck },
-  { label: "Professores", to: "/professores", icon: GraduationCap, roles: [Role.Admin] },
+  {
+    label: "Professores",
+    to: "/professores",
+    icon: GraduationCap,
+    roles: [Role.Admin],
+  },
   { label: "Alunos", to: "/alunos", icon: Users },
   { label: "Jogos", to: "/jogos", icon: Gamepad2 },
+  { label: "Perfil", to: "/perfil", icon: User },
 ];
 
 function Sidebar1() {
@@ -45,34 +52,41 @@ function Sidebar1() {
 
       <nav className="sideBarNavlinks">
         {navItems
-          .filter((item) => !item.roles || (user?.role && item.roles.includes(user.role)))
+          .filter(
+            (item) =>
+              !item.roles || (user?.role && item.roles.includes(user.role)),
+          )
           .map((item) => {
-          const Icon = item.icon;
-          const content = (
-            <>
-              <Icon className="sideBarNavlinkIcon" size={20} aria-hidden="true" />
-              <span>{item.label}</span>
-            </>
-          );
-          if (item.to) {
-            return (
-              <NavLink
-                key={item.label}
-                to={item.to}
-                className={({ isActive }) =>
-                  `sideBarNavlink${isActive ? " active" : ""}`
-                }
-              >
-                {content}
-              </NavLink>
+            const Icon = item.icon;
+            const content = (
+              <>
+                <Icon
+                  className="sideBarNavlinkIcon"
+                  size={20}
+                  aria-hidden="true"
+                />
+                <span>{item.label}</span>
+              </>
             );
-          }
-          return (
-            <button key={item.label} className="sideBarNavlink" type="button">
-              {content}
-            </button>
-          );
-        })}
+            if (item.to) {
+              return (
+                <NavLink
+                  key={item.label}
+                  to={item.to}
+                  className={({ isActive }) =>
+                    `sideBarNavlink${isActive ? " active" : ""}`
+                  }
+                >
+                  {content}
+                </NavLink>
+              );
+            }
+            return (
+              <button key={item.label} className="sideBarNavlink" type="button">
+                {content}
+              </button>
+            );
+          })}
       </nav>
 
       <div className="sideBarFooter">

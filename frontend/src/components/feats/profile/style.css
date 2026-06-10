@@ -1,0 +1,28 @@
+.profilePainel {
+  display: flex;
+  flex-direction: row;
+  background-color: var(--on-primary);
+  border-radius: 10px;
+}
+
+.profileLayout {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  width: 100%;
+}
+
+.profileContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.profileForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  gap: 1em;
+}

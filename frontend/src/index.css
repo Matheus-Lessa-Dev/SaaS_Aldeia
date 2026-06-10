@@ -183,6 +183,11 @@ select:focus {
   border-bottom-color: var(--primary);
 }
 
+input:disabled {
+  background: var(--surface-container);
+  color: var(--on-surface-muted);
+}
+
 .surface-low {
   background: var(--surface-container-low);
 }

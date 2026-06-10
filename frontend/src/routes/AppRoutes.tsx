@@ -8,6 +8,7 @@ import {
 import { useAuth } from "../hooks/useAuth";
 import { Role } from "../context/AuthContext";
 import StudentClass from "../components/feats/studentClass";
+import Profiless from "../components/feats/profile";
 
 const Login = lazy(() => import("../pages/Login"));
 const Perfil = lazy(() => import("../pages/Perfil"));
@@ -49,7 +50,7 @@ function PrivateRoute({
   return children;
 }
 
-// Redireciona para /perfil se for primeiro acesso
+// Redireciona para /onboarding se for primeiro acesso
 function ProtectedRoute({
   children,
   allowedRoles,
@@ -64,7 +65,7 @@ function ProtectedRoute({
   }
 
   if (!isAuthenticated) return <Navigate to="/login" replace />;
-  if (user?.primeiroAcesso) return <Navigate to="/perfil" replace />;
+  if (user?.primeiroAcesso) return <Navigate to="/onboarding" replace />;
   if (allowedRoles && !allowedRoles.some(hasRole))
     return <div style={{ padding: 40 }}>Acesso não autorizado.</div>;
   return children;
@@ -96,7 +97,7 @@ const router = createBrowserRouter([
 
   // Perfil — acessível para qualquer autenticado
   {
-    path: "/perfil",
+    path: "/onboarding",
     element: (
       <PrivateRoute>
         <Perfil />
@@ -189,7 +190,7 @@ const router = createBrowserRouter([
       <ProtectedRoute allowedRoles={[Role.Admin]}>
         <TeacherCreatePage />
       </ProtectedRoute>
-    )
+    ),
   },
   {
     path: "/jogos",
@@ -212,6 +213,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute allowedRoles={[Role.Admin, Role.Teacher]}>
         <GameCreatePage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/perfil",
+    element: (
+      <ProtectedRoute>
+        <Profiless />
       </ProtectedRoute>
     ),
   },

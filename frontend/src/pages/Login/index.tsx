@@ -45,7 +45,7 @@ function Login() {
       login(user, data.token, data.refreshToken);
 
       if (data.primeiroAcesso) {
-        navigate("/perfil");
+        navigate("/onboarding");
         return;
       }
 

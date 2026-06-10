@@ -2,6 +2,7 @@ import { GraduationCap } from "lucide-react";
 import Sidebar2 from "../../solos/sideBar/SideBar2";
 import "./style.css";
 import StudentCard from "./studentCard";
+import Header from "../../shared/Header";
 
 const games = [
   {
@@ -37,12 +38,7 @@ export default function StudentClass() {
     <div className="studentClassPage">
       <Sidebar2 />
       <div className="studentClassLayout">
-        <header className="header">
-          <button type="button" className="headerBtn">
-            <span>Educador</span>
-            <GraduationCap size={18} aria-hidden="true" />
-          </button>
-        </header>
+        <Header />
         <h1 className="title">Turma 5</h1>
         <main className="mainContent">
           <div className="classContent">

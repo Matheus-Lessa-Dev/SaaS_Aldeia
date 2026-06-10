@@ -1,6 +1,12 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import type { LucideIcon } from "lucide-react";
-import { BookOpenCheck, Gamepad2, LayoutDashboard, LogOut } from "lucide-react";
+import {
+  BookOpenCheck,
+  Gamepad2,
+  LayoutDashboard,
+  LogOut,
+  User,
+} from "lucide-react";
 import { useAuth } from "../../../hooks/useAuth";
 import "./sideBar.css";
 
@@ -8,6 +14,7 @@ const navItems = [
   { label: "Dashboard", to: "/dashboard", icon: LayoutDashboard },
   { label: "Turma", to: "/turma", icon: BookOpenCheck },
   { label: "Jogos", to: "/jogos", icon: Gamepad2 },
+  { label: "Perfil", to: "/perfil", icon: User },
 ];
 
 type NavItem = {
@@ -39,7 +46,11 @@ function Sidebar2() {
           const Icon = item.icon;
           const content = (
             <>
-              <Icon className="sideBarNavlinkIcon" size={20} aria-hidden="true" />
+              <Icon
+                className="sideBarNavlinkIcon"
+                size={20}
+                aria-hidden="true"
+              />
               <span>{item.label}</span>
             </>
           );

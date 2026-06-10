@@ -6,6 +6,7 @@ import Calendario from "../../solos/calendario/Calendario";
 import api from "../../../services/api";
 import "./Dashboard.css";
 import ClassCard from "./classCard";
+import Header from "../../shared/Header";
 
 interface TurmaResponse {
   id: number;
@@ -98,12 +99,7 @@ function TeacherDashboard() {
     <div className="dashBoardPainel">
       <Sidebar />
       <div className="dashboardLayout">
-        <header className="dashboardHeader">
-          <button type="button" className="dashboardHeaderBtn">
-            <span>Educador</span>
-            <GraduationCap size={18} aria-hidden="true" />
-          </button>
-        </header>
+        <Header />
         <main className="dashboardContent">
           <div className="bannerPlaceholder">
             <div className="bannerContent">

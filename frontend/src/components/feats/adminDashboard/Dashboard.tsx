@@ -31,7 +31,9 @@ function CountUp({ value, isReady }: CountUpProps) {
       return;
     }
 
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
 
     if (prefersReducedMotion || value === 0) {
       setDisplayValue(value);
@@ -122,7 +124,10 @@ function AdminDashboard() {
                 <div key={card.title} className="dashboardCard">
                   <h3>{card.title}</h3>
                   <p>
-                    <CountUp value={totals[card.key]} isReady={!loadingTotals} />
+                    <CountUp
+                      value={totals[card.key]}
+                      isReady={!loadingTotals}
+                    />
                   </p>
                   <div className="dashboardCardIcon">
                     <Icon size={32} aria-hidden="true" />
@@ -131,7 +136,11 @@ function AdminDashboard() {
               );
             })}
           </div>
-          {totalsError && <p className="dashboardError" role="alert">{totalsError}</p>}
+          {totalsError && (
+            <p className="dashboardError" role="alert">
+              {totalsError}
+            </p>
+          )}
           <div className="dashboardContentBottom">
             <div className="bannerPlaceholder"></div>
             <Calendario />

@@ -12,5 +12,6 @@ public record AlunoResponse(
         String nomeResponsavel,
         String telefoneResponsavel,
         String emailResponsavel,       
+        Long turmaId,
         String nomeTurma
 ) {}

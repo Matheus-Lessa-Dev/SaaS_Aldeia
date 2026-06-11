@@ -4,18 +4,19 @@
 - Login
 - Crud comlpeto de alunos
 - Crud completo de professores
-- Dashboard de admin
+- Crud completo de alunos
+- Todos os módulos de admin
+- Todos os módulos de professor
 
 ## Andamento
-- Dashboard de professor
-- Cadastro de turmas
-- Edição de turmas
-- Cadastro de jogos
-- Edição de jogos
+- Módulos de aluno
+- Dashboard de aluno(conferir se esta pronto)
+- Módulo de turma acessado pelo aluno
+- Módulo de jogos de aluno
+- Módulo de perfil no geral (verificar como vai funcionar, se tem um campo nome que ele usa o email como nome padrão ou se vamos ter que adicionar isso)
+- Normalização de estilos das páginas
+- Testes dos endpoints do backend
 
 ## A Fazer
 - Deploy 
 - Resposividade
-- Detalhes no css e front end
-- Pagina de perfil (vizualizar email e senha)
-- Testes finais

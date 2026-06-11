@@ -1,68 +1,136 @@
+import { useEffect, useMemo, useState } from "react";
 import StudentSidebar from "../../solos/sideBar/StudentSidebar";
 import "./style.css";
 import StudentCard from "./studentCard";
 import Header from "../../shared/Header";
+import api from "../../../services/api";
+import GenericMainList from "../genericMainList";
 
-const games = [
-  {
-    id: 1,
-    title: "Caça às Palavras da Floresta",
-    description: "Encontre termos sobre natureza, cultura e território.",
-    status: "Liberado",
-  },
-  {
-    id: 2,
-    title: "Memória dos Animais",
-    description: "Combine os pares e descubra a fauna da aldeia.",
-    status: "Liberado",
-  },
-  {
-    id: 3,
-    title: "Quiz das Plantas Medicinais",
-    description: "Teste seus conhecimentos sobre saberes tradicionais.",
-    status: "Liberado",
-  },
-];
+type AlunoResponse = {
+  id: number;
+  nome: string;
+  turmaId?: number | null;
+  nomeTurma?: string | null;
+};
+
+type JogoResponse = {
+  id: number;
+  nome: string;
+  tempo?: number | null;
+  linkUrl?: string | null;
+};
 
 export default function StudentClass() {
-  const students = [
-    { id: 1, name: "João Silva" },
-    { id: 2, name: "Maria Oliveira" },
-    { id: 3, name: "Pedro Santos" },
-    { id: 4, name: "Ana Costa" },
-    { id: 5, name: "Lucas Pereira" },
-  ];
+  const [aluno, setAluno] = useState<AlunoResponse | null>(null);
+  const [students, setStudents] = useState<AlunoResponse[]>([]);
+  const [games, setGames] = useState<JogoResponse[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function fetchClassData() {
+      try {
+        const [alunoRes, studentsRes, gamesRes] = await Promise.all([
+          api.get<AlunoResponse>("/alunos/me"),
+          api.get<AlunoResponse[]>("/alunos/minha-turma"),
+          api.get<JogoResponse[]>("/jogos/minha-turma"),
+        ]);
+
+        if (!isMounted) return;
+
+        setAluno(alunoRes.data);
+        setStudents(studentsRes.data);
+        setGames(gamesRes.data.slice(0, 3));
+        setError("");
+      } catch {
+        if (isMounted) {
+          setError("Erro ao carregar os dados da sua turma.");
+        }
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
+    }
+
+    fetchClassData();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const nomeTurma = useMemo(() => {
+    if (loading) return "Carregando turma...";
+    return aluno?.nomeTurma ?? "Sem turma";
+  }, [aluno?.nomeTurma, loading]);
+
+  const handleOpenGame = (linkUrl?: string | null) => {
+    if (!linkUrl) return;
+    window.open(linkUrl, "_blank", "noopener,noreferrer");
+  };
+
+  const studentListItems = loading
+    ? [<p key="students-loading" className="studentClassState">Carregando alunos...</p>]
+    : error
+      ? [<p key="students-error" className="studentClassState">{error}</p>]
+      : students.length === 0
+        ? [<p key="students-empty" className="studentClassState">Nenhum aluno vinculado a esta turma.</p>]
+        : students.map((student) => (
+            <StudentCard key={student.id} name={student.nome} />
+          ));
 
   return (
     <div className="studentClassPage">
       <StudentSidebar />
       <div className="studentClassLayout">
         <Header />
-        <h1 className="title">Turma 5</h1>
+        <h1 className="title">{nomeTurma}</h1>
         <main className="mainContent">
           <div className="classContent">
-            <h3>Alunos</h3>
-            <div className="classContentList">
-              {students.map((student) => (
-                <StudentCard key={student.id} name={student.name} />
-              ))}
-            </div>
+            <GenericMainList
+              props={{
+                title: "Alunos",
+                itemsPerPage: 5,
+                pageSizeOptions: [5, 10, 15, 20],
+              }}
+            >
+              {studentListItems}
+            </GenericMainList>
           </div>
           <aside className="gamesAside">
             <h3>Jogos liberados</h3>
             <div className="gamesAsideContentList">
-              {games.slice(0, 2).map((game) => (
-                <article key={game.id} className="contentGameCard">
-                  <div className="gameCardHeader">
-                    <span className="gameCardStatus">{game.status}</span>
-                  </div>
-                  <h4>{game.title}</h4>
-                  <p>{game.description}</p>
-                  <button type="button" className="gameCardButton">
-                    Ver jogo
-                  </button>
-                </article>
-              ))}
+              {loading && <p className="studentClassState">Carregando jogos...</p>}
+              {!loading && error && <p className="studentClassState">{error}</p>}
+              {!loading && !error && games.length === 0 && (
+                <p className="studentClassState">Nenhum jogo liberado para sua turma.</p>
+              )}
+              {!loading &&
+                !error &&
+                games.map((game) => (
+                  <article key={game.id} className="contentGameCard">
+                    <div className="gameCardHeader">
+                      <span className="gameCardStatus">Liberado</span>
+                    </div>
+                    <h4>{game.nome}</h4>
+                    <p>
+                      {game.tempo
+                        ? `${game.tempo} minutos estimados`
+                        : "Disponivel para jogar."}
+                    </p>
+                    <button
+                      type="button"
+                      className="gameCardButton"
+                      disabled={!game.linkUrl}
+                      onClick={() => handleOpenGame(game.linkUrl)}
+                    >
+                      Ver jogo
+                    </button>
+                  </article>
+                ))}
             </div>
           </aside>
         </main>

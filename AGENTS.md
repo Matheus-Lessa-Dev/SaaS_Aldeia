@@ -23,6 +23,7 @@ Prioridade:
 - Manter o padrão de código já existente.
 - Sempre analisar arquivos relacionados antes de modificar.
 - Sempre informar impacto das alterações.
+- Ao final de toda alteração rodar o container no docker com o comando: docker-compose up --build
 
 ## Testes
 

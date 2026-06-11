@@ -76,7 +76,7 @@ export default function TeacherManagement() {
       pageClassName="teacherManagementPage"
       layoutClassName="managementPageLayout"
       title="Professores"
-      itemsPerPage={6}
+      itemsPerPage={5}
       addButtonLabel="Adicionar Professor"
       searchPlaceholder="Pesquisar Professor"
       searchValue={searchTerm}

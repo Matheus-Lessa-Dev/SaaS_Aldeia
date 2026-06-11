@@ -81,7 +81,7 @@ export default function ClassManagement() {
       pageClassName="classManagementPage"
       layoutClassName="managementPageLayout"
       title="Turmas"
-      itemsPerPage={6}
+      itemsPerPage={5}
       addButtonLabel="Adicionar Turma"
       searchPlaceholder="Pesquisar turma"
       searchValue={searchTerm}

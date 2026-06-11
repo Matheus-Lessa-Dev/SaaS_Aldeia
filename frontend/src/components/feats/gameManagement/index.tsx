@@ -114,7 +114,7 @@ export default function GameManagement() {
       pageClassName="gameManagementPage"
       layoutClassName="managementPageLayout"
       title="Jogos"
-      itemsPerPage={6}
+      itemsPerPage={5}
       addButtonLabel="Adicionar Jogo"
       searchPlaceholder="Pesquisar Jogo"
       searchValue={searchTerm}

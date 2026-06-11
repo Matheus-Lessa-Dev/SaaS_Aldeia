@@ -29,6 +29,16 @@ public class AlunoService {
         return toResponse(buscar(id));
     }
 
+    public List<AlunoResponse> listarPorTurmaDoAluno(Long alunoId) {
+        Aluno aluno = buscar(alunoId);
+
+        if (aluno.getTurma() == null) {
+            return List.of();
+        }
+
+        return listarPorTurma(aluno.getTurma().getId());
+    }
+
     public List<AlunoResponse> listarSemTurma() {
         return alunoRepository.findAll().stream()
                 .filter(a -> a.getTurma() == null)
@@ -80,6 +90,7 @@ public class AlunoService {
                 a.getNomeResponsavel(),
                 a.getTelefoneResponsavel(),
                 a.getEmailResponsavel(),        
+                a.getTurma() != null ? a.getTurma().getId() : null,
                 a.getTurma() != null ? a.getTurma().getNome() : null
         );
     }

@@ -9,9 +9,9 @@
 
 .gameCard {
   position: relative;
-  min-height: 118px;
-  padding: 1.15rem 1.2rem;
-  align-items: flex-end;
+  min-height: 0;
+  padding: 0.85rem 1rem;
+  align-items: center;
   border: 1px solid transparent;
   box-shadow: 0 8px 18px rgba(108, 71, 31, 0.08);
 }
@@ -25,11 +25,11 @@
 }
 
 .gameCardTitle {
-  max-width: calc(100% - 7rem);
+  max-width: 100%;
   color: var(--primary);
-  font-size: clamp(1.55rem, 2.5vw, 2rem);
-  font-weight: 800;
-  line-height: 1.08;
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.2;
 }
 
 .gameCardDescription {
@@ -44,7 +44,7 @@
 .gameCardStatus {
   display: inline-flex;
   width: fit-content;
-  margin-bottom: 0.35rem;
+  margin-bottom: 0.2rem;
   border-radius: 999px;
   padding: 0.2rem 0.55rem;
   background: rgba(44, 103, 44, 0.1);
@@ -59,10 +59,9 @@
 }
 
 .gameCardSwitch {
-  position: absolute;
-  top: 0.85rem;
-  right: 1rem;
+  position: static;
   display: inline-flex;
+  flex-shrink: 0;
   cursor: pointer;
 }
 
@@ -109,11 +108,10 @@
 
 @media (max-width: 700px) {
   .gameCard {
-    min-height: 132px;
-    align-items: flex-end;
+    align-items: center;
   }
 
   .gameCardTitle {
-    max-width: calc(100% - 4rem);
+    max-width: 100%;
   }
 }

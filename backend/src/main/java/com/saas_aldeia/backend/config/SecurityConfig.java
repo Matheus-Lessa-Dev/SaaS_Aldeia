@@ -64,6 +64,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/admins/**").hasRole("ADMIN")
                         .requestMatchers("/alunos/me").hasRole("ALUNO")
+                        .requestMatchers("/alunos/minha-turma").hasRole("ALUNO")
                         .requestMatchers("/alunos/**").hasAnyRole("ADMIN", "PROFESSOR")
                         .requestMatchers("/professores/**").hasAnyRole("ADMIN", "PROFESSOR")
                         .requestMatchers("/turmas/**").hasAnyRole("ADMIN", "PROFESSOR")

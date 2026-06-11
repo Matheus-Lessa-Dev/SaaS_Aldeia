@@ -49,6 +49,21 @@ class AlunoServiceTest {
     }
 
     @Test
+    void listarPorTurmaDoAluno_returnsStudentsFromSameClass() {
+        Turma turma = turma(10L, "5A");
+        Aluno alunoLogado = aluno(1L, "Joao", "joao@test.com", "hash");
+        Aluno colega = aluno(2L, "Maria", "maria@test.com", "hash");
+        alunoLogado.setTurma(turma);
+        colega.setTurma(turma);
+        when(alunoRepository.findById(1L)).thenReturn(Optional.of(alunoLogado));
+        when(alunoRepository.findByTurmaId(10L)).thenReturn(List.of(alunoLogado, colega));
+
+        var result = alunoService.listarPorTurmaDoAluno(1L);
+
+        assertThat(result).extracting("id").containsExactly(1L, 2L);
+    }
+
+    @Test
     void atualizar_updatesClassAndEncodedPassword() {
         Aluno aluno = aluno(1L, "Antigo", "old@test.com", "oldHash");
         Turma turma = turma(10L, "5A");

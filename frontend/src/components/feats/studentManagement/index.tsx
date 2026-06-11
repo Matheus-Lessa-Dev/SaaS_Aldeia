@@ -80,7 +80,7 @@ export default function StudentManagement() {
       pageClassName="studentManagementPage"
       layoutClassName="managementPageLayout"
       title="Alunos"
-      itemsPerPage={6}
+      itemsPerPage={5}
       addButtonLabel="Adicionar Aluno"
       searchPlaceholder="Pesquisar Aluno"
       searchValue={searchTerm}

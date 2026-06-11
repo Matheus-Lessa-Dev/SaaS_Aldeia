@@ -59,7 +59,7 @@ class ResourceControllersTest {
     @Test
     void alunoController_delegatesCrudEndpoints() {
         AlunoController controller = new AlunoController(alunoService);
-        var response = new AlunoResponse(1L, "João", "joao@test.com", LocalDate.of(2010, 3, 15), "Rua", "Casa", "Resp", "44", "resp@test.com", "5A");
+        var response = new AlunoResponse(1L, "João", "joao@test.com", LocalDate.of(2010, 3, 15), "Rua", "Casa", "Resp", "44", "resp@test.com", 10L, "5A");
         var request = new AlunoRequest("João", null, null, null, null, null, null, null, null, null);
         when(alunoService.listar()).thenReturn(List.of(response));
         when(alunoService.buscarPorId(1L)).thenReturn(response);
@@ -78,7 +78,7 @@ class ResourceControllersTest {
         Usuario alunoLogado = new Usuario();
         alunoLogado.setId(1L);
         alunoLogado.setTipo(TipoUsuario.ALUNO);
-        var response = new AlunoResponse(1L, "João", "joao@test.com", LocalDate.of(2010, 3, 15), "Rua", "Casa", "Resp", "44", "resp@test.com", "5A");
+        var response = new AlunoResponse(1L, "João", "joao@test.com", LocalDate.of(2010, 3, 15), "Rua", "Casa", "Resp", "44", "resp@test.com", 10L, "5A");
         when(alunoService.buscarPorId(1L)).thenReturn(response);
 
         assertThat(controller.buscarMe(alunoLogado).getBody()).isEqualTo(response);

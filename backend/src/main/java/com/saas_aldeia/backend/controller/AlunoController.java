@@ -55,6 +55,21 @@ public class AlunoController {
         return ResponseEntity.ok(alunoService.buscarPorId(usuarioLogado.getId()));
     }
 
+    @GetMapping("/minha-turma")
+    @Operation(summary = "Listar alunos da minha turma", description = "Retorna os alunos vinculados a turma do aluno logado")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lista de alunos da turma retornada com sucesso"),
+            @ApiResponse(responseCode = "401", description = "NÃ£o autorizado"),
+            @ApiResponse(responseCode = "403", description = "Acesso permitido apenas para alunos")
+    })
+    public ResponseEntity<List<AlunoResponse>> listarMinhaTurma(@AuthenticationPrincipal Usuario usuarioLogado) {
+        if (usuarioLogado == null || usuarioLogado.getTipo() != TipoUsuario.ALUNO) {
+            throw new AccessDeniedException("Apenas alunos podem acessar os alunos da propria turma");
+        }
+
+        return ResponseEntity.ok(alunoService.listarPorTurmaDoAluno(usuarioLogado.getId()));
+    }
+
     @GetMapping("/{id}")
     @Operation(summary = "Buscar aluno por ID", description = "Retorna um aluno com base no ID fornecido")
     @ApiResponses(value = {

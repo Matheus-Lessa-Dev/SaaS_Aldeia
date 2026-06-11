@@ -7,9 +7,9 @@ import {
 } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import { Role } from "../context/AuthContext";
-import StudentClass from "../components/feats/studentClass";
-import Profiless from "../components/feats/profile";
 
+const StudentClass = lazy(() => import("../components/feats/studentClass"));
+const Profile = lazy(() => import("../components/feats/profile"));
 const Login = lazy(() => import("../pages/Login"));
 const Perfil = lazy(() => import("../pages/Perfil"));
 const AdminDashboard = lazy(
@@ -72,24 +72,19 @@ function ProtectedRoute({
   return children;
 }
 
-// Renderiza o dashboard correto baseado no role
-function DashboardRouter() {
+function RoleBasedRoute(props: { roleRoutes: Map<Role, ReactNode> }) {
   const { user, loading } = useAuth();
 
   if (loading) {
     return <div className="appLoading">Carregando...</div>;
   }
 
-  switch (user?.role) {
-    case Role.Admin:
-      return <AdminDashboard />;
-    case Role.Teacher:
-      return <TeacherDashboard />;
-    case Role.Student:
-      return <StudentDashboard />;
-    default:
-      return <Navigate to="/login" replace />;
-  }
+  const route = props.roleRoutes.get(user!.role);
+  return route ? (
+    <>{route}</>
+  ) : (
+    <div style={{ padding: 40 }}>Acesso não autorizado.</div>
+  );
 }
 
 function GamesRouter() {
@@ -120,9 +115,17 @@ const router = createBrowserRouter([
   {
     path: "/dashboard",
     element: (
-      <ProtectedRoute>
-        <DashboardRouter />
-      </ProtectedRoute>
+      <PrivateRoute>
+        <RoleBasedRoute
+          roleRoutes={
+            new Map<Role, ReactNode>([
+              [Role.Admin, <AdminDashboard />],
+              [Role.Teacher, <TeacherDashboard />],
+              [Role.Student, <StudentDashboard />],
+            ])
+          }
+        />
+      </PrivateRoute>
     ),
   },
   {
@@ -233,7 +236,7 @@ const router = createBrowserRouter([
     path: "/perfil",
     element: (
       <ProtectedRoute>
-        <Profiless />
+        <Profile />
       </ProtectedRoute>
     ),
   },

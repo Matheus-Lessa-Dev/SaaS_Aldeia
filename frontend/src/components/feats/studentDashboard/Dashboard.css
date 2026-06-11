@@ -74,7 +74,7 @@
     flex-wrap: wrap;
 }
 
-.gameCard {
+.studentDashboardGameCard {
 	flex: 1;
     min-width: 24rem;
 	padding: var(--spacing-4);
@@ -90,7 +90,7 @@
     overflow: hidden;
 }
 
-.gameCard::before {
+.studentDashboardGameCard::before {
     content: '';
     position: absolute;
     border-radius: 50%;
@@ -102,21 +102,48 @@
     right: -50px;
 }
 
-.gameCard > * {
+.studentDashboardGameCard > * {
     position: relative;
     z-index: 1;
 }
 
-.gameCard h2 {
+.studentDashboardGameCard h2 {
     font-size: clamp(1.9rem, 3vw, 2.8rem);
     max-width: 32rem;
     margin: 0;
-    color: var(--on-primary);
+    color: #fcf9f4;
+    overflow-wrap: anywhere;
 }
 
-.gameCard p {
+.studentDashboardGameCard p {
     max-width: 30rem;
     color: rgba(252, 249, 244, 0.9);
+}
+
+.studentHighlightLabel {
+    color: rgba(252, 249, 244, 0.86);
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.studentDashboardCarouselDots {
+    display: flex;
+    gap: 0.45rem;
+    margin-top: 0.25rem;
+}
+
+.studentDashboardCarouselDots span {
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 999px;
+    background: rgba(252, 249, 244, 0.38);
+}
+
+.studentDashboardCarouselDots span.active {
+    width: 1.4rem;
+    background: #fcf9f4;
 }
 
 .turmaCard {
@@ -160,6 +187,7 @@
     font-size: clamp(2.6rem, 4vw, 4rem);
     font-weight: 700;
     line-height: 1;
+    overflow-wrap: anywhere;
 }
 
 @media (max-width: 900px) {

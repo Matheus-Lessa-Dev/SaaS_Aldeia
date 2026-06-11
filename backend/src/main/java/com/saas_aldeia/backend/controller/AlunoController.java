@@ -2,10 +2,14 @@ package com.saas_aldeia.backend.controller;
 
 import com.saas_aldeia.backend.dto.AlunoRequest;
 import com.saas_aldeia.backend.dto.AlunoResponse;
+import com.saas_aldeia.backend.model.TipoUsuario;
+import com.saas_aldeia.backend.model.Usuario;
 import com.saas_aldeia.backend.service.AlunoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -34,6 +38,21 @@ public class AlunoController {
             return ResponseEntity.ok(alunoService.listarPorTurma(turmaId));
         }
         return ResponseEntity.ok(alunoService.listar());
+    }
+
+    @GetMapping("/me")
+    @Operation(summary = "Buscar dados do aluno autenticado", description = "Retorna os dados do aluno logado")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Aluno retornado com sucesso"),
+            @ApiResponse(responseCode = "401", description = "Não autorizado"),
+            @ApiResponse(responseCode = "403", description = "Acesso permitido apenas para alunos")
+    })
+    public ResponseEntity<AlunoResponse> buscarMe(@AuthenticationPrincipal Usuario usuarioLogado) {
+        if (usuarioLogado == null || usuarioLogado.getTipo() != TipoUsuario.ALUNO) {
+            throw new AccessDeniedException("Apenas alunos podem acessar seus proprios dados");
+        }
+
+        return ResponseEntity.ok(alunoService.buscarPorId(usuarioLogado.getId()));
     }
 
     @GetMapping("/{id}")

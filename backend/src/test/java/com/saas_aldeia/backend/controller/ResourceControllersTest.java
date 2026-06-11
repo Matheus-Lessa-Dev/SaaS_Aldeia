@@ -11,6 +11,8 @@ import com.saas_aldeia.backend.dto.ProfessorResponse;
 import com.saas_aldeia.backend.dto.TurmaAlunosRequest;
 import com.saas_aldeia.backend.dto.TurmaRequest;
 import com.saas_aldeia.backend.dto.TurmaResponse;
+import com.saas_aldeia.backend.model.TipoUsuario;
+import com.saas_aldeia.backend.model.Usuario;
 import com.saas_aldeia.backend.service.AdminService;
 import com.saas_aldeia.backend.service.AlunoService;
 import com.saas_aldeia.backend.service.JogoService;
@@ -68,6 +70,18 @@ class ResourceControllersTest {
         assertThat(controller.atualizar(1L, request).getBody()).isEqualTo(response);
         assertThat(controller.deletar(1L).getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
         verify(alunoService).deletar(1L);
+    }
+
+    @Test
+    void alunoController_delegatesAuthenticatedStudentEndpoint() {
+        AlunoController controller = new AlunoController(alunoService);
+        Usuario alunoLogado = new Usuario();
+        alunoLogado.setId(1L);
+        alunoLogado.setTipo(TipoUsuario.ALUNO);
+        var response = new AlunoResponse(1L, "João", "joao@test.com", LocalDate.of(2010, 3, 15), "Rua", "Casa", "Resp", "44", "resp@test.com", "5A");
+        when(alunoService.buscarPorId(1L)).thenReturn(response);
+
+        assertThat(controller.buscarMe(alunoLogado).getBody()).isEqualTo(response);
     }
 
     @Test

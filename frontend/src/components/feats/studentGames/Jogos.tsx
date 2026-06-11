@@ -1,139 +1,134 @@
+import { useEffect, useMemo, useState } from 'react'
 import { UserCircle, Play } from 'lucide-react'
-import SideBar from '../../solos/sideBar/SideBar2'
+import StudentSidebar from '../../solos/sideBar/StudentSidebar'
+import api from '../../../services/api'
 import './Jogos.css'
 
-type Jogo = {
+type JogoResponse = {
     id: number
-    titulo: string
-    descricao: string
-    status: 'disponivel' | 'bloqueado'
-    destaque?: boolean
-    novo?: boolean
+    nome: string
+    imgUrl?: string | null
+    tempo?: number | null
+    linkUrl?: string | null
 }
 
-const jogos: Jogo[] = [
-    {
-        id: 1,
-        titulo: 'Nome do jogo',
-        descricao: 'Encontre as palavras sagradas escondidas entre as copas das árvores centenárias.',
-        status: 'disponivel',
-        destaque: true,
-        novo: true,
-    },
-    {
-        id: 2,
-        titulo: 'Nome do jogo',
-        descricao: 'Proteja as águas cristalinas e aprenda sobre a fauna aquática local.',
-        status: 'disponivel',
-    },
-    {
-        id: 3,
-        titulo: 'Nome do jogo',
-        descricao: 'Aguardando liberação do professor para iniciar esta jornada.',
-        status: 'bloqueado',
-    },
-    {
-        id: 4,
-        titulo: 'Nome do jogo',
-        descricao: 'Explore as formas e significados dos grafismos tradicionais.',
-        status: 'disponivel',
-    },
-    {
-        id: 5,
-        titulo: 'Nome do jogo',
-        descricao: 'Seu professor ainda está preparando este conteúdo.',
-        status: 'bloqueado',
-    },
-]
-
-const jogoDestaque = jogos.find((j) => j.destaque)
-const jogoSecundario = jogos.find((j) => !j.destaque && j.status === 'disponivel')
-const jogosGrid = jogos.filter((j) => !j.destaque && j.id !== jogoSecundario?.id)
-
 function AlunoJogos() {
+    const [jogos, setJogos] = useState<JogoResponse[]>([])
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState('')
+
+    useEffect(() => {
+        async function fetchJogos() {
+            try {
+                const { data } = await api.get<JogoResponse[]>('/jogos/minha-turma')
+                setJogos(data)
+            } catch {
+                setError('Erro ao carregar jogos da sua turma.')
+            } finally {
+                setLoading(false)
+            }
+        }
+
+        fetchJogos()
+    }, [])
+
+    const jogoDestaque = jogos[0]
+    const jogoSecundario = jogos[1]
+    const jogosGrid = useMemo(() => jogos.slice(2), [jogos])
+
+    const handlePlay = (linkUrl?: string | null) => {
+        if (!linkUrl) return
+        window.open(linkUrl, '_blank', 'noopener,noreferrer')
+    }
+
+    const renderThumb = (jogo: JogoResponse, className: string) => (
+        <div
+            className={className}
+            style={jogo.imgUrl ? { backgroundImage: `url(${jogo.imgUrl})` } : undefined}
+        />
+    )
+
     return (
         <div className="jogosPage">
-            <SideBar />
+            <StudentSidebar />
 
-            {/* MAIN */}
             <div className="jogosMain">
-
-                {/* TOP BAR */}
                 <div className="jogosTopBar">
                     <h2>Jogos</h2>
                     <button className="jogosProfileBtn">
-                        Prof. Arandú
+                        Minha turma
                         <UserCircle size={20} aria-hidden="true" />
                     </button>
                 </div>
 
-                {/* CONTENT */}
                 <div className="jogosContent">
                     <div className="jogosPageHeader">
                         <h1>Área de Jogos</h1>
                         <p>
-                            Aprenda com a sabedoria da floresta. Escolha um desafio e fortaleça
-                            seu conhecimento ancestral.
+                            Escolha um jogo liberado para sua turma e continue sua jornada de aprendizagem.
                         </p>
                     </div>
 
-                    {/* Card destaque + card lateral */}
-                    <div className="jogosFeaturedRow">
-                        {jogoDestaque && (
-                            <div className="jogosFeaturedCard">
-                                <div className="jogosFeaturedThumb">
-                                    {jogoDestaque.novo && (
-                                        <span className="jogosTagNovo">NOVO</span>
-                                    )}
-                                </div>
-                                <div className="jogosFeaturedInfo">
-                                    <div>
-                                        <h3>{jogoDestaque.titulo}</h3>
-                                        <p>{jogoDestaque.descricao}</p>
-                                    </div>
-                                    <button className="jogosBtnJogar">
-                                        Jogar
-                                        <Play size={13} aria-hidden="true" />
-                                    </button>
-                                </div>
-                            </div>
-                        )}
+                    {loading && <p className="jogosStateMessage">Carregando jogos...</p>}
+                    {!loading && error && <p className="jogosStateMessage">{error}</p>}
+                    {!loading && !error && jogos.length === 0 && (
+                        <p className="jogosStateMessage">Nenhum jogo foi liberado para sua turma ainda.</p>
+                    )}
 
-                        {jogoSecundario && (
-                            <div className="jogosSideCard">
-                                <div className="jogosSideThumb" />
-                                <div className="jogosSideInfo">
-                                    <div>
-                                        <h3>{jogoSecundario.titulo}</h3>
-                                        <p>{jogoSecundario.descricao}</p>
+                    {!loading && !error && jogos.length > 0 && (
+                        <>
+                            <div className="jogosFeaturedRow">
+                                {jogoDestaque && (
+                                    <div className="jogosFeaturedCard">
+                                        <div className="jogosFeaturedThumbWrap">
+                                            {renderThumb(jogoDestaque, 'jogosFeaturedThumb')}
+                                            <span className="jogosTagNovo">NOVO</span>
+                                        </div>
+                                        <div className="jogosFeaturedInfo">
+                                            <div>
+                                                <h3>{jogoDestaque.nome}</h3>
+                                                <p>{jogoDestaque.tempo ? `${jogoDestaque.tempo} minutos estimados` : 'Jogo liberado para sua turma.'}</p>
+                                            </div>
+                                            <button className="jogosBtnJogar" onClick={() => handlePlay(jogoDestaque.linkUrl)}>
+                                                Jogar
+                                                <Play size={13} aria-hidden="true" />
+                                            </button>
+                                        </div>
                                     </div>
-                                    <button className="jogosBtnJogarFull">Jogar</button>
-                                </div>
-                            </div>
-                        )}
-                    </div>
+                                )}
 
-                    {/* Grid de 3 cards */}
-                    <div className="jogosGrid">
-                        {jogosGrid.map((jogo) => (
-                            <div key={jogo.id} className="jogosGridCard">
-                                <div className="jogosGridThumb" />
-                                <div className="jogosGridInfo">
-                                    <h3 className={jogo.status === 'bloqueado' ? 'locked' : ''}>
-                                        {jogo.titulo}
-                                    </h3>
-                                    <p>{jogo.descricao}</p>
-                                    {jogo.status === 'disponivel' ? (
-                                        <button className="jogosBtnJogarFull">Jogar</button>
-                                    ) : (
-                                        <button className="jogosBtnBloqueado" disabled>
-                                            Bloqueado
-                                        </button>
-                                    )}
-                                </div>
+                                {jogoSecundario && (
+                                    <div className="jogosSideCard">
+                                        {renderThumb(jogoSecundario, 'jogosSideThumb')}
+                                        <div className="jogosSideInfo">
+                                            <div>
+                                                <h3>{jogoSecundario.nome}</h3>
+                                                <p>{jogoSecundario.tempo ? `${jogoSecundario.tempo} minutos estimados` : 'Disponível agora.'}</p>
+                                            </div>
+                                            <button className="jogosBtnJogarFull" onClick={() => handlePlay(jogoSecundario.linkUrl)}>
+                                                Jogar
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
-                        ))}
-                    </div>
+
+                            <div className="jogosGrid">
+                                {jogosGrid.map((jogo) => (
+                                    <div key={jogo.id} className="jogosGridCard">
+                                        {renderThumb(jogo, 'jogosGridThumb')}
+                                        <div className="jogosGridInfo">
+                                            <h3>{jogo.nome}</h3>
+                                            <p>{jogo.tempo ? `${jogo.tempo} minutos estimados` : 'Disponível para jogar.'}</p>
+                                            <button className="jogosBtnJogarFull" onClick={() => handlePlay(jogo.linkUrl)}>
+                                                Jogar
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </>
+                    )}
                 </div>
             </div>
         </div>

@@ -89,8 +89,8 @@ class ResourceControllersTest {
     @Test
     void jogoController_delegatesCrudEndpoints() {
         JogoController controller = new JogoController(jogoService);
-        var response = new JogoResponse(1L, "Memória", "img", 10, "link", true);
-        var request = new JogoRequest("Memória", "img", 10, "link", true);
+        var response = new JogoResponse(1L, "Memória", "img", 10, "link", true, List.of(1L), List.of("5A"));
+        var request = new JogoRequest("Memória", "img", 10, "link", true, List.of(1L));
         when(jogoService.listar()).thenReturn(List.of(response));
         when(jogoService.buscarPorId(1L)).thenReturn(response);
         when(jogoService.criar(request)).thenReturn(response);

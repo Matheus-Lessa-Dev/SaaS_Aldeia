@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { GraduationCap, UserRound, Users } from 'lucide-react'
 import { useNavigate, useParams } from 'react-router-dom'
-import Sidebar1 from '../../solos/sideBar/SideBar1'
+import DefaultSidebar from '../../solos/sideBar/DefaultSidebar'
 import { FormActions } from '../../shared/formActions'
 import { FormField } from '../../shared/formField'
 import { FormSection } from '../../shared/formSection'
@@ -136,7 +136,7 @@ useEffect(() => {
 
   return (
     <div className="managementPageLayout">
-      <Sidebar1 />
+      <DefaultSidebar />
       <div className="managementMain">
         <header className="managementHeader">
           <button type="button" className="dashboardHeaderBtn">

@@ -1,5 +1,4 @@
-import { GraduationCap } from "lucide-react";
-import Sidebar2 from "../../solos/sideBar/SideBar2";
+import StudentSidebar from "../../solos/sideBar/StudentSidebar";
 import "./style.css";
 import StudentCard from "./studentCard";
 import Header from "../../shared/Header";
@@ -36,7 +35,7 @@ export default function StudentClass() {
 
   return (
     <div className="studentClassPage">
-      <Sidebar2 />
+      <StudentSidebar />
       <div className="studentClassLayout">
         <Header />
         <h1 className="title">Turma 5</h1>

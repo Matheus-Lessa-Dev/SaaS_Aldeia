@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Gamepad2, GraduationCap, Link as LinkIcon } from "lucide-react";
+import { Gamepad2, GraduationCap, Layers3, Link as LinkIcon } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
-import Sidebar1 from "../../solos/sideBar/SideBar1";
+import DefaultSidebar from "../../solos/sideBar/DefaultSidebar";
 import { FormActions } from "../../shared/formActions";
 import { FormField } from "../../shared/formField";
 import { FormSection } from "../../shared/formSection";
 import api from "../../../services/api";
 import "../../shared/ManagementPageShell/style.css";
+import "../classNew/style.css";
 import "./style.css";
 
 type GameFormState = {
@@ -19,6 +20,20 @@ type GameFormState = {
 };
 
 type GameFormErrors = Partial<Record<keyof GameFormState, string>>;
+
+type TurmaOption = {
+  id: number;
+  nome: string;
+};
+
+type JogoResponse = {
+  nome?: string;
+  tempo?: number | null;
+  imgUrl?: string | null;
+  linkUrl?: string | null;
+  habilitado?: boolean | null;
+  turmasIds?: number[];
+};
 
 const emptyForm: GameFormState = {
   name: "",
@@ -37,32 +52,45 @@ export default function GameCreatePage() {
   const isEditing = Boolean(id);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [loadingData, setLoadingData] = useState(isEditing);
+  const [loadingData, setLoadingData] = useState(true);
   const [formState, setFormState] = useState<GameFormState>(emptyForm);
   const [formErrors, setFormErrors] = useState<GameFormErrors>({});
+  const [turmas, setTurmas] = useState<TurmaOption[]>([]);
+  const [selectedTurmas, setSelectedTurmas] = useState<number[]>([]);
 
   useEffect(() => {
-    if (!isEditing) return;
-
-    async function fetchGame() {
+    async function fetchData() {
       try {
-        const { data } = await api.get(`/jogos/${id}`);
-        setFormState({
-          name: data.nome ?? "",
-          time: data.tempo == null ? "" : String(data.tempo),
-          imageUrl: data.imgUrl ?? "",
-          linkUrl: data.linkUrl ?? "",
-          enabled: data.habilitado ?? true,
-        });
+        const turmasRequest = api.get<TurmaOption[]>("/turmas");
+
+        if (isEditing) {
+          const [turmasRes, jogoRes] = await Promise.all([
+            turmasRequest,
+            api.get<JogoResponse>(`/jogos/${id}`),
+          ]);
+          const data = jogoRes.data;
+          setTurmas(turmasRes.data);
+          setSelectedTurmas(data.turmasIds ?? []);
+          setFormState({
+            name: data.nome ?? "",
+            time: data.tempo == null ? "" : String(data.tempo),
+            imageUrl: data.imgUrl ?? "",
+            linkUrl: data.linkUrl ?? "",
+            enabled: data.habilitado ?? true,
+          });
+        } else {
+          const { data } = await turmasRequest;
+          setTurmas(data);
+        }
       } catch {
-        alert("Erro ao carregar dados do jogo.");
+        alert(isEditing ? "Erro ao carregar dados do jogo." : "Erro ao carregar turmas.");
         navigate("/jogos");
       } finally {
         setLoadingData(false);
       }
     }
 
-    fetchGame();
+    fetchData();
   }, [id, isEditing, navigate]);
 
   const handleFieldChange = (field: keyof GameFormState, value: string) => {
@@ -79,6 +107,14 @@ export default function GameCreatePage() {
     } catch {
       return false;
     }
+  };
+
+  const toggleTurma = (turmaId: number) => {
+    setSelectedTurmas((current) =>
+      current.includes(turmaId)
+        ? current.filter((idAtual) => idAtual !== turmaId)
+        : [...current, turmaId],
+    );
   };
 
   const validate = () => {
@@ -114,6 +150,7 @@ export default function GameCreatePage() {
       imgUrl: formState.imageUrl.trim(),
       linkUrl: formState.linkUrl.trim(),
       habilitado: formState.enabled,
+      turmasIds: selectedTurmas,
     };
 
     try {
@@ -135,7 +172,7 @@ export default function GameCreatePage() {
 
   return (
     <div className="managementPageLayout">
-      <Sidebar1 />
+      <DefaultSidebar />
       <div className="managementMain">
         <header className="managementHeader">
           <button type="button" className="dashboardHeaderBtn">
@@ -197,6 +234,33 @@ export default function GameCreatePage() {
                 error={formErrors.linkUrl}
                 required
               />
+            </FormSection>
+
+            <FormSection title="Turmas vinculadas" icon={<Layers3 size={16} aria-hidden="true" />}>
+              {turmas.length === 0 ? (
+                <p className="class-empty-msg">Nenhuma turma cadastrada.</p>
+              ) : (
+                <div className="class-selection-list">
+                  {turmas.map((turma) => {
+                    const selected = selectedTurmas.includes(turma.id);
+                    return (
+                      <div
+                        key={turma.id}
+                        className={`class-selection-item${selected ? " class-selection-item--selected" : ""}`}
+                      >
+                        <span>{turma.nome}</span>
+                        <button
+                          type="button"
+                          className={`class-selection-btn${selected ? " class-selection-btn--remove" : ""}`}
+                          onClick={() => toggleTurma(turma.id)}
+                        >
+                          {selected ? "Remover" : "Adicionar"}
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </FormSection>
 
             <FormActions

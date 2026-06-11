@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
+import java.util.List;
+
 public record JogoRequest(
         @NotBlank(message = "Informe o nome do jogo")
         @Size(max = 45, message = "O nome deve ter no maximo 45 caracteres")
@@ -21,5 +23,7 @@ public record JogoRequest(
         @Size(max = 1000, message = "A URL do jogo deve ter no maximo 1000 caracteres")
         String linkUrl,
 
-        Boolean habilitado
+        Boolean habilitado,
+
+        List<Long> turmasIds
 ) {}

@@ -2,9 +2,12 @@ package com.saas_aldeia.backend.service;
 
 import com.saas_aldeia.backend.dto.JogoRequest;
 import com.saas_aldeia.backend.exception.ResourceNotFoundException;
+import com.saas_aldeia.backend.model.Aluno;
 import com.saas_aldeia.backend.model.Jogo;
 import com.saas_aldeia.backend.model.Turma;
+import com.saas_aldeia.backend.repository.AlunoRepository;
 import com.saas_aldeia.backend.repository.JogoRepository;
+import com.saas_aldeia.backend.repository.TurmaRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -25,6 +28,8 @@ import static org.mockito.Mockito.when;
 class JogoServiceTest {
 
     @Mock JogoRepository jogoRepository;
+    @Mock TurmaRepository turmaRepository;
+    @Mock AlunoRepository alunoRepository;
     @InjectMocks JogoService jogoService;
 
     @Test
@@ -35,7 +40,7 @@ class JogoServiceTest {
             return jogo;
         });
 
-        var response = jogoService.criar(new JogoRequest("Memória", "img.png", 10, "https://game.test", true));
+        var response = jogoService.criar(new JogoRequest("Memória", "img.png", 10, "https://game.test", true, null));
 
         assertThat(response.id()).isEqualTo(1L);
         assertThat(response.nome()).isEqualTo("Memória");
@@ -46,12 +51,32 @@ class JogoServiceTest {
     }
 
     @Test
+    void criar_gameWithClasses_linksBothSides() {
+        Turma turma = new Turma();
+        turma.setId(10L);
+        turma.setNome("5A");
+        turma.setJogos(new ArrayList<>());
+        when(turmaRepository.findById(10L)).thenReturn(Optional.of(turma));
+        when(jogoRepository.save(any(Jogo.class))).thenAnswer(invocation -> {
+            Jogo jogo = invocation.getArgument(0);
+            jogo.setId(1L);
+            return jogo;
+        });
+
+        var response = jogoService.criar(new JogoRequest("Memória", "img.png", 10, "https://game.test", true, List.of(10L)));
+
+        assertThat(response.turmasIds()).containsExactly(10L);
+        assertThat(response.nomesTurmas()).containsExactly("5A");
+        assertThat(turma.getJogos()).singleElement().satisfies(jogo -> assertThat(jogo.getId()).isEqualTo(1L));
+    }
+
+    @Test
     void atualizar_updatesOnlyProvidedFields() {
         Jogo jogo = jogo(1L, "Antigo", "old.png", "5 min", "old");
         when(jogoRepository.findById(1L)).thenReturn(Optional.of(jogo));
         when(jogoRepository.save(jogo)).thenReturn(jogo);
 
-        var response = jogoService.atualizar(1L, new JogoRequest("Novo", null, 12, null, null));
+        var response = jogoService.atualizar(1L, new JogoRequest("Novo", null, 12, null, null, null));
 
         assertThat(response.nome()).isEqualTo("Novo");
         assertThat(response.imgUrl()).isEqualTo("old.png");
@@ -103,6 +128,24 @@ class JogoServiceTest {
         assertThat(jogo.getTurmas()).isEmpty();
         assertThat(turma.getJogos()).doesNotContain(jogo);
         verify(jogoRepository).delete(jogo);
+    }
+
+    @Test
+    void listarPorTurmaDoAluno_returnsOnlyEnabledClassGames() {
+        Turma turma = new Turma();
+        Jogo habilitado = jogo(1L, "Ativo", "img", "10", "link");
+        habilitado.setHabilitado(true);
+        Jogo desabilitado = jogo(2L, "Inativo", "img", "10", "link");
+        desabilitado.setHabilitado(false);
+        turma.setJogos(List.of(habilitado, desabilitado));
+        Aluno aluno = new Aluno();
+        aluno.setId(5L);
+        aluno.setTurma(turma);
+        when(alunoRepository.findById(5L)).thenReturn(Optional.of(aluno));
+
+        var result = jogoService.listarPorTurmaDoAluno(5L);
+
+        assertThat(result).singleElement().satisfies(jogo -> assertThat(jogo.nome()).isEqualTo("Ativo"));
     }
 
     private static Jogo jogo(Long id, String nome, String imgUrl, String tempo, String linkUrl) {

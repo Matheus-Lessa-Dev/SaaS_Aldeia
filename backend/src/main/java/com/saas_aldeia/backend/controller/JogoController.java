@@ -2,10 +2,14 @@ package com.saas_aldeia.backend.controller;
 
 import com.saas_aldeia.backend.dto.JogoRequest;
 import com.saas_aldeia.backend.dto.JogoResponse;
+import com.saas_aldeia.backend.model.TipoUsuario;
+import com.saas_aldeia.backend.model.Usuario;
 import com.saas_aldeia.backend.service.JogoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -31,6 +35,16 @@ public class JogoController {
     })
     public ResponseEntity<List<JogoResponse>> listar() {
         return ResponseEntity.ok(jogoService.listar());
+    }
+
+    @GetMapping("/minha-turma")
+    @Operation(summary = "Listar jogos da minha turma", description = "Retorna jogos habilitados vinculados a turma do aluno autenticado")
+    public ResponseEntity<List<JogoResponse>> listarMinhaTurma(@AuthenticationPrincipal Usuario usuarioLogado) {
+        if (usuarioLogado == null || usuarioLogado.getTipo() != TipoUsuario.ALUNO) {
+            throw new AccessDeniedException("Apenas alunos podem acessar os jogos da propria turma");
+        }
+
+        return ResponseEntity.ok(jogoService.listarPorTurmaDoAluno(usuarioLogado.getId()));
     }
 
     @GetMapping("/{id}")

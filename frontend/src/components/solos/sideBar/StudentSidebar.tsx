@@ -25,7 +25,7 @@ type NavItem = {
 
 const typedNavItems: NavItem[] = navItems;
 
-function Sidebar2() {
+function StudentSidebar() {
   const { logout, user } = useAuth();
   const navigate = useNavigate();
 
@@ -89,4 +89,4 @@ function Sidebar2() {
   );
 }
 
-export default Sidebar2;
+export default StudentSidebar;

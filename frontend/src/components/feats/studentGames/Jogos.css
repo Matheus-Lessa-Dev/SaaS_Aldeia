@@ -122,7 +122,15 @@
     border: 1px solid #ece8e2;
 }
 
-.jogosFeaturedThumb { width: 100%; height: 200px; background: #4a4a4a; position: relative; }
+.jogosFeaturedThumbWrap { position: relative; }
+
+.jogosFeaturedThumb {
+    width: 100%;
+    height: 200px;
+    background: #4a4a4a;
+    background-size: cover;
+    background-position: center;
+}
 
 .jogosTagNovo {
     position: absolute;
@@ -157,7 +165,13 @@
     display: flex;
     flex-direction: column;
 }
-.jogosSideThumb { width: 100%; height: 160px; background: #4a4a4a; }
+.jogosSideThumb {
+    width: 100%;
+    height: 160px;
+    background: #4a4a4a;
+    background-size: cover;
+    background-position: center;
+}
 .jogosSideInfo { padding: 14px; flex: 1; display: flex; flex-direction: column; justify-content: space-between; gap: 10px; }
 .jogosSideInfo h3 { font-size: 15px; font-weight: 700; color: #7d2b2b; margin: 0 0 4px; }
 .jogosSideInfo p { font-size: 12px; color: #888; line-height: 1.5; margin: 0; }
@@ -173,7 +187,13 @@
     display: flex;
     flex-direction: column;
 }
-.jogosGridThumb { width: 100%; height: 140px; background: #4a4a4a; }
+.jogosGridThumb {
+    width: 100%;
+    height: 140px;
+    background: #4a4a4a;
+    background-size: cover;
+    background-position: center;
+}
 .jogosGridInfo { padding: 14px; flex: 1; display: flex; flex-direction: column; gap: 8px; }
 .jogosGridInfo h3 { font-size: 14px; font-weight: 600; color: #7d2b2b; margin: 0; }
 .jogosGridInfo h3.locked { color: #555; }
@@ -236,6 +256,14 @@
     cursor: not-allowed;
     opacity: 1;
     visibility: visible;
+}
+
+.jogosStateMessage {
+    margin: 0;
+    padding: 18px 0;
+    color: #7d2b2b;
+    font-size: 14px;
+    font-weight: 600;
 }
 
 /* RESPONSIVO */

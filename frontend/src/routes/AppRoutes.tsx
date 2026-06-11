@@ -35,6 +35,7 @@ const TeacherManagement = lazy(
 const TeacherCreatePage = lazy(() => import("../components/feats/teacherNew"));
 const GameManagement = lazy(() => import("../components/feats/gameManagement"));
 const GameCreatePage = lazy(() => import("../components/feats/gameNew"));
+const StudentGames = lazy(() => import("../components/feats/studentGames/Jogos"));
 
 function PrivateRoute({
   children,
@@ -89,6 +90,18 @@ function DashboardRouter() {
     default:
       return <Navigate to="/login" replace />;
   }
+}
+
+function GamesRouter() {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return <div className="appLoading">Carregando...</div>;
+  }
+
+  if (user?.role === Role.Student) return <StudentGames />;
+  if (user?.role === Role.Admin || user?.role === Role.Teacher) return <GameManagement />;
+  return <Navigate to="/login" replace />;
 }
 
 const router = createBrowserRouter([
@@ -171,7 +184,7 @@ const router = createBrowserRouter([
   {
     path: "/professores",
     element: (
-      <ProtectedRoute allowedRoles={[Role.Admin]}>
+      <ProtectedRoute allowedRoles={[Role.Admin, Role.Teacher]}>
         <TeacherManagement />
       </ProtectedRoute>
     ),
@@ -179,7 +192,7 @@ const router = createBrowserRouter([
   {
     path: "/professores/novo",
     element: (
-      <ProtectedRoute allowedRoles={[Role.Admin]}>
+      <ProtectedRoute allowedRoles={[Role.Admin, Role.Teacher]}>
         <TeacherCreatePage />
       </ProtectedRoute>
     ),
@@ -187,7 +200,7 @@ const router = createBrowserRouter([
   {
     path: "/professores/:id/editar",
     element: (
-      <ProtectedRoute allowedRoles={[Role.Admin]}>
+      <ProtectedRoute allowedRoles={[Role.Admin, Role.Teacher]}>
         <TeacherCreatePage />
       </ProtectedRoute>
     ),
@@ -195,8 +208,8 @@ const router = createBrowserRouter([
   {
     path: "/jogos",
     element: (
-      <ProtectedRoute allowedRoles={[Role.Admin, Role.Teacher]}>
-        <GameManagement />
+      <ProtectedRoute allowedRoles={[Role.Admin, Role.Teacher, Role.Student]}>
+        <GamesRouter />
       </ProtectedRoute>
     ),
   },

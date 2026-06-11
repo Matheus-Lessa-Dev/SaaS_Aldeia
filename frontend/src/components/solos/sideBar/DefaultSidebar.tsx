@@ -34,7 +34,7 @@ const navItems: NavItem[] = [
   { label: "Perfil", to: "/perfil", icon: User },
 ];
 
-function Sidebar1() {
+function DefaultSidebar() {
   const { logout, user } = useAuth();
   const navigate = useNavigate();
 
@@ -103,4 +103,4 @@ function Sidebar1() {
   );
 }
 
-export default Sidebar1;
+export default DefaultSidebar;

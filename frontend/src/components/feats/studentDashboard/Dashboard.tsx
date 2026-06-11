@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import { User, Trees } from "lucide-react";
-import Sidebar from "../../solos/sideBar/SideBar2";
+import { useEffect } from "react";
+import { Trees } from "lucide-react";
+import Sidebar from "../../solos/sideBar/StudentSidebar";
 import "./Dashboard.css";
 import Header from "../../shared/Header";
 

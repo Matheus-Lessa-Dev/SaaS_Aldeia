@@ -57,6 +57,8 @@
   gap: 8px;
   max-height: 300px;
   overflow-y: auto;
+  padding-right: 8px;
+  scrollbar-gutter: stable;
 }
 
 .class-selection-item {

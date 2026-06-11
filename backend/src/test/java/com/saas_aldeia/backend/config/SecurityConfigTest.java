@@ -19,6 +19,7 @@ class SecurityConfigTest {
         assertThat(source).contains(".requestMatchers(\"/alunos/**\").hasAnyRole(\"ADMIN\", \"PROFESSOR\")");
         assertThat(source).contains(".requestMatchers(\"/professores/**\").hasAnyRole(\"ADMIN\", \"PROFESSOR\")");
         assertThat(source).contains(".requestMatchers(\"/turmas/**\").hasAnyRole(\"ADMIN\", \"PROFESSOR\")");
+        assertThat(source).contains(".requestMatchers(\"/jogos/minha-turma\").hasRole(\"ALUNO\")");
         assertThat(source).contains(".requestMatchers(\"/jogos/**\").hasAnyRole(\"ADMIN\", \"PROFESSOR\")");
     }
 }

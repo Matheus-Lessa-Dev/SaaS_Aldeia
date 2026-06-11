@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { GraduationCap, Users, BookOpen } from "lucide-react";
-import Sidebar from "../../solos/sideBar/SideBar1";
+import Sidebar from "../../solos/sideBar/DefaultSidebar";
 import Calendario from "../../solos/calendario/Calendario";
 import api from "../../../services/api";
 import "./Dashboard.css";

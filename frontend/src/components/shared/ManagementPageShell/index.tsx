@@ -1,6 +1,6 @@
 import { useEffect, type ReactNode } from 'react';
 import { GraduationCap } from 'lucide-react';
-import Sidebar1 from '../../solos/sideBar/SideBar1';
+import DefaultSidebar from '../../solos/sideBar/DefaultSidebar';
 import ActionBar from '../ActionBar';
 import GenericMainList from '../../feats/genericMainList';
 import './style.css';
@@ -40,7 +40,7 @@ export default function ManagementPageShell({
 
     return (
         <div className={layoutClassName}>
-            <Sidebar1 />
+            <DefaultSidebar />
             <div className="managementMain">
                 <header className="managementHeader">
                     <button type="button" className="dashboardHeaderBtn">

@@ -1,15 +1,18 @@
 import useAuth from "../../../hooks/useAuth";
+import { Role } from "../../../context/AuthContext";
 import Header from "../../shared/Header";
-import Sidebar2 from "../../solos/sideBar/SideBar2";
+import DefaultSidebar from "../../solos/sideBar/DefaultSidebar";
+import StudentSidebar from "../../solos/sideBar/StudentSidebar";
 import "./style.css";
 
 export default function Profile() {
   const auth = useAuth();
+  const Sidebar = auth.user?.role === Role.Student ? StudentSidebar : DefaultSidebar;
 
   return (
     <div className="profilePainel">
       <title>Perfil</title>
-      <Sidebar2 />
+      <Sidebar />
       <div className="profileLayout">
         <Header />
         <main className="profileContent">

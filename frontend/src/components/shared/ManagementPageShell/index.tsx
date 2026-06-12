@@ -4,6 +4,7 @@ import DefaultSidebar from '../../solos/sideBar/DefaultSidebar';
 import ActionBar from '../ActionBar';
 import GenericMainList from '../../feats/genericMainList';
 import './style.css';
+import type { ManagementSortOption } from '../../../utils/managementSort';
 
 interface ManagementPageShellProps {
     pageClassName: string;
@@ -15,6 +16,8 @@ interface ManagementPageShellProps {
     searchValue: string;
     onSearchChange: (value: string) => void;
     onAddClick?: () => void;
+    sortValue?: ManagementSortOption;
+    onSortChange?: (value: ManagementSortOption) => void;
     children: ReactNode[];
 }
 
@@ -28,6 +31,8 @@ export default function ManagementPageShell({
     searchValue,
     onSearchChange,
     onAddClick,
+    sortValue,
+    onSortChange,
     children,
 }: ManagementPageShellProps) {
     useEffect(() => {
@@ -55,6 +60,8 @@ export default function ManagementPageShell({
                         searchValue={searchValue}
                         onSearchChange={onSearchChange}
                         onAddClick={onAddClick}
+                        sortValue={sortValue}
+                        onSortChange={onSortChange}
                     />
                     <GenericMainList props={{ title, itemsPerPage }}>
                         {children}

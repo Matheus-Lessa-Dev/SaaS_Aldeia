@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSearch } from "../../../hooks/useSearch";
+import { sortManagementItems, type ManagementSortOption } from "../../../utils/managementSort";
 import ManagementPageShell from "../../shared/ManagementPageShell";
 import ClassCard from "./classCard";
 import api from "../../../services/api";
@@ -27,8 +28,10 @@ export default function ClassManagement() {
   const [classes, setClasses] = useState<ClassInfo[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [sortOption, setSortOption] = useState<ManagementSortOption>("nameAsc");
 
   const { searchTerm, setSearchTerm, filteredItems } = useSearch(classes);
+  const sortedItems = sortManagementItems(filteredItems, sortOption);
 
   useEffect(() => {
     fetchClasses();
@@ -59,7 +62,7 @@ export default function ClassManagement() {
     }
   };
 
-  const classesElements = filteredItems.map((classInfo) => (
+  const classesElements = sortedItems.map((classInfo) => (
     <ClassCard
       key={classInfo.id}
       name={classInfo.name}
@@ -86,6 +89,8 @@ export default function ClassManagement() {
       searchPlaceholder="Pesquisar turma"
       searchValue={searchTerm}
       onSearchChange={setSearchTerm}
+      sortValue={sortOption}
+      onSortChange={setSortOption}
       onAddClick={() => navigate("/turmas/novo")}
     >
       {listElements}

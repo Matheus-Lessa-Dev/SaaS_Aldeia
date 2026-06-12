@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSearch } from "../../../hooks/useSearch";
+import { sortManagementItems, type ManagementSortOption } from "../../../utils/managementSort";
 import ManagementPageShell from "../../shared/ManagementPageShell";
 import GameCard from "./gameCard";
 import api from "../../../services/api";
@@ -30,8 +31,10 @@ export default function GameManagement() {
   const [games, setGames] = useState<GameInfo[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [sortOption, setSortOption] = useState<ManagementSortOption>("nameAsc");
 
   const { searchTerm, setSearchTerm, filteredItems } = useSearch(games);
+  const sortedItems = sortManagementItems(filteredItems, sortOption);
 
   useEffect(() => {
     fetchGames();
@@ -90,7 +93,7 @@ export default function GameManagement() {
     }
   };
 
-  const gameElements = filteredItems.map((gameInfo) => (
+  const gameElements = sortedItems.map((gameInfo) => (
     <GameCard
       key={gameInfo.id}
       name={gameInfo.name}
@@ -119,6 +122,8 @@ export default function GameManagement() {
       searchPlaceholder="Pesquisar Jogo"
       searchValue={searchTerm}
       onSearchChange={setSearchTerm}
+      sortValue={sortOption}
+      onSortChange={setSortOption}
       onAddClick={() => navigate("/jogos/novo")}
     >
       {listElements}

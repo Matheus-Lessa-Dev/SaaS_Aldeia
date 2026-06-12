@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSearch } from "../../../hooks/useSearch";
+import { sortManagementItems, type ManagementSortOption } from "../../../utils/managementSort";
 import ManagementPageShell from "../../shared/ManagementPageShell";
 import TeacherCard from "./teacherCard";
 import api from "../../../services/api";
@@ -24,8 +25,10 @@ export default function TeacherManagement() {
   const [teachers, setTeachers] = useState<TeacherInfo[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [sortOption, setSortOption] = useState<ManagementSortOption>("nameAsc");
 
   const { searchTerm, setSearchTerm, filteredItems } = useSearch(teachers);
+  const sortedItems = sortManagementItems(filteredItems, sortOption);
 
   useEffect(() => {
     fetchTeachers();
@@ -55,7 +58,7 @@ export default function TeacherManagement() {
     }
   };
 
-  const teacherElements = filteredItems.map((teacherInfo) => (
+  const teacherElements = sortedItems.map((teacherInfo) => (
     <TeacherCard
       key={teacherInfo.id}
       name={teacherInfo.name}
@@ -81,6 +84,8 @@ export default function TeacherManagement() {
       searchPlaceholder="Pesquisar Professor"
       searchValue={searchTerm}
       onSearchChange={setSearchTerm}
+      sortValue={sortOption}
+      onSortChange={setSortOption}
       onAddClick={() => navigate("/professores/novo")}
     >
       {listElements}

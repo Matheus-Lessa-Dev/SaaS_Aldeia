@@ -1,5 +1,6 @@
 import { Search, Plus } from 'lucide-react';
 import './style.css';
+import type { ManagementSortOption } from '../../../utils/managementSort';
 
 interface ActionBarProps {
     addButtonLabel: string;
@@ -7,6 +8,8 @@ interface ActionBarProps {
     searchValue: string;
     onSearchChange: (value: string) => void;
     onAddClick?: () => void;
+    sortValue?: ManagementSortOption;
+    onSortChange?: (value: ManagementSortOption) => void;
 }
 
 export default function ActionBar({
@@ -15,6 +18,8 @@ export default function ActionBar({
     searchValue,
     onSearchChange,
     onAddClick,
+    sortValue,
+    onSortChange,
 }: ActionBarProps) {
     return (
         <div className="managementActionBar">
@@ -31,6 +36,20 @@ export default function ActionBar({
                     onChange={(e) => onSearchChange(e.target.value)}
                 />
             </div>
+            {sortValue && onSortChange && (
+                <label className="managementSortContainer">
+                    <select
+                        className="managementSortSelect"
+                        value={sortValue}
+                        onChange={(e) => onSortChange(e.target.value as ManagementSortOption)}
+                        aria-label="Ordenar lista"
+                    >
+                        <option value="nameAsc">Nome A-Z</option>
+                        <option value="newest">Mais novo</option>
+                        <option value="oldest">Mais antigo</option>
+                    </select>
+                </label>
+            )}
         </div>
     );
 }

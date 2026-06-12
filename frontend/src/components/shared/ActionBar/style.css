@@ -1,5 +1,6 @@
 .managementActionBar {
     display: flex;
+    align-items: center;
     gap: 1em;
     flex: 1;
     justify-content: space-between;
@@ -14,6 +15,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 0.45rem;
     background: var(--primary);
     color: var(--on-primary);
     padding: 8px 16px;
@@ -32,12 +34,26 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    box-sizing: border-box;
     padding: 0.65rem 1rem;
     border-radius: 9999px;
     background: var(--surface);
     border: 1px solid var(--outline-variant);
     width: min(430px, 100%);
     margin-left: auto;
+}
+
+.managementSortContainer {
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    padding: 0.65rem 0.9rem 0.65rem 1rem;
+    border-radius: 9999px;
+    background: var(--surface);
+    border: 1px solid var(--outline-variant);
+    color: var(--on-surface);
+    min-width: 180px;
+    flex: 0 0 180px;
 }
 
 .managementSearchIcon {
@@ -47,6 +63,7 @@
 
 .managementSearchInput {
     width: 100%;
+    min-width: 0;
     padding: 0;
     border: 0;
     border-radius: 0;
@@ -56,4 +73,32 @@
 .managementSearchInput:focus {
     border: 0;
     outline: none;
+}
+
+.managementSortSelect {
+    width: 100%;
+    min-width: 0;
+    min-height: 1.5rem;
+    padding: 0.1rem 0.25rem;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    line-height: 1.35;
+    cursor: pointer;
+}
+
+.managementSortSelect:focus {
+    outline: none;
+}
+
+@media (max-width: 900px) {
+    .managementActionBar {
+        flex-wrap: wrap;
+    }
+
+    .managementSortContainer {
+        width: 100%;
+        flex-basis: 100%;
+    }
 }

@@ -87,8 +87,6 @@ function AlunoDashboard() {
         <Header />
 
         <main className="alunoDashboardContent">
-          <h3>Página inicial</h3>
-
           <div className="welcomeSection">
             <h1>Olá, {nomeAluno}!</h1>
             <p>

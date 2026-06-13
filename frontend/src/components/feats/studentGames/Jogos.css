@@ -5,19 +5,19 @@
 .jogosPage {
   display: flex;
   min-height: 100svh;
-  background: #f9f7f3;
+  background: var(--surface-container-low);
 }
 
 /* SIDEBAR */
 .jogossidebar {
   width: 210px;
   min-height: 100svh;
-  background: #f5f2ee;
+  background: var(--surface-container-low);
   display: flex;
   flex-direction: column;
   padding: 28px 0;
   flex-shrink: 0;
-  border-right: 1px solid #e8e4df;
+  border-right: 1px solid var(--outline-variant);
   justify-content: space-between;
   position: sticky;
   top: 0;
@@ -31,21 +31,21 @@
 
 .jogossidebarTitle {
   padding: 0 18px 22px;
-  border-bottom: 1px solid #e8e4df;
+  border-bottom: 1px solid var(--outline-variant);
   margin-bottom: 10px;
 }
 
 .jogossidebarTitle h1 {
   font-size: 15px;
   font-weight: 600;
-  color: #7d2b2b;
+  color: var(--primary);
   margin: 0;
 }
 
 .jogossidebarTitle h6 {
   font-size: 10px;
   letter-spacing: 1px;
-  color: #999;
+  color: var(--on-surface-muted);
   margin: 4px 0 0;
   text-transform: uppercase;
   font-weight: 400;
@@ -65,7 +65,7 @@
   padding: 11px 18px;
   border: none;
   background: transparent;
-  color: #555;
+  color: var(--on-surface-muted);
   font-size: 13px;
   font-family: inherit;
   cursor: pointer;
@@ -78,14 +78,14 @@
 }
 
 .jogossidebarLink:hover {
-  background: #ede8e2;
-  color: #7d2b2b;
+  background: var(--surface-container);
+  color: var(--primary);
 }
 
 .jogossidebarLink.active {
-  background: #ede8e2;
-  color: #7d2b2b;
-  border-right: 3px solid #7d2b2b;
+  background: var(--surface-container);
+  color: var(--primary);
+  border-right: 3px solid var(--primary);
 }
 
 .jogossidebarBottom {
@@ -98,7 +98,7 @@
   gap: 8px;
   background: none;
   border: none;
-  color: #888;
+  color: var(--on-surface-muted);
   font-size: 13px;
   font-family: inherit;
   cursor: pointer;
@@ -107,7 +107,7 @@
 }
 
 .jogossairBtn:hover {
-  color: #7d2b2b;
+  color: var(--primary);
 }
 
 /* MAIN */
@@ -118,40 +118,9 @@
   min-width: 0;
 }
 
-.jogosTopBar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 28px;
-  border-bottom: 1px solid #e8e4df;
-  background: #f5f2ee;
-}
-
-.jogosTopBar h2 {
-  font-size: 15px;
-  font-weight: 600;
-  color: #7d2b2b;
-  margin: 0;
-}
-
-.jogosProfileBtn {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: white;
-  border: none;
-  padding: 8px 14px;
-  border-radius: 20px;
-  color: #7d2b2b;
-  font-family: inherit;
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-}
-
 /* CONTENT */
 .jogosContent {
-  padding: 28px 32px;
+  padding: var(--spacing-4) clamp(1.2rem, 2vw, var(--spacing-8));
   overflow-y: auto;
 }
 
@@ -160,122 +129,17 @@
 }
 
 .jogosPageHeader h1 {
-  font-size: 36px;
+  font-size: clamp(2.4rem, 4vw, 3.5rem);
   font-weight: 700;
-  color: #8b3a1e;
+  color: var(--primary);
   margin: 0 0 8px;
 }
 
 .jogosPageHeader p {
-  color: #9c8f85;
+  color: var(--on-surface-muted);
   font-size: 14px;
   line-height: 1.6;
   max-width: 500px;
-  margin: 0;
-}
-
-/* DESTAQUE */
-.jogosFeaturedRow {
-  display: flex;
-  gap: 18px;
-  margin-bottom: 18px;
-}
-
-.jogosFeaturedCard {
-  flex: 1.6;
-  background: white;
-  border-radius: 16px;
-  overflow: hidden;
-  border: 1px solid #ece8e2;
-}
-
-.jogosFeaturedThumbWrap {
-  position: relative;
-}
-
-.jogosFeaturedThumb {
-  width: 100%;
-  height: 200px;
-  background: #4a4a4a;
-  background-size: cover;
-  background-position: center;
-}
-
-.jogosTagNovo {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  background: #2d6a2d;
-  color: white;
-  font-size: 10px;
-  font-weight: 700;
-  padding: 4px 10px;
-  border-radius: 20px;
-  letter-spacing: 0.5px;
-}
-
-.jogosFeaturedInfo {
-  padding: 18px;
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.jogosFeaturedInfo h3 {
-  font-size: 18px;
-  font-weight: 700;
-  color: #7d2b2b;
-  margin: 0 0 6px;
-}
-
-.jogosFeaturedInfo p {
-  font-size: 12px;
-  color: #888;
-  line-height: 1.5;
-  max-width: 220px;
-  margin: 0;
-}
-
-/* CARD LATERAL */
-.jogosSideCard {
-  flex: 1;
-  background: white;
-  border-radius: 16px;
-  overflow: hidden;
-  border: 1px solid #ece8e2;
-  display: flex;
-  flex-direction: column;
-}
-
-.jogosSideThumb {
-  width: 100%;
-  height: 160px;
-  background: #4a4a4a;
-  background-size: cover;
-  background-position: center;
-}
-
-.jogosSideInfo {
-  padding: 14px;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 10px;
-}
-
-.jogosSideInfo h3 {
-  font-size: 15px;
-  font-weight: 700;
-  color: #7d2b2b;
-  margin: 0 0 4px;
-}
-
-.jogosSideInfo p {
-  font-size: 12px;
-  color: #888;
-  line-height: 1.5;
   margin: 0;
 }
 
@@ -287,10 +151,10 @@
 }
 
 .jogosGridCard {
-  background: white;
+  background: var(--surface);
   border-radius: 16px;
   overflow: hidden;
-  border: 1px solid #ece8e2;
+  border: 1px solid var(--outline-variant);
   display: flex;
   flex-direction: column;
 }
@@ -314,51 +178,27 @@
 .jogosGridInfo h3 {
   font-size: 14px;
   font-weight: 600;
-  color: #7d2b2b;
+  color: var(--on-surface);
   margin: 0;
 }
 
 .jogosGridInfo h3.locked {
-  color: #555;
+  color: var(--on-surface-muted);
 }
 
 .jogosGridInfo p {
   font-size: 11px;
-  color: #999;
+  color: var(--on-surface-muted);
   line-height: 1.5;
   flex: 1;
   margin: 0;
 }
 
-/* BOTOES */
-.jogosBtnJogar {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: #2d6a2d;
-  color: white;
-  border: none;
-  border-radius: 20px;
-  padding: 11px 22px;
-  font-size: 13px;
-  font-weight: 600;
-  font-family: inherit;
-  cursor: pointer;
-  white-space: nowrap;
-  flex-shrink: 0;
-  opacity: 1;
-  visibility: visible;
-}
-
-.jogosBtnJogar:hover {
-  background: #245424;
-}
-
 .jogosBtnJogarFull {
   display: block;
   width: 100%;
-  background: #2d6a2d;
-  color: white;
+  background: var(--secondary);
+  color: var(--on-primary);
   border: none;
   border-radius: 20px;
   padding: 10px;
@@ -371,14 +211,14 @@
 }
 
 .jogosBtnJogarFull:hover {
-  background: #245424;
+  background: color-mix(in srgb, var(--secondary) 86%, #000);
 }
 
 .jogosBtnBloqueado {
   display: block;
   width: 100%;
-  background: #e8e4de;
-  color: #aaa;
+  background: var(--surface-container-highest);
+  color: var(--on-surface-muted);
   border: none;
   border-radius: 20px;
   padding: 10px;
@@ -393,17 +233,13 @@
 .jogosStateMessage {
   margin: 0;
   padding: 18px 0;
-  color: #7d2b2b;
+  color: var(--primary);
   font-size: 14px;
   font-weight: 600;
 }
 
 /* RESPONSIVO */
 @media (max-width: 900px) {
-  .jogosFeaturedRow {
-    flex-direction: column;
-  }
-
   .jogosGrid {
     grid-template-columns: repeat(2, 1fr);
   }

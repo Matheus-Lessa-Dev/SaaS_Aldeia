@@ -118,37 +118,6 @@
   min-width: 0;
 }
 
-.jogosTopBar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 28px;
-  border-bottom: 1px solid #e8e4df;
-  background: #f5f2ee;
-}
-
-.jogosTopBar h2 {
-  font-size: 15px;
-  font-weight: 600;
-  color: #7d2b2b;
-  margin: 0;
-}
-
-.jogosProfileBtn {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: white;
-  border: none;
-  padding: 8px 14px;
-  border-radius: 20px;
-  color: #7d2b2b;
-  font-family: inherit;
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-}
-
 /* CONTENT */
 .jogosContent {
   padding: 28px 32px;

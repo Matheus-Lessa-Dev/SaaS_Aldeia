@@ -1,4 +1,6 @@
-FROM eclipse-temurin:17-jdk-alpine
+# Builder stage
+
+FROM eclipse-temurin:17-jdk-alpine AS builder
 
 WORKDIR /app
 
@@ -10,4 +12,15 @@ RUN chmod +x mvnw
 RUN ./mvnw dependency:go-offline
 
 COPY src ./src
-CMD ["./mvnw", "spring-boot:run"]
+
+RUN ./mvnw package -DskipTests
+
+# Runtime stage
+
+FROM eclipse-temurin:17-jre-alpine
+
+WORKDIR /app
+
+COPY --from=builder /app/target/*.jar app.jar
+
+ENTRYPOINT ["java", "-jar", "app.jar"]

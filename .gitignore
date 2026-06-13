@@ -20,6 +20,10 @@ dist-ssrjh
 /package.json
 /package-lock.json
 
+# Local project instructions/status for chat context
+/AGENTS.md
+/PROJECT_STATUS.md
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

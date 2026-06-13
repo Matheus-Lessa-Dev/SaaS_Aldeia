@@ -1,8 +1,8 @@
 import { useEffect, type ReactNode } from 'react';
-import { GraduationCap } from 'lucide-react';
 import DefaultSidebar from '../../solos/sideBar/DefaultSidebar';
 import ActionBar from '../ActionBar';
 import GenericMainList from '../../feats/genericMainList';
+import Header from '../Header';
 import './style.css';
 
 interface ManagementPageShellProps {
@@ -42,12 +42,7 @@ export default function ManagementPageShell({
         <div className={layoutClassName}>
             <DefaultSidebar />
             <div className="managementMain">
-                <header className="managementHeader">
-                    <button type="button" className="dashboardHeaderBtn">
-                        <span>Educador</span>
-                        <GraduationCap size={18} aria-hidden="true" />
-                    </button>
-                </header>
+                <Header />
                 <main className="managementContent">
                     <ActionBar
                         addButtonLabel={addButtonLabel}

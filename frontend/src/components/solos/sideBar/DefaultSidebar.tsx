@@ -7,7 +7,6 @@ import {
   LayoutDashboard,
   LogOut,
   Users,
-  User,
 } from "lucide-react";
 import { Role } from "../../../context/AuthContext";
 import { useAuth } from "../../../hooks/useAuth";
@@ -31,7 +30,6 @@ const navItems: NavItem[] = [
   },
   { label: "Alunos", to: "/alunos", icon: Users },
   { label: "Jogos", to: "/jogos", icon: Gamepad2 },
-  { label: "Perfil", to: "/perfil", icon: User },
 ];
 
 function DefaultSidebar() {

@@ -111,7 +111,19 @@ public class AuthService {
     private AuthResponse toResponse(Usuario usuario) {
         String token        = jwtService.generateToken(usuario);
         String refreshToken = jwtService.generateRefreshToken(usuario);
-        // adicionado primeiroAcesso no construtor
-        return new AuthResponse(token, refreshToken, usuario.getTipo().name(), usuario.getEmail(), usuario.isPrimeiroAcesso());
+        return new AuthResponse(token, refreshToken, usuario.getTipo().name(), usuario.getEmail(), resolverNome(usuario));
+    }
+
+    private String resolverNome(Usuario usuario) {
+        if (usuario instanceof Admin) {
+            return "Admin";
+        }
+        if (usuario instanceof Professor professor) {
+            return professor.getNome();
+        }
+        if (usuario instanceof Aluno aluno) {
+            return aluno.getNome();
+        }
+        return usuario.getEmail();
     }
 }

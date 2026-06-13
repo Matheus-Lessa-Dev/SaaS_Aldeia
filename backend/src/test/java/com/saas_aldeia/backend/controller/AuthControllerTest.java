@@ -27,7 +27,7 @@ class AuthControllerTest {
     void registerAdmin_returnsCreated() {
         AuthController controller = new AuthController(authService);
         var request = new RegisterAdminRequest("admin@test.com", "senha123", "Admin");
-        var authResponse = new AuthResponse("token", "refresh", "ADMIN", "admin@test.com", false);
+        var authResponse = new AuthResponse("token", "refresh", "ADMIN", "admin@test.com", "Admin");
         when(authService.registerAdmin(request)).thenReturn(authResponse);
 
         var response = controller.registerAdmin(request);
@@ -42,7 +42,7 @@ class AuthControllerTest {
         var request = new RegisterAlunoRequest(
                 "aluno@test.com", "João", LocalDate.of(2010, 3, 15), "Rua", "Casa", "Resp", "44", "resp@test.com"
         );
-        var authResponse = new AuthResponse("token", "refresh", "ALUNO", "aluno@test.com", true);
+        var authResponse = new AuthResponse("token", "refresh", "ALUNO", "aluno@test.com", "João");
         when(authService.registerAluno(request)).thenReturn(authResponse);
 
         var response = controller.registerAluno(request);
@@ -57,7 +57,7 @@ class AuthControllerTest {
         var request = new RegisterProfessorRequest(
                 "prof@test.com", "Maria", LocalDate.of(1990, 5, 20), "Rua", "Apto", "44"
         );
-        var authResponse = new AuthResponse("token", "refresh", "PROFESSOR", "prof@test.com", true);
+        var authResponse = new AuthResponse("token", "refresh", "PROFESSOR", "prof@test.com", "Maria");
         when(authService.registerProfessor(request)).thenReturn(authResponse);
 
         var response = controller.registerProfessor(request);
@@ -70,7 +70,7 @@ class AuthControllerTest {
     void login_returnsOk() {
         AuthController controller = new AuthController(authService);
         var request = new LoginRequest("admin@test.com", "senha123");
-        var authResponse = new AuthResponse("token", "refresh", "ADMIN", "admin@test.com", false);
+        var authResponse = new AuthResponse("token", "refresh", "ADMIN", "admin@test.com", "Admin");
         when(authService.login(request)).thenReturn(authResponse);
 
         var response = controller.login(request);
@@ -82,7 +82,7 @@ class AuthControllerTest {
     @Test
     void refresh_returnsOk() {
         AuthController controller = new AuthController(authService);
-        var authResponse = new AuthResponse("token", "refresh", "ADMIN", "admin@test.com", false);
+        var authResponse = new AuthResponse("token", "refresh", "ADMIN", "admin@test.com", "Admin");
         when(authService.refresh("refresh")).thenReturn(authResponse);
 
         var response = controller.refresh(new RefreshTokenRequest("refresh"));

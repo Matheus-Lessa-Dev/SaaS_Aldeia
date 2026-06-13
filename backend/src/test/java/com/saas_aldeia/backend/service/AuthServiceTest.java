@@ -61,7 +61,7 @@ class AuthServiceTest {
         assertThat(response.refreshToken()).isEqualTo("refreshToken");
         assertThat(response.role()).isEqualTo("ADMIN");
         assertThat(response.email()).isEqualTo("admin@test.com");
-        assertThat(response.primeiroAcesso()).isFalse();
+        assertThat(response.nome()).isEqualTo("Admin");
     }
 
     @Test
@@ -86,7 +86,7 @@ class AuthServiceTest {
         assertThat(response.token()).isEqualTo("token");
         assertThat(response.role()).isEqualTo("ALUNO");
         assertThat(response.email()).isEqualTo("aluno@test.com");
-        assertThat(response.primeiroAcesso()).isTrue();
+        assertThat(response.nome()).isEqualTo("João");
     }
 
     @Test
@@ -127,13 +127,14 @@ class AuthServiceTest {
         assertThat(response.token()).isEqualTo("token");
         assertThat(response.role()).isEqualTo("PROFESSOR");
         assertThat(response.email()).isEqualTo("prof@test.com");
-        assertThat(response.primeiroAcesso()).isTrue();
+        assertThat(response.nome()).isEqualTo("Maria");
     }
 
     @Test
     void login_success() {
         Aluno aluno = new Aluno();
         aluno.setEmail("aluno@test.com");
+        aluno.setNome("João");
         aluno.setSenha("hashed");
         aluno.setTipo(TipoUsuario.ALUNO);
         when(usuarioRepository.findByEmail("aluno@test.com")).thenReturn(Optional.of(aluno));
@@ -145,6 +146,7 @@ class AuthServiceTest {
 
         assertThat(response.token()).isEqualTo("token");
         assertThat(response.role()).isEqualTo("ALUNO");
+        assertThat(response.nome()).isEqualTo("João");
     }
 
     @Test
@@ -171,6 +173,7 @@ class AuthServiceTest {
     void refresh_success() {
         Aluno aluno = new Aluno();
         aluno.setEmail("aluno@test.com");
+        aluno.setNome("João");
         aluno.setTipo(TipoUsuario.ALUNO);
         when(jwtService.extractUsername("refreshToken")).thenReturn("aluno@test.com");
         when(userDetailsService.loadUserByUsername("aluno@test.com")).thenReturn(aluno);
@@ -183,6 +186,7 @@ class AuthServiceTest {
         assertThat(response.token()).isEqualTo("newToken");
         assertThat(response.refreshToken()).isEqualTo("newRefreshToken");
         assertThat(response.role()).isEqualTo("ALUNO");
+        assertThat(response.nome()).isEqualTo("João");
     }
 
     @Test

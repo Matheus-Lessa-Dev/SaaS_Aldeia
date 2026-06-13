@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react'
-import { BookOpenCheck, Layers3, UserRound, Users } from 'lucide-react'
+import { Layers3, UserRound, Users } from 'lucide-react'
 import { useNavigate, useParams } from 'react-router-dom'
 import DefaultSidebar from '../../solos/sideBar/DefaultSidebar'
 import { FormActions } from '../../shared/formActions'
 import { FormField } from '../../shared/formField'
 import { FormSection } from '../../shared/formSection'
+import Header from '../../shared/Header'
 import api from '../../../services/api'
 import '../../shared/ManagementPageShell/style.css'
 import './style.css'
@@ -176,12 +177,7 @@ export default function ClassCreatePage() {
         <div className="managementPageLayout">
             <DefaultSidebar />
             <div className="managementMain">
-                <header className="managementHeader">
-                    <button type="button" className="dashboardHeaderBtn">
-                        <span>Educador</span>
-                        <BookOpenCheck size={18} aria-hidden="true" />
-                    </button>
-                </header>
+                <Header />
 
                 <main className="managementContent">
                     <section className="class-create-page__card" aria-label="Formulario de cadastro de turma">

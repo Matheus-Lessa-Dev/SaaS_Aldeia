@@ -70,7 +70,6 @@ public class SecurityConfig {
                         .requestMatchers("/turmas/**").hasAnyRole("ADMIN", "PROFESSOR")
                         .requestMatchers("/jogos/minha-turma").hasRole("ALUNO")
                         .requestMatchers("/jogos/**").hasAnyRole("ADMIN", "PROFESSOR")
-                        .requestMatchers("/perfil/**").authenticated()
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

@@ -16,7 +16,6 @@ export interface User {
   name: string;
   email?: string;
   role: Role;
-  primeiroAcesso: boolean;
 }
 
 export interface AuthContextType {

@@ -3,6 +3,7 @@ import { GraduationCap, Users, BookOpen } from "lucide-react";
 import Sidebar from "../../solos/sideBar/DefaultSidebar";
 import Calendario from "../../solos/calendario/Calendario";
 import api from "../../../services/api";
+import Header from "../../shared/Header";
 import "./Dashboard.css";
 
 const dashboardCards = [
@@ -108,12 +109,7 @@ function AdminDashboard() {
     <div className="dashBoardPainel">
       <Sidebar />
       <div className="dashboardLayout">
-        <header className="dashboardHeader">
-          <button type="button" className="dashboardHeaderBtn">
-            <span>Educador</span>
-            <GraduationCap size={18} aria-hidden="true" />
-          </button>
-        </header>
+        <Header />
         <main className="dashboardContent">
           <h1>Bom dia, educador!</h1>
           <h4>Acompanhe as informações gerais do sistema</h4>

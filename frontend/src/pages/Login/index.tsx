@@ -36,18 +36,12 @@ function Login() {
 
       const user = {
         id: data.email,
-        name: data.email,
+        name: data.nome,
         email: data.email,
         role: data.role,
-        primeiroAcesso: data.primeiroAcesso,
       };
 
       login(user, data.token, data.refreshToken);
-
-      if (data.primeiroAcesso) {
-        navigate("/onboarding");
-        return;
-      }
 
       navigate("/dashboard");
     } catch (err: any) {

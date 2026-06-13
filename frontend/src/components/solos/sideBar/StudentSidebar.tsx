@@ -5,7 +5,6 @@ import {
   Gamepad2,
   LayoutDashboard,
   LogOut,
-  User,
 } from "lucide-react";
 import { useAuth } from "../../../hooks/useAuth";
 import "./sideBar.css";
@@ -14,7 +13,6 @@ const navItems = [
   { label: "Dashboard", to: "/dashboard", icon: LayoutDashboard },
   { label: "Turma", to: "/turma", icon: BookOpenCheck },
   { label: "Jogos", to: "/jogos", icon: Gamepad2 },
-  { label: "Perfil", to: "/perfil", icon: User },
 ];
 
 type NavItem = {

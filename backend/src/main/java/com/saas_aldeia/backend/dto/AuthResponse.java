@@ -5,5 +5,5 @@ public record AuthResponse(
     String refreshToken, 
     String role, 
     String email,
-    boolean primeiroAcesso
+    String nome
 ) {}

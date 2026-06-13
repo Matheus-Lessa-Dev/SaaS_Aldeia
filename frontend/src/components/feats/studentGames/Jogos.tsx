@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
-import { UserCircle, Play } from 'lucide-react'
+import { Play } from 'lucide-react'
 import StudentSidebar from '../../solos/sideBar/StudentSidebar'
+import Header from '../../shared/Header'
 import api from '../../../services/api'
 import './Jogos.css'
 
@@ -53,13 +54,7 @@ function AlunoJogos() {
             <StudentSidebar />
 
             <div className="jogosMain">
-                <div className="jogosTopBar">
-                    <h2>Jogos</h2>
-                    <button className="jogosProfileBtn">
-                        Minha turma
-                        <UserCircle size={20} aria-hidden="true" />
-                    </button>
-                </div>
+                <Header />
 
                 <div className="jogosContent">
                     <div className="jogosPageHeader">

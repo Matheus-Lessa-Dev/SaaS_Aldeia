@@ -10,33 +10,13 @@
   overflow: hidden;
   box-shadow: none;
   background: var(--surface-container-low);
-  padding: var(--spacing-4) clamp(1.2rem, 2vw, var(--spacing-8));
-  padding-top: 0;
-}
-
-.header {
-  width: 100%;
-  padding: clamp(1rem, 2vw, var(--spacing-4));
-  display: flex;
-  justify-content: flex-end;
-}
-
-.headerBtn {
-  padding: 8px 16px;
-  background-color: #7d2b2b;
-  color: #fff;
-  border: none;
-  border-radius: 20px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 8px;
 }
 
 .mainContent {
   display: flex;
   flex-direction: row;
   gap: clamp(1rem, 2vw, var(--spacing-4));
+  padding: 0 clamp(1.2rem, 2vw, var(--spacing-8)) var(--spacing-4);
 }
 
 .classContent {
@@ -171,7 +151,8 @@
 .title {
   font-size: var(--display-lg);
   color: var(--primary);
-  margin-bottom: 1rem;
+  margin: 0 0 1rem;
+  padding: 0 clamp(1.2rem, 2vw, var(--spacing-8));
   font-weight: 500;
 }
 

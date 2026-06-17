@@ -41,6 +41,46 @@ function Invoke-SeedPost {
     }
 }
 
+function Invoke-SeedJson {
+    param(
+        [string]$Method,
+        [string]$Path,
+        [object]$Body = $null,
+        [hashtable]$Headers = @{}
+    )
+
+    $params = @{
+        Method = $Method
+        Uri = "$ApiBaseUrl$Path"
+        Headers = $Headers
+        ContentType = "application/json"
+    }
+
+    if ($null -ne $Body) {
+        $params.Body = $Body | ConvertTo-Json -Depth 8
+    }
+
+    return Invoke-RestMethod @params
+}
+
+function Get-ByEmail {
+    param(
+        [array]$Items,
+        [string]$Email
+    )
+
+    return $Items | Where-Object { $_.email -eq $Email } | Select-Object -First 1
+}
+
+function Get-ByName {
+    param(
+        [array]$Items,
+        [string]$Name
+    )
+
+    return $Items | Where-Object { $_.nome -eq $Name } | Select-Object -First 1
+}
+
 Write-Host "Populando banco de desenvolvimento em $ApiBaseUrl"
 
 Invoke-SeedPost `
@@ -116,6 +156,141 @@ for ($i = 0; $i -lt $nomesAlunos.Count; $i++) {
 }
 
 Write-Host ""
+Write-Host "Autenticando admin para criar turmas e chamadas..."
+
+$login = Invoke-SeedJson `
+    -Method "Post" `
+    -Path "/auth/login" `
+    -Body @{
+        email = "admin@teste.com"
+        senha = "123123"
+    }
+
+$headers = @{
+    Authorization = "Bearer $($login.token)"
+}
+
+$professoresCriados = @(Invoke-SeedJson -Method "Get" -Path "/professores" -Headers $headers)
+$alunosCriados = @(Invoke-SeedJson -Method "Get" -Path "/alunos" -Headers $headers)
+
+$turmasSeed = @(
+    @{
+        nome = "Turma Alfa"
+        periodo = "Manhã"
+        professoresEmails = @("professor01@aldeia.com", "professor02@aldeia.com")
+        alunosEmails = @("aluno01@aldeia.com", "aluno02@aldeia.com", "aluno03@aldeia.com", "aluno04@aldeia.com", "aluno05@aldeia.com", "aluno06@aldeia.com", "aluno07@aldeia.com", "aluno08@aldeia.com", "aluno09@aldeia.com", "aluno10@aldeia.com")
+    },
+    @{
+        nome = "Turma Beta"
+        periodo = "Tarde"
+        professoresEmails = @("professor03@aldeia.com", "professor04@aldeia.com")
+        alunosEmails = @("aluno11@aldeia.com", "aluno12@aldeia.com", "aluno13@aldeia.com", "aluno14@aldeia.com", "aluno15@aldeia.com", "aluno16@aldeia.com", "aluno17@aldeia.com", "aluno18@aldeia.com", "aluno19@aldeia.com", "aluno20@aldeia.com")
+    },
+    @{
+        nome = "Turma Gama"
+        periodo = "Manhã"
+        professoresEmails = @("professor05@aldeia.com", "professor06@aldeia.com")
+        alunosEmails = @("aluno21@aldeia.com", "aluno22@aldeia.com", "aluno23@aldeia.com", "aluno24@aldeia.com", "aluno25@aldeia.com", "aluno26@aldeia.com", "aluno27@aldeia.com", "aluno28@aldeia.com", "aluno29@aldeia.com", "aluno30@aldeia.com")
+    },
+    @{
+        nome = "Turma Delta"
+        periodo = "Tarde"
+        professoresEmails = @("professor07@aldeia.com", "professor08@aldeia.com")
+        alunosEmails = @("aluno31@aldeia.com", "aluno32@aldeia.com", "aluno33@aldeia.com", "aluno34@aldeia.com", "aluno35@aldeia.com", "aluno36@aldeia.com", "aluno37@aldeia.com", "aluno38@aldeia.com", "aluno39@aldeia.com", "aluno40@aldeia.com")
+    }
+)
+
+$turmasExistentes = @(Invoke-SeedJson -Method "Get" -Path "/turmas" -Headers $headers)
+$turmasCriadas = @()
+
+foreach ($turmaSeed in $turmasSeed) {
+    $professoresIds = @(
+        foreach ($email in $turmaSeed.professoresEmails) {
+            $professor = Get-ByEmail -Items $professoresCriados -Email $email
+            if ($null -ne $professor) { [long]$professor.id }
+        }
+    )
+
+    $turma = Get-ByName -Items $turmasExistentes -Name $turmaSeed.nome
+
+    if ($null -eq $turma) {
+        $turma = Invoke-SeedJson `
+            -Method "Post" `
+            -Path "/turmas" `
+            -Headers $headers `
+            -Body @{
+                nome = $turmaSeed.nome
+                periodo = $turmaSeed.periodo
+                professoresIds = $professoresIds
+                jogosIds = @()
+            }
+        Write-Host "[OK] Turma $($turmaSeed.nome)"
+    } else {
+        Write-Host "[SKIP] Turma $($turmaSeed.nome) ja existe"
+    }
+
+    $alunosIds = @(
+        foreach ($email in $turmaSeed.alunosEmails) {
+            $aluno = Get-ByEmail -Items $alunosCriados -Email $email
+            if ($null -ne $aluno) { [long]$aluno.id }
+        }
+    )
+
+    Invoke-SeedJson `
+        -Method "Put" `
+        -Path "/turmas/$($turma.id)/alunos" `
+        -Headers $headers `
+        -Body @{
+            alunosIds = $alunosIds
+        } | Out-Null
+
+    Write-Host "[OK] Alunos vinculados em $($turmaSeed.nome)"
+    $turmasCriadas += $turma
+}
+
+$chamadasExistentes = @(Invoke-SeedJson -Method "Get" -Path "/chamadas" -Headers $headers)
+
+foreach ($turma in $turmasCriadas) {
+    $chamadasTurma = @(
+        @{
+            nome = "Frequencia 1 Bimestre - $($turma.nome)"
+            tipoPeriodo = "BIMESTRE"
+            numeroPeriodo = 1
+        },
+        @{
+            nome = "Frequencia 2 Bimestre - $($turma.nome)"
+            tipoPeriodo = "BIMESTRE"
+            numeroPeriodo = 2
+        }
+    )
+
+    foreach ($chamadaSeed in $chamadasTurma) {
+        $chamada = Get-ByName -Items $chamadasExistentes -Name $chamadaSeed.nome
+
+        if ($null -ne $chamada) {
+            Write-Host "[SKIP] Chamada $($chamadaSeed.nome) ja existe"
+            continue
+        }
+
+        $novaChamada = Invoke-SeedJson `
+            -Method "Post" `
+            -Path "/chamadas" `
+            -Headers $headers `
+            -Body @{
+                nome = $chamadaSeed.nome
+                turmaId = [long]$turma.id
+                tipoPeriodo = $chamadaSeed.tipoPeriodo
+                numeroPeriodo = $chamadaSeed.numeroPeriodo
+            }
+
+        $chamadasExistentes += $novaChamada
+        Write-Host "[OK] Chamada $($chamadaSeed.nome)"
+    }
+}
+
+Write-Host ""
 Write-Host "Seed finalizada."
 Write-Host "Admin: admin@teste.com / 123123"
 Write-Host "Professores e alunos usam senha inicial no formato ddMMyyyy da data de nascimento."
+Write-Host "Turmas criadas: Turma Alfa, Turma Beta, Turma Gama, Turma Delta."
+Write-Host "Chamadas criadas: 1 e 2 bimestre para cada turma."

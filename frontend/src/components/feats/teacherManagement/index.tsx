@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSearch } from "../../../hooks/useSearch";
+import { useRouteFeedback } from "../../../hooks/useRouteFeedback";
 import { sortManagementItems, type ManagementSortOption } from "../../../utils/managementSort";
 import ManagementPageShell from "../../shared/ManagementPageShell";
 import TeacherCard from "./teacherCard";
@@ -25,7 +26,7 @@ export default function TeacherManagement() {
   const [teachers, setTeachers] = useState<TeacherInfo[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [feedback, setFeedback] = useState('');
+  const { feedback, setFeedback } = useRouteFeedback();
   const [sortOption, setSortOption] = useState<ManagementSortOption>("nameAsc");
 
   const { searchTerm, setSearchTerm, filteredItems } = useSearch(teachers);
@@ -54,9 +55,17 @@ export default function TeacherManagement() {
     try {
       await api.delete(`/professores/${teacherInfo.id}`);
       setTeachers((prev) => prev.filter((t) => t.id !== teacherInfo.id));
-      setFeedback('');
+      setFeedback({
+        type: "success",
+        title: "Professor removido",
+        message: "Professor excluido com sucesso.",
+      });
     } catch {
-      setFeedback('Erro ao deletar professor. Tente novamente.');
+      setFeedback({
+        type: "error",
+        title: "Nao foi possivel concluir a acao",
+        message: "Erro ao deletar professor. Tente novamente.",
+      });
     }
   };
 
@@ -90,10 +99,8 @@ export default function TeacherManagement() {
       onSortChange={setSortOption}
       onAddClick={() => navigate("/professores/novo")}
       feedback={feedback ? {
-        type: "error",
-        title: "Nao foi possivel concluir a acao",
-        message: feedback,
-        onDismiss: () => setFeedback(''),
+        ...feedback,
+        onDismiss: () => setFeedback(null),
       } : undefined}
     >
       {listElements}

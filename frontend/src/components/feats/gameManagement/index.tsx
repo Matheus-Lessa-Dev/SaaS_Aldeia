@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSearch } from "../../../hooks/useSearch";
+import { useRouteFeedback } from "../../../hooks/useRouteFeedback";
 import { sortManagementItems, type ManagementSortOption } from "../../../utils/managementSort";
 import ManagementPageShell from "../../shared/ManagementPageShell";
 import GameCard from "./gameCard";
@@ -31,7 +32,7 @@ export default function GameManagement() {
   const [games, setGames] = useState<GameInfo[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [feedback, setFeedback] = useState("");
+  const { feedback, setFeedback } = useRouteFeedback();
   const [sortOption, setSortOption] = useState<ManagementSortOption>("nameAsc");
 
   const { searchTerm, setSearchTerm, filteredItems } = useSearch(games);
@@ -66,9 +67,17 @@ export default function GameManagement() {
     try {
       await api.delete(`/jogos/${gameInfo.id}`);
       setGames((prev) => prev.filter((game) => game.id !== gameInfo.id));
-      setFeedback("");
+      setFeedback({
+        type: "success",
+        title: "Jogo removido",
+        message: "Jogo excluido com sucesso.",
+      });
     } catch {
-      setFeedback("Erro ao deletar jogo. Tente novamente.");
+      setFeedback({
+        type: "error",
+        title: "Nao foi possivel concluir a acao",
+        message: "Erro ao deletar jogo. Tente novamente.",
+      });
     }
   };
 
@@ -85,13 +94,22 @@ export default function GameManagement() {
         linkUrl: gameInfo.linkUrl ?? "",
         habilitado: enabled,
       });
+      setFeedback({
+        type: "success",
+        title: "Status atualizado",
+        message: enabled ? "Jogo ativado com sucesso." : "Jogo desativado com sucesso.",
+      });
     } catch {
       setGames((prev) =>
         prev.map((game) =>
           game.id === gameInfo.id ? { ...game, enabled: gameInfo.enabled } : game,
         ),
       );
-      setFeedback("Erro ao atualizar status do jogo. Tente novamente.");
+      setFeedback({
+        type: "error",
+        title: "Nao foi possivel concluir a acao",
+        message: "Erro ao atualizar status do jogo. Tente novamente.",
+      });
     }
   };
 
@@ -128,10 +146,8 @@ export default function GameManagement() {
       onSortChange={setSortOption}
       onAddClick={() => navigate("/jogos/novo")}
       feedback={feedback ? {
-        type: "error",
-        title: "Nao foi possivel concluir a acao",
-        message: feedback,
-        onDismiss: () => setFeedback(""),
+        ...feedback,
+        onDismiss: () => setFeedback(null),
       } : undefined}
     >
       {listElements}

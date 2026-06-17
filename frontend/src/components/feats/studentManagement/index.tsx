@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSearch } from "../../../hooks/useSearch";
+import { useRouteFeedback } from "../../../hooks/useRouteFeedback";
 import { sortManagementItems, type ManagementSortOption } from "../../../utils/managementSort";
 import ManagementPageShell from "../../shared/ManagementPageShell";
 import StudentCard from "./studentCard";
@@ -27,7 +28,7 @@ export default function StudentManagement() {
   const [students, setStudents] = useState<StudentInfo[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [feedback, setFeedback] = useState("");
+  const { feedback, setFeedback } = useRouteFeedback();
   const [sortOption, setSortOption] = useState<ManagementSortOption>("nameAsc");
 
   const { searchTerm, setSearchTerm, filteredItems } = useSearch(students);
@@ -58,9 +59,17 @@ export default function StudentManagement() {
     try {
       await api.delete(`/alunos/${studentInfo.id}`);
       setStudents((prev) => prev.filter((s) => s.id !== studentInfo.id));
-      setFeedback("");
+      setFeedback({
+        type: "success",
+        title: "Aluno removido",
+        message: "Aluno excluido com sucesso.",
+      });
     } catch {
-      setFeedback("Erro ao deletar aluno. Tente novamente.");
+      setFeedback({
+        type: "error",
+        title: "Nao foi possivel concluir a acao",
+        message: "Erro ao deletar aluno. Tente novamente.",
+      });
     }
   };
 
@@ -94,10 +103,8 @@ export default function StudentManagement() {
       onSortChange={setSortOption}
       onAddClick={() => navigate("/alunos/novo")}
       feedback={feedback ? {
-        type: "error",
-        title: "Nao foi possivel concluir a acao",
-        message: feedback,
-        onDismiss: () => setFeedback(""),
+        ...feedback,
+        onDismiss: () => setFeedback(null),
       } : undefined}
     >
       {listElements}

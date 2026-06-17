@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, CalendarRange, Layers3 } from "lucide-react";
 import DefaultSidebar from "../../solos/sideBar/DefaultSidebar";
+import FeedbackMessage from "../../shared/FeedbackMessage";
 import Header from "../../shared/Header";
 import { FormActions } from "../../shared/formActions";
 import { FormField } from "../../shared/formField";
@@ -27,7 +28,7 @@ export default function AttendanceCreate() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [turmas, setTurmas] = useState<TurmaResponse[]>([]);
-  const [message, setMessage] = useState("");
+  const [feedback, setFeedback] = useState("");
   const [saving, setSaving] = useState(false);
   const [errors, setErrors] = useState<Partial<Record<"nome" | "turmaId", string>>>({});
   const [form, setForm] = useState({
@@ -49,7 +50,7 @@ export default function AttendanceCreate() {
         const { data } = await api.get<TurmaResponse[]>(turmasUrl);
         setTurmas(data);
       } catch {
-        setMessage("Erro ao carregar turmas.");
+        setFeedback("Erro ao carregar turmas.");
       }
     }
 
@@ -59,6 +60,7 @@ export default function AttendanceCreate() {
   function handleFieldChange(field: keyof typeof form, value: string | number) {
     setForm((current) => ({ ...current, [field]: value }));
     setErrors((current) => ({ ...current, [field]: undefined }));
+    setFeedback("");
   }
 
   function validate() {
@@ -72,7 +74,7 @@ export default function AttendanceCreate() {
   async function handleCreate() {
     if (!validate()) return;
     if (!form.turmaId) {
-      setMessage("Selecione uma turma para criar a chamada.");
+      setFeedback("Selecione uma turma para criar a chamada.");
       return;
     }
 
@@ -85,9 +87,17 @@ export default function AttendanceCreate() {
         numeroPeriodo: form.numeroPeriodo,
       });
 
-      navigate(`/chamadas/${data.id}/editar`);
+      navigate(`/chamadas/${data.id}/editar`, {
+        state: {
+          feedback: {
+            type: "success",
+            title: "Chamada criada",
+            message: "Chamada criada com sucesso.",
+          },
+        },
+      });
     } catch {
-      setMessage("Erro ao criar chamada.");
+      setFeedback("Erro ao criar chamada.");
     } finally {
       setSaving(false);
     }
@@ -106,6 +116,14 @@ export default function AttendanceCreate() {
 
           <section className="attendance-create-page__card" aria-label="Formulario de cadastro de chamada">
             <h2 className="attendance-create-page__title">Nova chamada</h2>
+            {feedback && (
+              <FeedbackMessage
+                type="error"
+                title="Nao foi possivel concluir"
+                message={feedback}
+                onDismiss={() => setFeedback("")}
+              />
+            )}
 
             <FormSection title="Dados da chamada" icon={<CalendarRange size={16} aria-hidden="true" />}>
               <FormField
@@ -182,7 +200,6 @@ export default function AttendanceCreate() {
               submitLabel="Criar chamada"
               loading={saving}
             />
-            {message && <p className="attendanceMessage">{message}</p>}
           </section>
         </main>
       </div>

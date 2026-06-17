@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import DefaultSidebar from "../../solos/sideBar/DefaultSidebar";
 import Header from "../../shared/Header";
 import ActionBar from "../../shared/ActionBar";
+import FeedbackMessage from "../../shared/FeedbackMessage";
 import GenericMainList from "../genericMainList";
 import api from "../../../services/api";
 import { useSearch } from "../../../hooks/useSearch";
@@ -27,7 +28,7 @@ export default function AttendanceManagement() {
   const navigate = useNavigate();
   const [chamadas, setChamadas] = useState<ChamadaResponse[]>([]);
   const [loading, setLoading] = useState(true);
-  const [message, setMessage] = useState("");
+  const [feedback, setFeedback] = useState("");
 
   useEffect(() => {
     document.body.classList.add("attendancePage");
@@ -40,7 +41,7 @@ export default function AttendanceManagement() {
         const { data } = await api.get<ChamadaResponse[]>("/chamadas");
         setChamadas(data);
       } catch {
-        setMessage("Erro ao carregar chamadas.");
+        setFeedback("Erro ao carregar chamadas.");
       } finally {
         setLoading(false);
       }
@@ -73,7 +74,14 @@ export default function AttendanceManagement() {
             onAddClick={() => navigate("/chamadas/novo")}
           />
 
-          {message && <p className="attendanceMessage">{message}</p>}
+          {feedback && (
+            <FeedbackMessage
+              type="error"
+              title="Nao foi possivel concluir"
+              message={feedback}
+              onDismiss={() => setFeedback("")}
+            />
+          )}
 
           <GenericMainList props={{ title: "Chamadas", itemsPerPage: 5 }}>
             {loading

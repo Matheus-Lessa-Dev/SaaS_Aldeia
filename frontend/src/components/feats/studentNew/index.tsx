@@ -127,7 +127,15 @@ useEffect(() => {
       } else {
         await api.post('/auth/register/aluno', { ...payload, senha: '123456' })
       }
-      navigate('/alunos')
+      navigate('/alunos', {
+        state: {
+          feedback: {
+            type: 'success',
+            title: isEditing ? 'Aluno atualizado' : 'Aluno cadastrado',
+            message: isEditing ? 'Aluno atualizado com sucesso.' : 'Aluno cadastrado com sucesso.',
+          },
+        },
+      })
     } catch {
       setFeedback(isEditing ? 'Erro ao atualizar aluno.' : 'Erro ao cadastrar aluno.')
     } finally {

@@ -162,7 +162,15 @@ export default function GameCreatePage() {
       } else {
         await api.post("/jogos", payload);
       }
-      navigate("/jogos");
+      navigate("/jogos", {
+        state: {
+          feedback: {
+            type: "success",
+            title: isEditing ? "Jogo atualizado" : "Jogo cadastrado",
+            message: isEditing ? "Jogo atualizado com sucesso." : "Jogo cadastrado com sucesso.",
+          },
+        },
+      });
     } catch (error) {
       const apiMessage = axios.isAxiosError(error) ? error.response?.data?.erro : undefined;
       setFeedback(apiMessage ?? (isEditing ? "Erro ao atualizar jogo." : "Erro ao cadastrar jogo."));

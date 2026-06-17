@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSearch } from "../../../hooks/useSearch";
+import { useRouteFeedback } from "../../../hooks/useRouteFeedback";
 import { sortManagementItems, type ManagementSortOption } from "../../../utils/managementSort";
 import ManagementPageShell from "../../shared/ManagementPageShell";
 import ClassCard from "./classCard";
@@ -28,7 +29,7 @@ export default function ClassManagement() {
   const [classes, setClasses] = useState<ClassInfo[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [feedback, setFeedback] = useState('');
+  const { feedback, setFeedback } = useRouteFeedback();
   const [sortOption, setSortOption] = useState<ManagementSortOption>("nameAsc");
 
   const { searchTerm, setSearchTerm, filteredItems } = useSearch(classes);
@@ -58,9 +59,17 @@ export default function ClassManagement() {
     try {
       await api.delete(`/turmas/${classInfo.id}`);
       setClasses((prev) => prev.filter((c) => c.id !== classInfo.id));
-      setFeedback('');
+      setFeedback({
+        type: "success",
+        title: "Turma removida",
+        message: "Turma excluida com sucesso.",
+      });
     } catch {
-      setFeedback('Erro ao deletar turma. Tente novamente.');
+      setFeedback({
+        type: "error",
+        title: "Nao foi possivel concluir a acao",
+        message: "Erro ao deletar turma. Tente novamente.",
+      });
     }
   };
 
@@ -95,10 +104,8 @@ export default function ClassManagement() {
       onSortChange={setSortOption}
       onAddClick={() => navigate("/turmas/novo")}
       feedback={feedback ? {
-        type: "error",
-        title: "Nao foi possivel concluir a acao",
-        message: feedback,
-        onDismiss: () => setFeedback(''),
+        ...feedback,
+        onDismiss: () => setFeedback(null),
       } : undefined}
     >
       {listElements}

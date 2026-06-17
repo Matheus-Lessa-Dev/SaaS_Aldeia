@@ -111,7 +111,15 @@ export default function TeacherCreatePage() {
       } else {
         await api.post('/auth/register/professor', payload)
       }
-      navigate('/professores')
+      navigate('/professores', {
+        state: {
+          feedback: {
+            type: 'success',
+            title: isEditing ? 'Professor atualizado' : 'Professor cadastrado',
+            message: isEditing ? 'Professor atualizado com sucesso.' : 'Professor cadastrado com sucesso.',
+          },
+        },
+      })
     } catch {
       setFeedback(isEditing ? 'Erro ao atualizar professor.' : 'Erro ao cadastrar professor.')
     } finally {

@@ -165,7 +165,15 @@ export default function ClassCreatePage() {
                 alunosIds: selectedAlunos,
             })
 
-            navigate('/turmas')
+            navigate('/turmas', {
+                state: {
+                    feedback: {
+                        type: 'success',
+                        title: isEditing ? 'Turma atualizada' : 'Turma cadastrada',
+                        message: isEditing ? 'Turma atualizada com sucesso.' : 'Turma cadastrada com sucesso.',
+                    },
+                },
+            })
         } catch (err: any) {
             const msg = err?.response?.data?.erro ?? err?.response?.data?.message
             setFeedback(msg || (isEditing ? 'Erro ao atualizar turma.' : 'Erro ao cadastrar turma.'))

@@ -53,10 +53,10 @@ public class JogoService {
     @Transactional
     public JogoResponse criar(JogoRequest request) {
         Jogo jogo = new Jogo();
-        jogo.setNome(trimToNull(request.nome()));
+        jogo.setNome(requiredText(request.nome(), "Informe o nome do jogo"));
         jogo.setImgUrl(trimToNull(request.imgUrl()));
-        jogo.setTempo(toTempoStorage(request.tempo()));
-        jogo.setLinkUrl(trimToNull(request.linkUrl()));
+        jogo.setTempo(toTempoStorage(requiredPositive(request.tempo(), "O tempo deve ser maior que zero")));
+        jogo.setLinkUrl(requiredText(request.linkUrl(), "Informe o link do jogo"));
         jogo.setHabilitado(request.habilitado() == null || request.habilitado());
         jogo.setTurmas(new ArrayList<>());
         Jogo jogoSalvo = jogoRepository.save(jogo);
@@ -68,10 +68,10 @@ public class JogoService {
     public JogoResponse atualizar(Long id, JogoRequest request) {
         Jogo jogo = buscar(id);
 
-        if (request.nome() != null)    jogo.setNome(trimToNull(request.nome()));
+        if (request.nome() != null)    jogo.setNome(requiredText(request.nome(), "Informe o nome do jogo"));
         if (request.imgUrl() != null)  jogo.setImgUrl(trimToNull(request.imgUrl()));
-        if (request.tempo() != null)   jogo.setTempo(toTempoStorage(request.tempo()));
-        if (request.linkUrl() != null) jogo.setLinkUrl(trimToNull(request.linkUrl()));
+        if (request.tempo() != null)   jogo.setTempo(toTempoStorage(requiredPositive(request.tempo(), "O tempo deve ser maior que zero")));
+        if (request.linkUrl() != null) jogo.setLinkUrl(requiredText(request.linkUrl(), "Informe o link do jogo"));
         if (request.habilitado() != null) jogo.setHabilitado(request.habilitado());
         if (request.turmasIds() != null) vincularTurmas(jogo, request.turmasIds());
 
@@ -149,6 +149,23 @@ public class JogoService {
 
     private String toTempoStorage(Integer tempo) {
         return tempo == null ? null : String.valueOf(tempo);
+    }
+
+    private Integer requiredPositive(Integer value, String message) {
+        if (value == null || value <= 0) {
+            throw new IllegalArgumentException(message);
+        }
+
+        return value;
+    }
+
+    private String requiredText(String value, String message) {
+        String trimmed = trimToNull(value);
+        if (trimmed == null) {
+            throw new IllegalArgumentException(message);
+        }
+
+        return trimmed;
     }
 
     private String trimToNull(String value) {

@@ -4,6 +4,7 @@ import { Gamepad2, Layers3, Link as LinkIcon } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import DefaultSidebar from "../../solos/sideBar/DefaultSidebar";
 import { FormActions } from "../../shared/formActions";
+import FeedbackMessage from "../../shared/FeedbackMessage";
 import { FormField } from "../../shared/formField";
 import { FormSection } from "../../shared/formSection";
 import Header from "../../shared/Header";
@@ -56,6 +57,7 @@ export default function GameCreatePage() {
   const [loadingData, setLoadingData] = useState(true);
   const [formState, setFormState] = useState<GameFormState>(emptyForm);
   const [formErrors, setFormErrors] = useState<GameFormErrors>({});
+  const [feedback, setFeedback] = useState("");
   const [turmas, setTurmas] = useState<TurmaOption[]>([]);
   const [selectedTurmas, setSelectedTurmas] = useState<number[]>([]);
 
@@ -84,8 +86,7 @@ export default function GameCreatePage() {
           setTurmas(data);
         }
       } catch {
-        alert(isEditing ? "Erro ao carregar dados do jogo." : "Erro ao carregar turmas.");
-        navigate("/jogos");
+        setFeedback(isEditing ? "Erro ao carregar dados do jogo." : "Erro ao carregar turmas.");
       } finally {
         setLoadingData(false);
       }
@@ -98,6 +99,7 @@ export default function GameCreatePage() {
     const nextValue = field === "time" ? value.replace(/\D/g, "") : value;
     setFormState((current) => ({ ...current, [field]: nextValue }));
     setFormErrors((current) => ({ ...current, [field]: undefined }));
+    setFeedback("");
   };
 
   const isValidUrl = (value: string) => {
@@ -163,7 +165,7 @@ export default function GameCreatePage() {
       navigate("/jogos");
     } catch (error) {
       const apiMessage = axios.isAxiosError(error) ? error.response?.data?.erro : undefined;
-      alert(apiMessage ?? (isEditing ? "Erro ao atualizar jogo." : "Erro ao cadastrar jogo."));
+      setFeedback(apiMessage ?? (isEditing ? "Erro ao atualizar jogo." : "Erro ao cadastrar jogo."));
     } finally {
       setIsSubmitting(false);
     }
@@ -182,6 +184,14 @@ export default function GameCreatePage() {
             <h2 className="game-create-page__title">
               {isEditing ? "Editar Jogo" : "Cadastrar Novo Jogo"}
             </h2>
+            {feedback && (
+              <FeedbackMessage
+                type="error"
+                title="Nao foi possivel concluir"
+                message={feedback}
+                onDismiss={() => setFeedback("")}
+              />
+            )}
 
             <FormSection title="Dados do jogo" icon={<Gamepad2 size={16} aria-hidden="true" />}>
               <FormField

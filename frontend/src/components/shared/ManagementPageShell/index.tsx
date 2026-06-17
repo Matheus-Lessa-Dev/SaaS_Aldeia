@@ -1,6 +1,7 @@
 import { useEffect, type ReactNode } from 'react';
 import DefaultSidebar from '../../solos/sideBar/DefaultSidebar';
 import ActionBar from '../ActionBar';
+import FeedbackMessage, { type FeedbackType } from '../FeedbackMessage';
 import GenericMainList from '../../feats/genericMainList';
 import Header from '../Header';
 import './style.css';
@@ -18,6 +19,12 @@ interface ManagementPageShellProps {
     onAddClick?: () => void;
     sortValue?: ManagementSortOption;
     onSortChange?: (value: ManagementSortOption) => void;
+    feedback?: {
+        type?: FeedbackType;
+        title?: string;
+        message: string;
+        onDismiss?: () => void;
+    };
     children: ReactNode[];
 }
 
@@ -33,6 +40,7 @@ export default function ManagementPageShell({
     onAddClick,
     sortValue,
     onSortChange,
+    feedback,
     children,
 }: ManagementPageShellProps) {
     useEffect(() => {
@@ -58,6 +66,7 @@ export default function ManagementPageShell({
                         sortValue={sortValue}
                         onSortChange={onSortChange}
                     />
+                    {feedback && <FeedbackMessage {...feedback} />}
                     <GenericMainList props={{ title, itemsPerPage }}>
                         {children}
                     </GenericMainList>

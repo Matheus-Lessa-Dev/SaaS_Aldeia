@@ -28,6 +28,7 @@ export default function ClassManagement() {
   const [classes, setClasses] = useState<ClassInfo[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [feedback, setFeedback] = useState('');
   const [sortOption, setSortOption] = useState<ManagementSortOption>("nameAsc");
 
   const { searchTerm, setSearchTerm, filteredItems } = useSearch(classes);
@@ -57,8 +58,9 @@ export default function ClassManagement() {
     try {
       await api.delete(`/turmas/${classInfo.id}`);
       setClasses((prev) => prev.filter((c) => c.id !== classInfo.id));
+      setFeedback('');
     } catch {
-      alert('Erro ao deletar turma. Tente novamente.');
+      setFeedback('Erro ao deletar turma. Tente novamente.');
     }
   };
 
@@ -92,6 +94,12 @@ export default function ClassManagement() {
       sortValue={sortOption}
       onSortChange={setSortOption}
       onAddClick={() => navigate("/turmas/novo")}
+      feedback={feedback ? {
+        type: "error",
+        title: "Nao foi possivel concluir a acao",
+        message: feedback,
+        onDismiss: () => setFeedback(''),
+      } : undefined}
     >
       {listElements}
     </ManagementPageShell>

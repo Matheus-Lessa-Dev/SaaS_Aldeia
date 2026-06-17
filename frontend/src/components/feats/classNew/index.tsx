@@ -3,6 +3,7 @@ import { Layers3, UserRound, Users } from 'lucide-react'
 import { useNavigate, useParams } from 'react-router-dom'
 import DefaultSidebar from '../../solos/sideBar/DefaultSidebar'
 import { FormActions } from '../../shared/formActions'
+import FeedbackMessage from '../../shared/FeedbackMessage'
 import { FormField } from '../../shared/formField'
 import { FormSection } from '../../shared/formSection'
 import Header from '../../shared/Header'
@@ -48,6 +49,7 @@ export default function ClassCreatePage() {
     const [loadingData, setLoadingData] = useState(true)
     const [formState, setFormState] = useState<ClassFormState>({ name: '', period: '' })
     const [formErrors, setFormErrors] = useState<ClassFormErrors>({})
+    const [feedback, setFeedback] = useState('')
 
     const [professores, setProfessores] = useState<ProfessorOption[]>([])
     const [selectedProfessores, setSelectedProfessores] = useState<number[]>([])
@@ -102,7 +104,7 @@ export default function ClassCreatePage() {
 
                 setAlunos(listaAlunos)
             } catch {
-                alert('Erro ao carregar dados.')
+                setFeedback('Erro ao carregar dados.')
             } finally {
                 setLoadingData(false)
             }
@@ -114,6 +116,7 @@ export default function ClassCreatePage() {
     const handleFieldChange = (field: keyof ClassFormState, value: string) => {
         setFormState((current) => ({ ...current, [field]: value }))
         setFormErrors((current) => ({ ...current, [field]: undefined }))
+        setFeedback('')
     }
 
     const toggleProfessor = (profId: number) => {
@@ -165,7 +168,7 @@ export default function ClassCreatePage() {
             navigate('/turmas')
         } catch (err: any) {
             const msg = err?.response?.data?.erro ?? err?.response?.data?.message
-            alert(msg || (isEditing ? 'Erro ao atualizar turma.' : 'Erro ao cadastrar turma.'))
+            setFeedback(msg || (isEditing ? 'Erro ao atualizar turma.' : 'Erro ao cadastrar turma.'))
         } finally {
             setIsSubmitting(false)
         }
@@ -184,6 +187,14 @@ export default function ClassCreatePage() {
                         <h2 className="class-create-page__title">
                             {isEditing ? 'Editar Turma' : 'Cadastrar Nova Turma'}
                         </h2>
+                        {feedback && (
+                            <FeedbackMessage
+                                type="error"
+                                title="Nao foi possivel concluir"
+                                message={feedback}
+                                onDismiss={() => setFeedback('')}
+                            />
+                        )}
 
                         <FormSection title="Dados da turma" icon={<Layers3 size={16} aria-hidden="true" />}>
                             <FormField

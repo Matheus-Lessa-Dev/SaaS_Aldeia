@@ -3,6 +3,7 @@ import { MapPinned, UserRound } from 'lucide-react'
 import { useNavigate, useParams } from 'react-router-dom'
 import DefaultSidebar from '../../solos/sideBar/DefaultSidebar'
 import { FormActions } from '../../shared/formActions'
+import FeedbackMessage from '../../shared/FeedbackMessage'
 import { FormField } from '../../shared/formField'
 import { FormSection } from '../../shared/formSection'
 import Header from '../../shared/Header'
@@ -41,6 +42,7 @@ export default function TeacherCreatePage() {
   const [loadingData, setLoadingData] = useState(isEditing)
   const [formState, setFormState] = useState<TeacherFormState>(emptyForm)
   const [formErrors, setFormErrors] = useState<TeacherFormErrors>({})
+  const [feedback, setFeedback] = useState('')
 
   useEffect(() => {
     if (!isEditing) return
@@ -61,8 +63,7 @@ export default function TeacherCreatePage() {
           phone: data.telefone ?? '',
         })
       } catch {
-        alert('Erro ao carregar dados do professor.')
-        navigate('/professores')
+        setFeedback('Erro ao carregar dados do professor.')
       } finally {
         setLoadingData(false)
       }
@@ -74,6 +75,7 @@ export default function TeacherCreatePage() {
   const handleFieldChange = (field: keyof TeacherFormState, value: string) => {
     setFormState((current) => ({ ...current, [field]: value }))
     setFormErrors((current) => ({ ...current, [field]: undefined }))
+    setFeedback('')
   }
 
   const validate = () => {
@@ -111,7 +113,7 @@ export default function TeacherCreatePage() {
       }
       navigate('/professores')
     } catch {
-      alert(isEditing ? 'Erro ao atualizar professor.' : 'Erro ao cadastrar professor.')
+      setFeedback(isEditing ? 'Erro ao atualizar professor.' : 'Erro ao cadastrar professor.')
     } finally {
       setIsSubmitting(false)
     }
@@ -130,6 +132,14 @@ export default function TeacherCreatePage() {
             <h2 className="teacher-create-page__title">
               {isEditing ? 'Editar Professor' : 'Cadastrar Novo Professor'}
             </h2>
+            {feedback && (
+              <FeedbackMessage
+                type="error"
+                title="Nao foi possivel concluir"
+                message={feedback}
+                onDismiss={() => setFeedback('')}
+              />
+            )}
 
             <FormSection title="Dados do professor" icon={<UserRound size={16} aria-hidden="true" />}>
               <FormField

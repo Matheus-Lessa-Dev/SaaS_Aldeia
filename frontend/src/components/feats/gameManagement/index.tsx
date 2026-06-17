@@ -31,6 +31,7 @@ export default function GameManagement() {
   const [games, setGames] = useState<GameInfo[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [feedback, setFeedback] = useState("");
   const [sortOption, setSortOption] = useState<ManagementSortOption>("nameAsc");
 
   const { searchTerm, setSearchTerm, filteredItems } = useSearch(games);
@@ -65,8 +66,9 @@ export default function GameManagement() {
     try {
       await api.delete(`/jogos/${gameInfo.id}`);
       setGames((prev) => prev.filter((game) => game.id !== gameInfo.id));
+      setFeedback("");
     } catch {
-      alert("Erro ao deletar jogo. Tente novamente.");
+      setFeedback("Erro ao deletar jogo. Tente novamente.");
     }
   };
 
@@ -89,7 +91,7 @@ export default function GameManagement() {
           game.id === gameInfo.id ? { ...game, enabled: gameInfo.enabled } : game,
         ),
       );
-      alert("Erro ao atualizar status do jogo. Tente novamente.");
+      setFeedback("Erro ao atualizar status do jogo. Tente novamente.");
     }
   };
 
@@ -125,6 +127,12 @@ export default function GameManagement() {
       sortValue={sortOption}
       onSortChange={setSortOption}
       onAddClick={() => navigate("/jogos/novo")}
+      feedback={feedback ? {
+        type: "error",
+        title: "Nao foi possivel concluir a acao",
+        message: feedback,
+        onDismiss: () => setFeedback(""),
+      } : undefined}
     >
       {listElements}
     </ManagementPageShell>

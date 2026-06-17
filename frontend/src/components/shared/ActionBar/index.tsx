@@ -3,7 +3,7 @@ import './style.css';
 import type { ManagementSortOption } from '../../../utils/managementSort';
 
 interface ActionBarProps {
-    addButtonLabel: string;
+    addButtonLabel?: string;
     searchPlaceholder: string;
     searchValue: string;
     onSearchChange: (value: string) => void;
@@ -23,10 +23,12 @@ export default function ActionBar({
 }: ActionBarProps) {
     return (
         <div className="managementActionBar">
-            <button className="managementAddButton" onClick={onAddClick} type="button">
-                <span>{addButtonLabel}</span>
-                <Plus size={18} aria-hidden="true" />
-            </button>
+            {addButtonLabel && (
+                <button className="managementAddButton" onClick={onAddClick} type="button">
+                    <span>{addButtonLabel}</span>
+                    <Plus size={18} aria-hidden="true" />
+                </button>
+            )}
             <div className="managementSearchContainer">
                 <Search size={16} className="managementSearchIcon" aria-hidden="true" />
                 <input

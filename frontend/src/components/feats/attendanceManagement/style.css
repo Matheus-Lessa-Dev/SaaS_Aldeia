@@ -1,0 +1,614 @@
+.attendancePage #root {
+  width: 100%;
+  max-width: none;
+  min-height: 100svh;
+  margin: 0;
+  padding: 0;
+  gap: 0;
+}
+
+.attendanceLayout {
+  display: flex;
+  min-height: 100svh;
+  background: var(--surface-container-low);
+}
+
+.attendanceMain {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.attendanceContent {
+  flex: 1;
+  padding: 0 clamp(1.2rem, 2vw, var(--spacing-8)) var(--spacing-4);
+}
+
+.attendancePanel {
+  background: var(--surface);
+  border: 1px solid var(--outline-variant);
+  border-radius: 12px;
+  padding: var(--spacing-4);
+  box-shadow: 0 4px 12px rgba(108, 71, 31, 0.06);
+}
+
+.attendance-create-page__card {
+  margin: var(--spacing-4) 1rem 0;
+  padding: var(--spacing-4);
+  border-radius: 12px;
+  background: var(--surface);
+  box-shadow: 0 4px 12px rgba(108, 71, 31, 0.06);
+}
+
+.attendance-create-page__title {
+  margin-bottom: 1rem;
+  font-size: clamp(1.4rem, 3vw, 2rem);
+}
+
+.attendance-create-page__card .form-section__grid {
+  align-items: start;
+}
+
+.attendance-create-page__card .form-field__input-wrapper {
+  border-bottom: 0;
+  border-radius: var(--roundedness-lg);
+  box-shadow: inset 0 0 0 1px var(--outline-variant);
+}
+
+.attendance-create-page__card .form-field__input-wrapper:focus-within {
+  box-shadow: inset 0 0 0 1px var(--primary);
+}
+
+.attendance-create-page__select-wrapper select {
+  border: 0;
+  border-radius: inherit;
+  background: transparent;
+  box-shadow: none;
+  appearance: none;
+  cursor: pointer;
+  padding-right: 2.5rem;
+}
+
+.attendance-create-page__turma-list {
+  max-height: 260px;
+}
+
+.attendance-create-page__card .class-selection-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+  padding-right: 8px;
+  scrollbar-gutter: stable;
+}
+
+.attendance-create-page__card .class-selection-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--outline-variant);
+  background: var(--surface-bright);
+  font-size: 14px;
+  color: var(--on-surface);
+  transition: all 0.15s;
+}
+
+.attendance-create-page__card .class-selection-item--selected {
+  background: var(--secondary-container);
+  border-color: var(--secondary);
+  color: var(--secondary);
+}
+
+.attendance-create-page__card .class-selection-btn {
+  padding: 4px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--primary);
+  background: transparent;
+  color: var(--primary);
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.attendance-create-page__card .class-selection-btn:hover {
+  background: var(--surface-container);
+}
+
+.attendance-create-page__card .class-selection-btn--remove {
+  border-color: var(--secondary);
+  color: var(--secondary);
+}
+
+.attendance-create-page__card .class-selection-btn--remove:hover {
+  background: var(--secondary-container);
+}
+
+.attendance-create-page__card .class-empty-msg {
+  font-size: 14px;
+  color: var(--on-surface-muted);
+  text-align: center;
+  padding: 16px 0;
+}
+
+.attendanceConfigPanel {
+  margin-top: var(--spacing-4);
+}
+
+.attendanceSectionHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.attendancePanel h2 {
+  margin: 0 0 1rem;
+  font-size: 1.35rem;
+  color: var(--on-surface);
+}
+
+.attendanceSectionHeader h2 {
+  margin-bottom: 0.35rem;
+}
+
+.attendanceSectionHeader p,
+.attendancePanel p {
+  color: var(--on-surface-muted);
+}
+
+.attendanceForm,
+.attendanceForm label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.attendanceForm {
+  gap: 1rem;
+}
+
+.attendanceForm span {
+  color: var(--on-surface-muted);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.attendanceFormRow {
+  display: grid;
+  grid-template-columns: 1fr 8rem;
+  gap: 0.8rem;
+}
+
+.attendancePrimaryButton,
+.attendanceActions button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  min-height: 2.65rem;
+  padding: 0.75rem 1rem;
+  border-radius: 999px;
+  font-weight: 700;
+}
+
+.attendancePrimaryButton {
+  background: var(--primary);
+  color: var(--on-primary);
+}
+
+.attendancePrimaryButton:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.attendanceMessage,
+.attendanceEmpty {
+  margin-top: 1rem;
+  font-size: 0.92rem;
+}
+
+.attendanceBackButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-bottom: var(--spacing-4);
+  padding: 0.65rem 0.95rem;
+  border: 1px solid var(--outline-variant);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.attendanceListCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: auto;
+  padding: 0.9rem 1rem;
+  margin-left: 1em;
+  margin-right: 1em;
+  border: 1px solid var(--outline-variant);
+  border-radius: 12px;
+  background: var(--surface-bright);
+  color: var(--on-surface);
+  text-align: left;
+}
+
+.classesList .attendanceListCard:first-child {
+  margin-top: var(--spacing-4);
+}
+
+.classesList .attendanceListCard:last-child {
+  margin-bottom: var(--spacing-4);
+}
+
+.attendanceListCard.active {
+  border-color: var(--primary);
+  box-shadow: inset 3px 0 0 var(--primary);
+}
+
+.attendanceCardContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  min-width: 0;
+}
+
+.attendanceCardTitle {
+  color: var(--on-surface);
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.attendanceCardMeta {
+  color: var(--on-surface-muted);
+  font-size: 0.9rem;
+}
+
+.attendanceCardStats {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.attendanceCardStats span {
+  padding: 0.35rem 0.65rem;
+  border-radius: 999px;
+  background: var(--surface-container);
+  color: var(--primary);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.attendanceRollCallHeader,
+.attendanceActions,
+.attendanceStudentRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.attendanceRollCallHeader {
+  margin-bottom: 1rem;
+}
+
+.attendanceDatePicker {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 12rem;
+  color: var(--on-surface-muted);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.attendanceDatePicker input {
+  min-height: 2.55rem;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid var(--outline-variant);
+  border-radius: 10px;
+  background: var(--surface-bright);
+  color: var(--on-surface);
+  font: inherit;
+}
+
+.attendanceDatePicker input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.attendanceDetailsPanel {
+  margin-bottom: var(--spacing-4);
+}
+
+.attendanceDetailsPanel h1,
+.attendanceConfigPanel h1 {
+  margin: 0 0 0.4rem;
+  color: var(--primary);
+  font-size: clamp(2rem, 3vw, 3rem);
+}
+
+.attendanceRollCall {
+  margin-top: var(--spacing-4);
+}
+
+.attendanceRollCall.locked .attendanceStudents {
+  opacity: 0.78;
+}
+
+.attendanceInfoGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(9rem, 1fr));
+  gap: 0.8rem;
+  margin-top: 1rem;
+}
+
+.attendanceInfoGrid div {
+  padding: 0.9rem 1rem;
+  border-radius: 10px;
+  background: var(--surface-container-low);
+  border: 1px solid var(--ghost-border);
+}
+
+.attendanceInfoGrid span,
+.attendanceInfoGrid strong {
+  display: block;
+}
+
+.attendanceInfoGrid span {
+  color: var(--on-surface-muted);
+  font-size: 0.84rem;
+  font-weight: 600;
+}
+
+.attendanceInfoGrid strong {
+  margin-top: 0.25rem;
+  color: var(--on-surface);
+  font-size: 1.15rem;
+}
+
+.attendanceStats {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.attendanceStats > span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0.45rem 0.75rem;
+  border-radius: 999px;
+  background: var(--surface-container);
+  color: var(--primary);
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.attendanceStatusControl {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 40px;
+  padding: 0.35rem 0.45rem 0.35rem 0.75rem;
+  border-radius: 999px;
+  background: var(--surface-container);
+  color: var(--primary);
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.attendanceStatusControl > span {
+  line-height: 1;
+}
+
+.attendanceStatusSwitch {
+  position: static;
+  display: inline-flex;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.attendanceStatusSwitch input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.attendanceStatusSwitchTrack {
+  position: relative;
+  width: 48px;
+  height: 28px;
+  border-radius: 999px;
+  background: #b8b1aa;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08);
+  transition: background 0.2s ease;
+}
+
+.attendanceStatusSwitchThumb {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease;
+}
+
+.attendanceStatusSwitch input:checked + .attendanceStatusSwitchTrack {
+  background: #2c672c;
+}
+
+.attendanceStatusSwitch input:checked + .attendanceStatusSwitchTrack .attendanceStatusSwitchThumb {
+  transform: translateX(20px);
+}
+
+.attendanceStatusSwitch input:focus-visible + .attendanceStatusSwitchTrack {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.attendanceStatusSwitch input:disabled + .attendanceStatusSwitchTrack {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.attendanceActions {
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+}
+
+.attendanceActions button:not(.attendancePrimaryButton) {
+  background: var(--secondary-container);
+  color: var(--secondary);
+}
+
+.attendanceActions button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  filter: grayscale(0.15);
+}
+
+.attendanceMarkAllButton {
+  border: 1px solid color-mix(in srgb, var(--secondary) 35%, transparent);
+  box-shadow: 0 4px 10px rgba(59, 105, 52, 0.1);
+}
+
+.attendanceMarkAllButton:hover {
+  filter: brightness(0.97);
+}
+
+.attendanceDayStatus {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-top: 0.65rem;
+  padding: 0.55rem 0.8rem;
+  border-radius: 10px;
+  border: 1px solid var(--outline-variant);
+  background: var(--surface-container-low);
+}
+
+.attendanceDayStatus span {
+  color: var(--on-surface-muted);
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.attendanceDayStatus strong {
+  color: var(--on-surface);
+  font-size: 0.9rem;
+}
+
+.attendanceDayStatus.saved {
+  border-color: color-mix(in srgb, var(--secondary) 40%, transparent);
+  background: var(--secondary-container);
+}
+
+.attendanceDayStatus.saved strong {
+  color: var(--secondary);
+}
+
+.attendanceDayStatus.pending {
+  border-color: var(--outline-variant);
+  background: var(--surface-container);
+}
+
+.attendanceStudents {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.attendanceStudentRow {
+  padding: 0.85rem 1rem;
+  border-radius: 10px;
+  background: var(--surface-container-low);
+  border: 1px solid var(--ghost-border);
+}
+
+.attendanceStudentRow strong,
+.attendanceStudentRow span {
+  display: block;
+}
+
+.attendanceStudentRow strong {
+  color: var(--on-surface);
+}
+
+.attendanceStudentRow span {
+  color: var(--on-surface-muted);
+  font-size: 0.86rem;
+}
+
+.attendanceSegmented {
+  display: grid;
+  grid-template-columns: repeat(3, 2.5rem);
+  border-radius: 999px;
+  background: var(--surface-container);
+  padding: 0.25rem;
+}
+
+.attendanceSegmented button {
+  display: grid;
+  place-items: center;
+  height: 2rem;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--on-surface-muted);
+  font-weight: 700;
+}
+
+.attendanceSegmented button:disabled {
+  cursor: not-allowed;
+  opacity: 0.72;
+}
+
+.attendanceSegmented button.active {
+  background: var(--secondary);
+  color: var(--on-primary);
+}
+
+.attendanceSegmented button.active.danger {
+  background: var(--primary);
+}
+
+.attendanceSegmented button.active.warn {
+  background: var(--tertiary);
+}
+
+@media (max-width: 900px) {
+  .attendance-create-page__card {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .attendanceLayout,
+  .attendanceRollCallHeader,
+  .attendanceActions,
+  .attendanceStudentRow,
+  .attendanceListCard {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .attendanceCardStats,
+  .attendanceStats {
+    justify-content: flex-start;
+  }
+
+  .attendanceInfoGrid {
+    grid-template-columns: 1fr;
+  }
+}

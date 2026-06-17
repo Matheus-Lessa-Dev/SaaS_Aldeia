@@ -2,6 +2,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import type { LucideIcon } from "lucide-react";
 import {
   BookOpenCheck,
+  CalendarCheck,
   Gamepad2,
   GraduationCap,
   LayoutDashboard,
@@ -30,6 +31,7 @@ const navItems: NavItem[] = [
   },
   { label: "Alunos", to: "/alunos", icon: Users },
   { label: "Jogos", to: "/jogos", icon: Gamepad2 },
+  { label: "Chamadas", to: "/chamadas", icon: CalendarCheck },
 ];
 
 function DefaultSidebar() {

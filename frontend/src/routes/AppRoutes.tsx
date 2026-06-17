@@ -34,6 +34,15 @@ const TeacherCreatePage = lazy(() => import("../components/feats/teacherNew"));
 const GameManagement = lazy(() => import("../components/feats/gameManagement"));
 const GameCreatePage = lazy(() => import("../components/feats/gameNew"));
 const StudentGames = lazy(() => import("../components/feats/studentGames/Jogos"));
+const AttendanceManagement = lazy(
+  () => import("../components/feats/attendanceManagement"),
+);
+const AttendanceCreate = lazy(
+  () => import("../components/feats/attendanceManagement/AttendanceCreate"),
+);
+const AttendanceEdit = lazy(
+  () => import("../components/feats/attendanceManagement/AttendanceEdit"),
+);
 
 function PrivateRoute({
   children,
@@ -216,6 +225,30 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute allowedRoles={[Role.Admin, Role.Teacher]}>
         <GameCreatePage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/chamadas",
+    element: (
+      <ProtectedRoute allowedRoles={[Role.Admin, Role.Teacher]}>
+        <AttendanceManagement />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/chamadas/novo",
+    element: (
+      <ProtectedRoute allowedRoles={[Role.Admin, Role.Teacher]}>
+        <AttendanceCreate />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/chamadas/:id/editar",
+    element: (
+      <ProtectedRoute allowedRoles={[Role.Admin, Role.Teacher]}>
+        <AttendanceEdit />
       </ProtectedRoute>
     ),
   },

@@ -112,15 +112,6 @@
     gap: 8px;
 }
 
-.login-error {
-  color: #e53e3e;
-  background: #fff5f5;
-  border: 1px solid #feb2b2;
-  border-radius: 6px;
-  padding: 8px 12px;
-  font-size: 0.875rem;
-}
-
 @media (max-width: 768px) {
     .login-page {
         padding: var(--spacing-4);

@@ -3,6 +3,7 @@ import { UserRound, Users } from 'lucide-react'
 import { useNavigate, useParams } from 'react-router-dom'
 import DefaultSidebar from '../../solos/sideBar/DefaultSidebar'
 import { FormActions } from '../../shared/formActions'
+import FeedbackMessage from '../../shared/FeedbackMessage'
 import { FormField } from '../../shared/formField'
 import { FormSection } from '../../shared/formSection'
 import Header from '../../shared/Header'
@@ -47,6 +48,7 @@ export default function StudentCreatePage() {
   const [loadingData, setLoadingData] = useState(isEditing)
   const [formState, setFormState] = useState<StudentFormState>(emptyForm)
   const [formErrors, setFormErrors] = useState<StudentFormErrors>({})
+  const [feedback, setFeedback] = useState('')
 
   // Se for edição, busca os dados do aluno e preenche o form
 useEffect(() => {
@@ -71,8 +73,7 @@ useEffect(() => {
         guardianEmail: data.emailResponsavel ?? '',  // ✅ agora retorna
       })
     } catch {
-      alert('Erro ao carregar dados do aluno.')
-      navigate('/alunos')
+      setFeedback('Erro ao carregar dados do aluno.')
     } finally {
       setLoadingData(false)
     }
@@ -84,6 +85,7 @@ useEffect(() => {
   const handleFieldChange = (field: keyof StudentFormState, value: string) => {
     setFormState((current) => ({ ...current, [field]: value }))
     setFormErrors((current) => ({ ...current, [field]: undefined }))
+    setFeedback('')
   }
 
   const validate = () => {
@@ -127,7 +129,7 @@ useEffect(() => {
       }
       navigate('/alunos')
     } catch {
-      alert(isEditing ? 'Erro ao atualizar aluno.' : 'Erro ao cadastrar aluno.')
+      setFeedback(isEditing ? 'Erro ao atualizar aluno.' : 'Erro ao cadastrar aluno.')
     } finally {
       setIsSubmitting(false)
     }
@@ -146,6 +148,14 @@ useEffect(() => {
             <h2 className="student-create-page__title">
               {isEditing ? 'Editar Aluno' : 'Cadastrar Novo Aluno'}
             </h2>
+            {feedback && (
+              <FeedbackMessage
+                type="error"
+                title="Nao foi possivel concluir"
+                message={feedback}
+                onDismiss={() => setFeedback('')}
+              />
+            )}
 
             <FormSection title="Dados do aluno" icon={<UserRound size={16} aria-hidden="true" />}>
               <FormField id="student-name" label="Nome" placeholder="Ex.: Maria"

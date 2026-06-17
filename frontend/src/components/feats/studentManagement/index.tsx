@@ -27,6 +27,7 @@ export default function StudentManagement() {
   const [students, setStudents] = useState<StudentInfo[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [feedback, setFeedback] = useState("");
   const [sortOption, setSortOption] = useState<ManagementSortOption>("nameAsc");
 
   const { searchTerm, setSearchTerm, filteredItems } = useSearch(students);
@@ -57,8 +58,9 @@ export default function StudentManagement() {
     try {
       await api.delete(`/alunos/${studentInfo.id}`);
       setStudents((prev) => prev.filter((s) => s.id !== studentInfo.id));
+      setFeedback("");
     } catch {
-      alert("Erro ao deletar aluno. Tente novamente.");
+      setFeedback("Erro ao deletar aluno. Tente novamente.");
     }
   };
 
@@ -91,6 +93,12 @@ export default function StudentManagement() {
       sortValue={sortOption}
       onSortChange={setSortOption}
       onAddClick={() => navigate("/alunos/novo")}
+      feedback={feedback ? {
+        type: "error",
+        title: "Nao foi possivel concluir a acao",
+        message: feedback,
+        onDismiss: () => setFeedback(""),
+      } : undefined}
     >
       {listElements}
     </ManagementPageShell>

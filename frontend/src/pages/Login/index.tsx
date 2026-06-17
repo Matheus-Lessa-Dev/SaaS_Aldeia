@@ -3,6 +3,7 @@ import type { FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { User, Lock, Eye, EyeOff, ArrowRight } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
+import FeedbackMessage from "../../components/shared/FeedbackMessage";
 import { loginRequest } from "../../services/authService";
 import "./style.css";
 
@@ -15,6 +16,8 @@ function Login() {
 
   const { login, user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
+
+  const isValidEmail = (value: string) => /^\S+@\S+\.\S+$/.test(value.trim());
 
   useEffect(() => {
     if (user) {
@@ -29,6 +32,12 @@ function Login() {
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError("");
+
+    if (!isValidEmail(email)) {
+      setError("Informe um e-mail valido para continuar.");
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -45,8 +54,13 @@ function Login() {
 
       navigate("/dashboard");
     } catch (err: any) {
+      const status = err?.response?.status;
       const msg = err?.response?.data?.erro ?? err?.response?.data?.message;
-      setError(msg || "E-mail ou senha inválidos.");
+      setError(
+        status === 401 || status === 403
+          ? "Usuario ou senha incorretos. Verifique os dados e tente novamente."
+          : msg || "Nao foi possivel entrar agora. Tente novamente em instantes.",
+      );
     } finally {
       setLoading(false);
     }
@@ -60,7 +74,14 @@ function Login() {
           <h2>Bem-vindo</h2>
           <p>Acesse sua conta para continuar sua jornada pedagógica.</p>
 
-          {error && <p className="login-error">{error}</p>}
+          {error && (
+            <FeedbackMessage
+              type="error"
+              title="Nao foi possivel entrar"
+              message={error}
+              onDismiss={() => setError("")}
+            />
+          )}
 
           <div className="login-field">
             <label htmlFor="email">E-mail</label>
@@ -68,11 +89,15 @@ function Login() {
               <User size={18} aria-hidden="true" />
               <input
                 id="email"
-                type="email"
+                type="text"
+                inputMode="email"
                 placeholder="nome@exemplo.com.br"
                 required
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  setError("");
+                }}
               />
             </div>
           </div>
@@ -87,7 +112,10 @@ function Login() {
                 placeholder="********"
                 required
                 value={senha}
-                onChange={(e) => setSenha(e.target.value)}
+                onChange={(e) => {
+                  setSenha(e.target.value);
+                  setError("");
+                }}
               />
               <button
                 type="button"

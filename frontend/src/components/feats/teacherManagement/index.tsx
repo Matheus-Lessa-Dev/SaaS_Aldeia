@@ -25,6 +25,7 @@ export default function TeacherManagement() {
   const [teachers, setTeachers] = useState<TeacherInfo[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [feedback, setFeedback] = useState('');
   const [sortOption, setSortOption] = useState<ManagementSortOption>("nameAsc");
 
   const { searchTerm, setSearchTerm, filteredItems } = useSearch(teachers);
@@ -53,8 +54,9 @@ export default function TeacherManagement() {
     try {
       await api.delete(`/professores/${teacherInfo.id}`);
       setTeachers((prev) => prev.filter((t) => t.id !== teacherInfo.id));
+      setFeedback('');
     } catch {
-      alert('Erro ao deletar professor. Tente novamente.');
+      setFeedback('Erro ao deletar professor. Tente novamente.');
     }
   };
 
@@ -87,6 +89,12 @@ export default function TeacherManagement() {
       sortValue={sortOption}
       onSortChange={setSortOption}
       onAddClick={() => navigate("/professores/novo")}
+      feedback={feedback ? {
+        type: "error",
+        title: "Nao foi possivel concluir a acao",
+        message: feedback,
+        onDismiss: () => setFeedback(''),
+      } : undefined}
     >
       {listElements}
     </ManagementPageShell>

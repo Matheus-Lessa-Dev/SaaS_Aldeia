@@ -85,6 +85,37 @@ class JogoServiceTest {
     }
 
     @Test
+    void atualizar_blankName_throwsException() {
+        Jogo jogo = jogo(1L, "Antigo", "old.png", "5 min", "old");
+        when(jogoRepository.findById(1L)).thenReturn(Optional.of(jogo));
+
+        assertThatThrownBy(() -> jogoService.atualizar(1L, new JogoRequest(" ", null, null, null, null, null)))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Informe o nome do jogo");
+    }
+
+    @Test
+    void atualizar_nonPositiveTime_throwsException() {
+        Jogo jogo = jogo(1L, "Antigo", "old.png", "5 min", "old");
+        when(jogoRepository.findById(1L)).thenReturn(Optional.of(jogo));
+
+        assertThatThrownBy(() -> jogoService.atualizar(1L, new JogoRequest(null, null, 0, null, null, null)))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("O tempo deve ser maior que zero");
+    }
+
+    @Test
+    void criar_blankRequiredFields_throwsException() {
+        assertThatThrownBy(() -> jogoService.criar(new JogoRequest(" ", null, 10, "https://game.test", true, null)))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Informe o nome do jogo");
+
+        assertThatThrownBy(() -> jogoService.criar(new JogoRequest("Memória", null, 10, " ", true, null)))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Informe o link do jogo");
+    }
+
+    @Test
     void deletar_missingGame_throwsException() {
         when(jogoRepository.findById(99L)).thenReturn(Optional.empty());
 

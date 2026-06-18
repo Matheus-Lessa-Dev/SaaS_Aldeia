@@ -50,7 +50,7 @@ function Login() {
         role: data.role,
       };
 
-      login(user, data.token, data.refreshToken);
+      login(user, data.token);
 
       navigate("/dashboard");
     } catch (err: any) {

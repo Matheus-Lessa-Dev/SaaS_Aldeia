@@ -99,6 +99,32 @@ class ChamadaServiceTest {
     }
 
     @Test
+    void buscarFrequenciaAluno_returnsSummaryAndRecordsForLoggedStudent() {
+        Usuario alunoLogado = usuario(7L, TipoUsuario.ALUNO);
+        Turma turma = turma(10L, "5A");
+        Chamada chamada = chamada(30L, turma, StatusChamada.ATIVA);
+        PresencaAluno presente = presenca(1L, aluno(7L, "Ana", turma), registro(40L, chamada, LocalDate.of(2026, 6, 17)), StatusPresenca.PRESENTE);
+        PresencaAluno falta = presenca(2L, aluno(7L, "Ana", turma), registro(41L, chamada, LocalDate.of(2026, 6, 18)), StatusPresenca.FALTA);
+        when(presencaRepository.findFrequenciaByAlunoId(7L)).thenReturn(List.of(falta, presente));
+
+        var result = chamadaService.buscarFrequenciaAluno(alunoLogado);
+
+        assertThat(result.totalRegistros()).isEqualTo(2);
+        assertThat(result.presentes()).isEqualTo(1);
+        assertThat(result.faltas()).isEqualTo(1);
+        assertThat(result.justificadas()).isZero();
+        assertThat(result.percentualPresenca()).isEqualTo(50);
+        assertThat(result.registros()).extracting("status").containsExactly(StatusPresenca.FALTA, StatusPresenca.PRESENTE);
+    }
+
+    @Test
+    void buscarFrequenciaAluno_nonStudent_isDenied() {
+        assertThatThrownBy(() -> chamadaService.buscarFrequenciaAluno(usuario(1L, TipoUsuario.ADMIN)))
+                .isInstanceOf(AccessDeniedException.class)
+                .hasMessageContaining("Apenas alunos podem acessar");
+    }
+
+    @Test
     void buscarRegistro_withoutSavedRecord_returnsStudentsSortedAlphabeticallyAsPresent() {
         Turma turma = turma(10L, "5A");
         Chamada chamada = chamada(30L, turma, StatusChamada.ATIVA);
@@ -220,6 +246,23 @@ class ChamadaServiceTest {
         aluno.setNome(nome);
         aluno.setTurma(turma);
         return aluno;
+    }
+
+    private static RegistroChamada registro(Long id, Chamada chamada, LocalDate data) {
+        RegistroChamada registro = new RegistroChamada();
+        registro.setId(id);
+        registro.setChamada(chamada);
+        registro.setData(data);
+        return registro;
+    }
+
+    private static PresencaAluno presenca(Long id, Aluno aluno, RegistroChamada registro, StatusPresenca status) {
+        PresencaAluno presenca = new PresencaAluno();
+        presenca.setId(id);
+        presenca.setAluno(aluno);
+        presenca.setRegistro(registro);
+        presenca.setStatus(status);
+        return presenca;
     }
 
     private static Usuario usuario(Long id, TipoUsuario tipo) {

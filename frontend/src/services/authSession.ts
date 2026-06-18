@@ -1,4 +1,4 @@
-const AUTH_STORAGE_KEYS = ["user", "token", "refreshToken"];
+const AUTH_STORAGE_KEYS = ["user", "token"];
 export const AUTH_SESSION_EXPIRED_EVENT = "auth-session-expired";
 
 interface JwtPayload {

@@ -68,6 +68,7 @@ public class SecurityConfig {
                         .requestMatchers("/alunos/**").hasAnyRole("ADMIN", "PROFESSOR")
                         .requestMatchers("/professores/**").hasAnyRole("ADMIN", "PROFESSOR")
                         .requestMatchers("/turmas/**").hasAnyRole("ADMIN", "PROFESSOR")
+                        .requestMatchers("/chamadas/minha-frequencia").hasRole("ALUNO")
                         .requestMatchers("/chamadas/**").hasAnyRole("ADMIN", "PROFESSOR")
                         .requestMatchers("/jogos/minha-turma").hasRole("ALUNO")
                         .requestMatchers("/jogos/**").hasAnyRole("ADMIN", "PROFESSOR")

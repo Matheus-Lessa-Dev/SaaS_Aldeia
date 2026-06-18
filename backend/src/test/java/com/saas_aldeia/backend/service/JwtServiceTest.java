@@ -12,31 +12,18 @@ class JwtServiceTest {
 
     @Test
     void generateToken_createsValidAccessTokenForUser() {
-        JwtService jwtService = new JwtService(SECRET, 60_000, 120_000);
+        JwtService jwtService = new JwtService(SECRET, 60_000);
         Admin admin = admin("admin@test.com");
 
         String token = jwtService.generateToken(admin);
 
         assertThat(jwtService.extractUsername(token)).isEqualTo("admin@test.com");
         assertThat(jwtService.isValid(token, admin)).isTrue();
-        assertThat(jwtService.isValidRefreshToken(token, admin)).isFalse();
-    }
-
-    @Test
-    void generateRefreshToken_createsValidRefreshTokenForUser() {
-        JwtService jwtService = new JwtService(SECRET, 60_000, 120_000);
-        Admin admin = admin("admin@test.com");
-
-        String token = jwtService.generateRefreshToken(admin);
-
-        assertThat(jwtService.extractUsername(token)).isEqualTo("admin@test.com");
-        assertThat(jwtService.isValidRefreshToken(token, admin)).isTrue();
-        assertThat(jwtService.isValid(token, admin)).isFalse();
     }
 
     @Test
     void isValid_returnsFalseForDifferentUser() {
-        JwtService jwtService = new JwtService(SECRET, 60_000, 120_000);
+        JwtService jwtService = new JwtService(SECRET, 60_000);
         String token = jwtService.generateToken(admin("admin@test.com"));
 
         assertThat(jwtService.isValid(token, admin("outro@test.com"))).isFalse();

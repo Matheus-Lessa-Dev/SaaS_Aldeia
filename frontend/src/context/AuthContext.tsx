@@ -20,7 +20,7 @@ export interface User {
 
 export interface AuthContextType {
   user: User | null;
-  login: (user: User, token: string, refreshToken: string) => void;
+  login: (user: User, token: string) => void;
   logout: () => void;
   setRole: (role: Role) => void;
   isAuthenticated: boolean;
@@ -58,11 +58,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
   }, []);
 
-  const login = (u: User, token: string, refreshToken: string) => {
+  const login = (u: User, token: string) => {
     setUser(u);
     localStorage.setItem("user", JSON.stringify(u));
     localStorage.setItem("token", token);
-    localStorage.setItem("refreshToken", refreshToken);
   };
 
   const logout = () => {

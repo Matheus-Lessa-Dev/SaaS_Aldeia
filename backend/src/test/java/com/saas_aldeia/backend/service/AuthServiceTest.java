@@ -37,7 +37,6 @@ class AuthServiceTest {
     @Mock ProfessorRepository professorRepository;
     @Mock PasswordEncoder passwordEncoder;
     @Mock JwtService jwtService;
-    @Mock UserDetailsServiceImpl userDetailsService;
     @InjectMocks AuthService authService;
 
     private static final LocalDate DATA_NASCIMENTO_ALUNO    = LocalDate.of(2010, 3, 15);
@@ -49,7 +48,6 @@ class AuthServiceTest {
         when(passwordEncoder.encode("senha123")).thenReturn("hashed");
         when(adminRepository.save(any(Admin.class))).thenAnswer(invocation -> invocation.getArgument(0));
         when(jwtService.generateToken(any())).thenReturn("token");
-        when(jwtService.generateRefreshToken(any())).thenReturn("refreshToken");
 
         var response = authService.registerAdmin(new RegisterAdminRequest(
                 "admin@test.com",
@@ -58,7 +56,6 @@ class AuthServiceTest {
         ));
 
         assertThat(response.token()).isEqualTo("token");
-        assertThat(response.refreshToken()).isEqualTo("refreshToken");
         assertThat(response.role()).isEqualTo("ADMIN");
         assertThat(response.email()).isEqualTo("admin@test.com");
         assertThat(response.nome()).isEqualTo("Admin");
@@ -70,7 +67,6 @@ class AuthServiceTest {
         when(passwordEncoder.encode("15032010")).thenReturn("hashed");
         when(alunoRepository.save(any(Aluno.class))).thenAnswer(invocation -> invocation.getArgument(0));
         when(jwtService.generateToken(any())).thenReturn("token");
-        when(jwtService.generateRefreshToken(any())).thenReturn("refreshToken");
 
         var response = authService.registerAluno(new RegisterAlunoRequest(
                 "aluno@test.com",       // email
@@ -113,7 +109,6 @@ class AuthServiceTest {
         when(passwordEncoder.encode("20051990")).thenReturn("hashed");
         when(professorRepository.save(any(Professor.class))).thenAnswer(invocation -> invocation.getArgument(0));
         when(jwtService.generateToken(any())).thenReturn("token");
-        when(jwtService.generateRefreshToken(any())).thenReturn("refreshToken");
 
         var response = authService.registerProfessor(new RegisterProfessorRequest(
                 "prof@test.com",            // email
@@ -140,7 +135,6 @@ class AuthServiceTest {
         when(usuarioRepository.findByEmail("aluno@test.com")).thenReturn(Optional.of(aluno));
         when(passwordEncoder.matches("senha123", "hashed")).thenReturn(true);
         when(jwtService.generateToken(aluno)).thenReturn("token");
-        when(jwtService.generateRefreshToken(aluno)).thenReturn("refreshToken");
 
         var response = authService.login(new LoginRequest("aluno@test.com", "senha123"));
 
@@ -169,46 +163,4 @@ class AuthServiceTest {
                 .isInstanceOf(BadCredentialsException.class);
     }
 
-    @Test
-    void refresh_success() {
-        Aluno aluno = new Aluno();
-        aluno.setEmail("aluno@test.com");
-        aluno.setNome("João");
-        aluno.setTipo(TipoUsuario.ALUNO);
-        when(jwtService.extractUsername("refreshToken")).thenReturn("aluno@test.com");
-        when(userDetailsService.loadUserByUsername("aluno@test.com")).thenReturn(aluno);
-        when(jwtService.isValidRefreshToken("refreshToken", aluno)).thenReturn(true);
-        when(jwtService.generateToken(aluno)).thenReturn("newToken");
-        when(jwtService.generateRefreshToken(aluno)).thenReturn("newRefreshToken");
-
-        var response = authService.refresh("refreshToken");
-
-        assertThat(response.token()).isEqualTo("newToken");
-        assertThat(response.refreshToken()).isEqualTo("newRefreshToken");
-        assertThat(response.role()).isEqualTo("ALUNO");
-        assertThat(response.nome()).isEqualTo("João");
-    }
-
-    @Test
-    void refresh_invalidToken_throwsException() {
-        when(jwtService.extractUsername("invalid")).thenThrow(new IllegalArgumentException("invalid"));
-
-        assertThatThrownBy(() -> authService.refresh("invalid"))
-                .isInstanceOf(BadCredentialsException.class)
-                .hasMessageContaining("Refresh token inválido");
-    }
-
-    @Test
-    void refresh_expiredToken_throwsException() {
-        Aluno aluno = new Aluno();
-        aluno.setEmail("aluno@test.com");
-        aluno.setTipo(TipoUsuario.ALUNO);
-        when(jwtService.extractUsername("refreshToken")).thenReturn("aluno@test.com");
-        when(userDetailsService.loadUserByUsername("aluno@test.com")).thenReturn(aluno);
-        when(jwtService.isValidRefreshToken("refreshToken", aluno)).thenReturn(false);
-
-        assertThatThrownBy(() -> authService.refresh("refreshToken"))
-                .isInstanceOf(BadCredentialsException.class)
-                .hasMessageContaining("Refresh token inválido ou expirado");
-    }
 }

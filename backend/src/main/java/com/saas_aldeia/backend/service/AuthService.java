@@ -19,7 +19,6 @@ public class AuthService {
     private final ProfessorRepository professorRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
-    private final UserDetailsServiceImpl userDetailsService;
 
     private static final DateTimeFormatter SENHA_FORMATADA = DateTimeFormatter.ofPattern("ddMMuuuu");
 
@@ -91,27 +90,9 @@ public class AuthService {
         return toResponse(usuario);
     }
 
-    public AuthResponse refresh(String refreshToken) {
-        String email;
-        try {
-            email = jwtService.extractUsername(refreshToken);
-        } catch (Exception e) {
-            throw new BadCredentialsException("Refresh token inválido");
-        }
-
-        Usuario usuario = (Usuario) userDetailsService.loadUserByUsername(email);
-
-        if (!jwtService.isValidRefreshToken(refreshToken, usuario)) {
-            throw new BadCredentialsException("Refresh token inválido ou expirado");
-        }
-
-        return toResponse(usuario);
-    }
-
     private AuthResponse toResponse(Usuario usuario) {
-        String token        = jwtService.generateToken(usuario);
-        String refreshToken = jwtService.generateRefreshToken(usuario);
-        return new AuthResponse(token, refreshToken, usuario.getTipo().name(), usuario.getEmail(), resolverNome(usuario));
+        String token = jwtService.generateToken(usuario);
+        return new AuthResponse(token, usuario.getTipo().name(), usuario.getEmail(), resolverNome(usuario));
     }
 
     private String resolverNome(Usuario usuario) {

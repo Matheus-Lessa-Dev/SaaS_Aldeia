@@ -3,7 +3,6 @@ import { Role } from '../context/AuthContext';
 
 interface LoginResponse {
   token: string;
-  refreshToken: string;
   role: string;
   email: string;
   nome: string;
@@ -23,7 +22,6 @@ export async function loginRequest(email: string, senha: string) {
 
   return {
     token: data.token,
-    refreshToken: data.refreshToken,
     email: data.email,
     nome: data.nome,
     role: mapRole(data.role),

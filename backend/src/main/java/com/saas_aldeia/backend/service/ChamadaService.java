@@ -35,6 +35,32 @@ public class ChamadaService {
     }
 
     @Transactional(readOnly = true)
+    public FrequenciaAlunoResponse buscarFrequenciaAluno(Usuario usuarioLogado) {
+        if (usuarioLogado.getTipo() != TipoUsuario.ALUNO) {
+            throw new AccessDeniedException("Apenas alunos podem acessar a propria frequencia");
+        }
+
+        List<PresencaAluno> presencas = presencaRepository.findFrequenciaByAlunoId(usuarioLogado.getId());
+        long presentes = presencas.stream().filter(p -> p.getStatus() == StatusPresenca.PRESENTE).count();
+        long faltas = presencas.stream().filter(p -> p.getStatus() == StatusPresenca.FALTA).count();
+        long justificadas = presencas.stream().filter(p -> p.getStatus() == StatusPresenca.JUSTIFICADA).count();
+        long total = presencas.size();
+        int percentual = total == 0 ? 0 : Math.round((presentes * 100f) / total);
+
+        List<FrequenciaAlunoItemResponse> registros = presencas.stream()
+                .map(p -> new FrequenciaAlunoItemResponse(
+                        p.getRegistro().getChamada().getId(),
+                        p.getRegistro().getChamada().getNome(),
+                        p.getRegistro().getData(),
+                        p.getStatus(),
+                        p.getObservacao()
+                ))
+                .toList();
+
+        return new FrequenciaAlunoResponse(total, presentes, faltas, justificadas, percentual, registros);
+    }
+
+    @Transactional(readOnly = true)
     public ChamadaResponse buscarPorId(Long id, Usuario usuarioLogado) {
         Chamada chamada = buscarChamada(id);
         validarAcesso(chamada, usuarioLogado);

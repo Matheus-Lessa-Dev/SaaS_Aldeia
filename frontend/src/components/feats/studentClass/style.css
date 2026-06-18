@@ -65,6 +65,9 @@
 }
 
 .gamesAside {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
   flex: 1 0 30%;
 }
 
@@ -148,12 +151,210 @@
   margin-bottom: 1rem;
 }
 
+.studentClassHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-4);
+  padding: var(--spacing-4) clamp(1.2rem, 2vw, var(--spacing-8)) 0;
+}
+
 .title {
   font-size: clamp(2.4rem, 4vw, 3.5rem);
   color: var(--primary);
   margin: 0 0 1rem;
-  padding: var(--spacing-4) clamp(1.2rem, 2vw, var(--spacing-8)) 0;
   font-weight: 700;
+}
+
+.frequencyToggleButton {
+  flex: 0 0 auto;
+  border: none;
+  border-radius: 999px;
+  padding: 0.8rem 1.1rem;
+  background: #2d7d4c;
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(108, 71, 31, 0.06);
+}
+
+.frequencyToggleButton:hover {
+  filter: brightness(0.95);
+}
+
+.frequencyPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 0 clamp(1.2rem, 2vw, var(--spacing-8)) var(--spacing-4);
+  padding: var(--spacing-4);
+  border-radius: var(--border-radius);
+  background: var(--surface-container);
+}
+
+.frequencySummary {
+  display: grid;
+  grid-template-columns: minmax(14rem, 0.8fr) 2fr;
+  gap: 1rem;
+  align-items: stretch;
+}
+
+.frequencyPercent {
+  display: flex;
+  min-height: 11rem;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0.75rem;
+  border: 1px solid var(--outline-variant);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--on-surface);
+  box-shadow: 0 4px 12px rgba(108, 71, 31, 0.06);
+  padding: var(--spacing-4);
+}
+
+.frequencyPercent > span {
+  color: var(--primary);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.frequencyPercent strong {
+  color: var(--on-surface);
+  font-size: clamp(2.6rem, 4vw, 4rem);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.frequencyPercent small {
+  color: var(--on-surface-muted);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.frequencyCounters {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.frequencyCounters div {
+  display: flex;
+  min-height: 8rem;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 0.75rem;
+  border: 1px solid var(--outline-variant);
+  border-radius: 12px;
+  background: var(--surface);
+  box-shadow: 0 4px 12px rgba(108, 71, 31, 0.06);
+  padding: var(--spacing-4);
+}
+
+.frequencyCounters strong {
+  order: 2;
+  color: var(--on-surface);
+  font-size: clamp(2rem, 3vw, 3rem);
+  line-height: 1;
+}
+
+.frequencyCounters span {
+  order: 1;
+  color: var(--primary);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.frequencyListSection .classesListContainer {
+  margin: 0;
+  padding: 0;
+}
+
+.frequencyListSection .classesListHeader {
+  margin-top: 0.25rem;
+}
+
+.frequencyListSection .classesListTitle {
+  font-size: clamp(1.2rem, 2vw, 1.6rem);
+}
+
+.frequencyListSection .classesList {
+  background: var(--surface);
+  border: 1px solid var(--outline-variant);
+}
+
+.frequencyListSection .classesListControls {
+  padding-right: 0.25rem;
+}
+
+.frequencyRecord {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-left: 1em;
+  margin-right: 1em;
+  border: 1px solid var(--outline-variant);
+  border-radius: 12px;
+  background: var(--surface-bright);
+  padding: 0.9rem 1rem;
+}
+
+.classesList .frequencyRecord:first-child {
+  margin-top: var(--spacing-4);
+}
+
+.classesList .frequencyRecord:last-child {
+  margin-bottom: var(--spacing-4);
+}
+
+.frequencyRecordContent {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.frequencyRecord strong {
+  overflow: hidden;
+  color: var(--on-surface);
+  font-size: 0.95rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.frequencyRecord span {
+  color: var(--on-surface-muted);
+  font-size: 0.85rem;
+}
+
+.frequencyStatus {
+  flex: 0 0 auto;
+  border-radius: 999px;
+  padding: 0.35rem 0.7rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.frequencyStatus--presente {
+  background: rgba(45, 125, 76, 0.14);
+  color: #2d7d4c;
+}
+
+.frequencyStatus--falta {
+  background: rgba(125, 43, 43, 0.14);
+  color: var(--primary);
+}
+
+.frequencyStatus--justificada {
+  background: rgba(133, 100, 4, 0.14);
+  color: #856404;
 }
 
 @media (max-width: 900px) {
@@ -163,5 +364,29 @@
 
   .gamesAside {
     flex-basis: auto;
+  }
+
+  .studentClassHeader {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .frequencyCounters {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .frequencySummary {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .frequencyCounters {
+    grid-template-columns: 1fr;
+  }
+
+  .frequencyRecord {
+    align-items: flex-start;
+    flex-direction: column;
   }
 }

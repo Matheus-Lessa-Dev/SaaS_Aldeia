@@ -3,14 +3,17 @@ package com.saas_aldeia.backend.controller;
 import com.saas_aldeia.backend.dto.ChamadaRequest;
 import com.saas_aldeia.backend.dto.ChamadaResponse;
 import com.saas_aldeia.backend.dto.ChamadaStatusRequest;
+import com.saas_aldeia.backend.dto.FrequenciaAlunoResponse;
 import com.saas_aldeia.backend.dto.RegistroChamadaRequest;
 import com.saas_aldeia.backend.dto.RegistroChamadaResponse;
+import com.saas_aldeia.backend.model.TipoUsuario;
 import com.saas_aldeia.backend.model.Usuario;
 import com.saas_aldeia.backend.service.ChamadaService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +30,16 @@ public class ChamadaController {
     @GetMapping
     public ResponseEntity<List<ChamadaResponse>> listar(@AuthenticationPrincipal Usuario usuarioLogado) {
         return ResponseEntity.ok(chamadaService.listar(usuarioLogado));
+    }
+
+    @GetMapping("/minha-frequencia")
+    public ResponseEntity<FrequenciaAlunoResponse> buscarMinhaFrequencia(
+            @AuthenticationPrincipal Usuario usuarioLogado) {
+        if (usuarioLogado == null || usuarioLogado.getTipo() != TipoUsuario.ALUNO) {
+            throw new AccessDeniedException("Apenas alunos podem acessar a propria frequencia");
+        }
+
+        return ResponseEntity.ok(chamadaService.buscarFrequenciaAluno(usuarioLogado));
     }
 
     @GetMapping("/{id}")

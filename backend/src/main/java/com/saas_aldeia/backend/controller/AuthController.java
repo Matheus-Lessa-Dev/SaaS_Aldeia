@@ -2,7 +2,6 @@ package com.saas_aldeia.backend.controller;
 
 import com.saas_aldeia.backend.dto.AuthResponse;
 import com.saas_aldeia.backend.dto.LoginRequest;
-import com.saas_aldeia.backend.dto.RefreshTokenRequest;
 import com.saas_aldeia.backend.dto.RegisterAdminRequest;
 import com.saas_aldeia.backend.dto.RegisterAlunoRequest;
 import com.saas_aldeia.backend.dto.RegisterProfessorRequest;
@@ -75,14 +74,4 @@ public class AuthController {
         return ResponseEntity.ok(authService.login(request));
     }
 
-    @PostMapping("/refresh")
-    @Operation(summary = "Atualizar token", description = "Atualiza o token de acesso")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Token atualizado com sucesso"),
-            @ApiResponse(responseCode = "401", description = "Não autorizado"),
-            @ApiResponse(responseCode = "403", description = "Acesso proibido")
-    })
-    public ResponseEntity<AuthResponse> refresh(@Valid @RequestBody RefreshTokenRequest request) {
-        return ResponseEntity.ok(authService.refresh(request.refreshToken()));
-    }
 }

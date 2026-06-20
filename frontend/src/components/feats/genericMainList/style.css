@@ -51,6 +51,7 @@
   background-color: white;
   border-radius: 12px;
   text-decoration: none;
+  box-shadow: 0 8px 18px rgba(108, 71, 31, 0.08);
 }
 
 .classesList .classCard:first-child {

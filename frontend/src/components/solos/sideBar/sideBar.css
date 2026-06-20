@@ -1,98 +1,99 @@
 :root {
-    --sidebar-width: 280px;
+  --sidebar-width: 280px;
 }
 
 .sideBar {
-    position: fixed;
-    inset: 0 auto 0 0;
-    z-index: 20;
-    width: var(--sidebar-width);
-    height: 100svh;
-    background-color: #F5F2EE;
-    display: flex;
-    flex-direction: column;
-    padding: 32px 0;
-    flex-shrink: 0;
-    overflow-y: auto;
+  position: fixed;
+  inset: 0 auto 0 0;
+  z-index: 20;
+  width: var(--sidebar-width);
+  height: 100svh;
+  background-color: #f5f2ee;
+  display: flex;
+  flex-direction: column;
+  padding: 32px 0;
+  flex-shrink: 0;
+  overflow-y: auto;
+  box-shadow: 0 8px 18px rgba(108, 71, 31, 0.08);
 }
 
 .sideBar + * {
-    margin-left: var(--sidebar-width);
-    width: calc(100% - var(--sidebar-width));
+  margin-left: var(--sidebar-width);
+  width: calc(100% - var(--sidebar-width));
 }
 
 .sideBarTitle {
-    padding: 0 24px 32px;
-    border-bottom: 1px solid #E8E4DF;
-    margin-bottom: 16px;
+  padding: 0 24px 32px;
+  border-bottom: 1px solid #e8e4df;
+  margin-bottom: 16px;
 }
 
 .sideBarTitle h1 {
-    font-size: 18px;
-    font-weight: 600;
-    color: #7D2B2B;
-    margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #7d2b2b;
+  margin: 0;
 }
 
 .sideBarTitle h6 {
-    font-size: 11px;
-    letter-spacing: 1px;
-    color: #999;
-    margin: 6px 0 0;
-    text-transform: uppercase;
-    font-weight: 400;
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: #999;
+  margin: 6px 0 0;
+  text-transform: uppercase;
+  font-weight: 400;
 }
 
 .sideBarNavlinks {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
 }
 
 .sideBarNavlink {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 12px;
-    width: 100%;
-    padding: 14px;
-    border: none;
-    border-radius: 0;
-    background: transparent;
-    color: #444;
-    font-size: 15px;
-    cursor: pointer;
-    text-align: left;
-    text-decoration: none;
-    transition: background 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  color: #444;
+  font-size: 15px;
+  cursor: pointer;
+  text-align: left;
+  text-decoration: none;
+  transition: background 0.15s;
 }
 
 .sideBarNavlinkIcon {
-    flex-shrink: 0;
+  flex-shrink: 0;
 }
 
 .sideBarNavlink:focus-visible {
-    outline: 2px solid #7D2B2B;
-    outline-offset: 1px;
+  outline: 2px solid #7d2b2b;
+  outline-offset: 1px;
 }
 
 .sideBarNavlink:hover {
-    background-color: #EDE8E2;
-    color: #7D2B2B;
+  background-color: #ede8e2;
+  color: #7d2b2b;
 }
 
 .sideBarNavlink.active {
-    background-color: #EDE8E2;
-    color: #7D2B2B;
-    border-right: 4px solid #7D2B2B;
-    padding-left: 12px;
-    padding-right: 16px;
+  background-color: #ede8e2;
+  color: #7d2b2b;
+  border-right: 4px solid #7d2b2b;
+  padding-left: 12px;
+  padding-right: 16px;
 }
 
 .sideBarFooter {
   padding: 16px 24px;
-  border-top: 1px solid #E8E4DF;
+  border-top: 1px solid #e8e4df;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -127,10 +128,10 @@
   gap: 10px;
   width: 100%;
   padding: 10px 12px;
-  border: 1px solid #E8E4DF;
+  border: 1px solid #e8e4df;
   border-radius: 8px;
   background: transparent;
-  color: #7D2B2B;
+  color: #7d2b2b;
   font-size: 14px;
   cursor: pointer;
   text-decoration: none;
@@ -140,5 +141,5 @@
 .sideBarFooterButton:hover,
 .sideBarFooterButton.active,
 .sideBarLogout:hover {
-  background-color: #EDE8E2;
+  background-color: #ede8e2;
 }

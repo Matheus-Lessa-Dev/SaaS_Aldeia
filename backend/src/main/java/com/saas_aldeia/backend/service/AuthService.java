@@ -54,7 +54,6 @@ public class AuthService {
         aluno.setNomeResponsavel(request.nomeResponsavel());
         aluno.setTelefoneResponsavel(request.telefoneResponsavel());
         aluno.setEmailResponsavel(request.emailResponsavel());
-        aluno.setPrimeiroAcesso(true);
         alunoRepository.save(aluno);
         return toResponse(aluno);
     }
@@ -75,7 +74,6 @@ public class AuthService {
         professor.setRua(request.rua());
         professor.setComplemento(request.complemento());
         professor.setTelefone(request.telefone());
-        professor.setPrimeiroAcesso(true);
         professorRepository.save(professor);
         return toResponse(professor);
     }

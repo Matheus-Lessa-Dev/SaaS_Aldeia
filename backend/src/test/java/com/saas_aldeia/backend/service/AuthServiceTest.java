@@ -65,7 +65,11 @@ class AuthServiceTest {
     void registerAluno_success() {
         when(usuarioRepository.existsByEmail("aluno@test.com")).thenReturn(false);
         when(passwordEncoder.encode("15032010")).thenReturn("hashed");
-        when(alunoRepository.save(any(Aluno.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        when(alunoRepository.save(any(Aluno.class))).thenAnswer(invocation -> {
+            Aluno aluno = invocation.getArgument(0);
+            assertThat(aluno.isPrimeiroAcesso()).isFalse();
+            return aluno;
+        });
         when(jwtService.generateToken(any())).thenReturn("token");
 
         var response = authService.registerAluno(new RegisterAlunoRequest(
@@ -107,7 +111,11 @@ class AuthServiceTest {
     void registerProfessor_success() {
         when(usuarioRepository.existsByEmail("prof@test.com")).thenReturn(false);
         when(passwordEncoder.encode("20051990")).thenReturn("hashed");
-        when(professorRepository.save(any(Professor.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        when(professorRepository.save(any(Professor.class))).thenAnswer(invocation -> {
+            Professor professor = invocation.getArgument(0);
+            assertThat(professor.isPrimeiroAcesso()).isFalse();
+            return professor;
+        });
         when(jwtService.generateToken(any())).thenReturn("token");
 
         var response = authService.registerProfessor(new RegisterProfessorRequest(

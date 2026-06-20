@@ -62,7 +62,36 @@ function Invoke-SeedJson {
         $params.Body = $Body | ConvertTo-Json -Depth 8
     }
 
-    return Invoke-RestMethod @params
+    $response = Invoke-RestMethod @params
+
+    if ($response -is [array]) {
+        $response | ForEach-Object { $_ }
+        return
+    }
+
+    return $response
+}
+
+function Expand-SeedItems {
+    param(
+        [object]$Items
+    )
+
+    if ($null -eq $Items) {
+        return @()
+    }
+
+    return @(
+        foreach ($item in $Items) {
+            if ($item -is [array]) {
+                foreach ($nestedItem in $item) {
+                    $nestedItem
+                }
+            } else {
+                $item
+            }
+        }
+    )
 }
 
 function Get-ByEmail {
@@ -71,7 +100,7 @@ function Get-ByEmail {
         [string]$Email
     )
 
-    return $Items | Where-Object { $_.email -eq $Email } | Select-Object -First 1
+    return Expand-SeedItems -Items $Items | Where-Object { $_.email -eq $Email } | Select-Object -First 1
 }
 
 function Get-ByName {
@@ -80,7 +109,7 @@ function Get-ByName {
         [string]$Name
     )
 
-    return $Items | Where-Object { $_.nome -eq $Name } | Select-Object -First 1
+    return Expand-SeedItems -Items $Items | Where-Object { $_.nome -eq $Name } | Select-Object -First 1
 }
 
 Write-Host "Populando banco de desenvolvimento em $ApiBaseUrl"

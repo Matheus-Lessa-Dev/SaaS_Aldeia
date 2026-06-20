@@ -32,7 +32,7 @@ public class Usuario implements UserDetails {
     private TipoUsuario tipo;
 
     @Column(nullable = false)
-    private boolean primeiroAcesso = true;
+    private boolean primeiroAcesso = false;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

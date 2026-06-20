@@ -54,8 +54,8 @@ public class ContaService {
                 jwtService.generateToken(usuarioAtualizado),
                 usuarioAtualizado.getTipo().name(),
                 usuarioAtualizado.getEmail(),
-                resolverNome(usuarioAtualizado)
-        );
+                resolverNome(usuarioAtualizado),
+                usuarioAtualizado.getId());
     }
 
     private ContaResponse toResponse(Usuario usuario) {
@@ -63,8 +63,7 @@ public class ContaService {
                 usuario.getId(),
                 resolverNome(usuario),
                 usuario.getEmail(),
-                usuario.getTipo().name()
-        );
+                usuario.getTipo().name());
     }
 
     private void setNome(Usuario usuario, String nome) {

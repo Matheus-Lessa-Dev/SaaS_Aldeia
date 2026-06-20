@@ -20,13 +20,14 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class AuthControllerTest {
 
-    @Mock AuthService authService;
+    @Mock
+    AuthService authService;
 
     @Test
     void registerAdmin_returnsCreated() {
         AuthController controller = new AuthController(authService);
         var request = new RegisterAdminRequest("admin@test.com", "senha123", "Admin");
-        var authResponse = new AuthResponse("token", "ADMIN", "admin@test.com", "Admin");
+        var authResponse = new AuthResponse("token", "ADMIN", "admin@test.com", "Admin", 1L);
         when(authService.registerAdmin(request)).thenReturn(authResponse);
 
         var response = controller.registerAdmin(request);
@@ -39,9 +40,8 @@ class AuthControllerTest {
     void registerAluno_returnsCreated() {
         AuthController controller = new AuthController(authService);
         var request = new RegisterAlunoRequest(
-                "aluno@test.com", "João", LocalDate.of(2010, 3, 15), "Rua", "Casa", "Resp", "44", "resp@test.com"
-        );
-        var authResponse = new AuthResponse("token", "ALUNO", "aluno@test.com", "João");
+                "aluno@test.com", "João", LocalDate.of(2010, 3, 15), "Rua", "Casa", "Resp", "44", "resp@test.com");
+        var authResponse = new AuthResponse("token", "ALUNO", "aluno@test.com", "João", 1L);
         when(authService.registerAluno(request)).thenReturn(authResponse);
 
         var response = controller.registerAluno(request);
@@ -54,9 +54,8 @@ class AuthControllerTest {
     void registerProfessor_returnsCreated() {
         AuthController controller = new AuthController(authService);
         var request = new RegisterProfessorRequest(
-                "prof@test.com", "Maria", LocalDate.of(1990, 5, 20), "Rua", "Apto", "44"
-        );
-        var authResponse = new AuthResponse("token", "PROFESSOR", "prof@test.com", "Maria");
+                "prof@test.com", "Maria", LocalDate.of(1990, 5, 20), "Rua", "Apto", "44");
+        var authResponse = new AuthResponse("token", "PROFESSOR", "prof@test.com", "Maria", 1L);
         when(authService.registerProfessor(request)).thenReturn(authResponse);
 
         var response = controller.registerProfessor(request);
@@ -69,7 +68,7 @@ class AuthControllerTest {
     void login_returnsOk() {
         AuthController controller = new AuthController(authService);
         var request = new LoginRequest("admin@test.com", "senha123");
-        var authResponse = new AuthResponse("token", "ADMIN", "admin@test.com", "Admin");
+        var authResponse = new AuthResponse("token", "ADMIN", "admin@test.com", "Admin", 1L);
         when(authService.login(request)).thenReturn(authResponse);
 
         var response = controller.login(request);

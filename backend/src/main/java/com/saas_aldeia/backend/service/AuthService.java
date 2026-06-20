@@ -45,7 +45,7 @@ public class AuthService {
 
         Aluno aluno = new Aluno();
         aluno.setEmail(request.email());
-        aluno.setSenha(passwordEncoder.encode(senhaGerada)); 
+        aluno.setSenha(passwordEncoder.encode(senhaGerada));
         aluno.setTipo(TipoUsuario.ALUNO);
         aluno.setNome(request.nome());
         aluno.setDataNascimento(request.dataNascimento());
@@ -67,7 +67,7 @@ public class AuthService {
 
         Professor professor = new Professor();
         professor.setEmail(request.email());
-        professor.setSenha(passwordEncoder.encode(senhaGerada)); 
+        professor.setSenha(passwordEncoder.encode(senhaGerada));
         professor.setTipo(TipoUsuario.PROFESSOR);
         professor.setNome(request.nome());
         professor.setDataNascimento(request.dataNascimento());
@@ -90,7 +90,8 @@ public class AuthService {
 
     private AuthResponse toResponse(Usuario usuario) {
         String token = jwtService.generateToken(usuario);
-        return new AuthResponse(token, usuario.getTipo().name(), usuario.getEmail(), resolverNome(usuario));
+        return new AuthResponse(token, usuario.getTipo().name(), usuario.getEmail(), resolverNome(usuario),
+                usuario.getId());
     }
 
     private String resolverNome(Usuario usuario) {

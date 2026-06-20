@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, CalendarRange, Layers3 } from "lucide-react";
 import DefaultSidebar from "../../solos/sideBar/DefaultSidebar";
-import FeedbackMessage from "../../shared/FeedbackMessage";
 import Header from "../../shared/Header";
 import { FormActions } from "../../shared/formActions";
 import { FormField } from "../../shared/formField";
@@ -10,6 +9,7 @@ import { FormSection } from "../../shared/formSection";
 import api from "../../../services/api";
 import { Role } from "../../../context/AuthContext";
 import { useAuth } from "../../../hooks/useAuth";
+import { useToast } from "../../../context/ToastContext";
 import "../../shared/ManagementPageShell/style.css";
 import "./style.css";
 
@@ -24,11 +24,16 @@ type ChamadaResponse = {
   id: number;
 };
 
+const periodOptionsByType: Record<TipoPeriodo, number[]> = {
+  BIMESTRE: [1, 2],
+  TRIMESTRE: [1, 2, 3],
+};
+
 export default function AttendanceCreate() {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { showToast } = useToast();
   const [turmas, setTurmas] = useState<TurmaResponse[]>([]);
-  const [feedback, setFeedback] = useState("");
   const [saving, setSaving] = useState(false);
   const [errors, setErrors] = useState<Partial<Record<"nome" | "turmaId", string>>>({});
   const [form, setForm] = useState({
@@ -50,17 +55,31 @@ export default function AttendanceCreate() {
         const { data } = await api.get<TurmaResponse[]>(turmasUrl);
         setTurmas(data);
       } catch {
-        setFeedback("Erro ao carregar turmas.");
+        showToast({
+          type: "error",
+          title: "Nao foi possivel concluir",
+          message: "Erro ao carregar turmas.",
+        });
       }
     }
 
     loadTurmas();
-  }, [user?.role]);
+  }, [showToast, user?.role]);
 
   function handleFieldChange(field: keyof typeof form, value: string | number) {
     setForm((current) => ({ ...current, [field]: value }));
     setErrors((current) => ({ ...current, [field]: undefined }));
-    setFeedback("");
+  }
+
+  function handlePeriodTypeChange(tipoPeriodo: TipoPeriodo) {
+    const availablePeriods = periodOptionsByType[tipoPeriodo];
+    setForm((current) => ({
+      ...current,
+      tipoPeriodo,
+      numeroPeriodo: availablePeriods.includes(current.numeroPeriodo)
+        ? current.numeroPeriodo
+        : availablePeriods[0],
+    }));
   }
 
   function validate() {
@@ -74,7 +93,11 @@ export default function AttendanceCreate() {
   async function handleCreate() {
     if (!validate()) return;
     if (!form.turmaId) {
-      setFeedback("Selecione uma turma para criar a chamada.");
+      showToast({
+        type: "warning",
+        title: "Dados incompletos",
+        message: "Selecione uma turma para criar a chamada.",
+      });
       return;
     }
 
@@ -97,7 +120,11 @@ export default function AttendanceCreate() {
         },
       });
     } catch {
-      setFeedback("Erro ao criar chamada.");
+      showToast({
+        type: "error",
+        title: "Nao foi possivel concluir",
+        message: "Erro ao criar chamada.",
+      });
     } finally {
       setSaving(false);
     }
@@ -116,14 +143,6 @@ export default function AttendanceCreate() {
 
           <section className="attendance-create-page__card" aria-label="Formulario de cadastro de chamada">
             <h2 className="attendance-create-page__title">Nova chamada</h2>
-            {feedback && (
-              <FeedbackMessage
-                type="error"
-                title="Nao foi possivel concluir"
-                message={feedback}
-                onDismiss={() => setFeedback("")}
-              />
-            )}
 
             <FormSection title="Dados da chamada" icon={<CalendarRange size={16} aria-hidden="true" />}>
               <FormField
@@ -144,9 +163,7 @@ export default function AttendanceCreate() {
                   <select
                     id="attendance-period-type"
                     value={form.tipoPeriodo}
-                    onChange={(event) =>
-                      handleFieldChange("tipoPeriodo", event.target.value as TipoPeriodo)
-                    }
+                    onChange={(event) => handlePeriodTypeChange(event.target.value as TipoPeriodo)}
                   >
                     <option value="BIMESTRE">Bimestre</option>
                     <option value="TRIMESTRE">Trimestre</option>
@@ -154,14 +171,24 @@ export default function AttendanceCreate() {
                 </div>
               </div>
 
-              <FormField
-                id="attendance-period-number"
-                label="Número do período"
-                type="number"
-                value={String(form.numeroPeriodo)}
-                onChange={(event) => handleFieldChange("numeroPeriodo", Number(event.target.value))}
-                required
-              />
+              <div className="form-field">
+                <label htmlFor="attendance-period-number" className="form-field__label">
+                  Número do período <span className="form-field__required">*</span>
+                </label>
+                <div className="form-field__input-wrapper attendance-create-page__select-wrapper">
+                  <select
+                    id="attendance-period-number"
+                    value={form.numeroPeriodo}
+                    onChange={(event) => handleFieldChange("numeroPeriodo", Number(event.target.value))}
+                  >
+                    {periodOptionsByType[form.tipoPeriodo].map((periodNumber) => (
+                      <option key={periodNumber} value={periodNumber}>
+                        {periodNumber}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
             </FormSection>
 
             <FormSection title="Turma vinculada" icon={<Layers3 size={16} aria-hidden="true" />}>

@@ -3,8 +3,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { ArrowLeft, Check, Minus, Save } from "lucide-react";
 import { useRouteFeedback } from "../../../hooks/useRouteFeedback";
 import DefaultSidebar from "../../solos/sideBar/DefaultSidebar";
-import FeedbackMessage from "../../shared/FeedbackMessage";
 import Header from "../../shared/Header";
+import { useToast } from "../../../context/ToastContext";
 import api from "../../../services/api";
 import "./style.css";
 
@@ -52,7 +52,8 @@ export default function AttendanceEdit() {
   const [loadingRegistro, setLoadingRegistro] = useState(false);
   const [saving, setSaving] = useState(false);
   const [updatingStatus, setUpdatingStatus] = useState(false);
-  const { feedback, setFeedback } = useRouteFeedback();
+  const { showToast } = useToast();
+  useRouteFeedback();
 
   useEffect(() => {
     document.body.classList.add("attendancePage");
@@ -67,7 +68,7 @@ export default function AttendanceEdit() {
         const chamadaRes = await api.get<ChamadaResponse>(`/chamadas/${chamadaId}`);
         setChamada(chamadaRes.data);
       } catch {
-        setFeedback({
+        showToast({
           type: "error",
           title: "Nao foi possivel concluir",
           message: "Erro ao carregar dados da chamada.",
@@ -78,7 +79,7 @@ export default function AttendanceEdit() {
     }
 
     loadChamada();
-  }, [chamadaId]);
+  }, [chamadaId, showToast]);
 
   useEffect(() => {
     async function loadRegistro() {
@@ -91,7 +92,7 @@ export default function AttendanceEdit() {
         );
         setRegistro(data);
       } catch {
-        setFeedback({
+        showToast({
           type: "error",
           title: "Nao foi possivel concluir",
           message: "Erro ao carregar chamada do dia selecionado.",
@@ -102,7 +103,7 @@ export default function AttendanceEdit() {
     }
 
     loadRegistro();
-  }, [chamadaId, selectedDate]);
+  }, [chamadaId, selectedDate, showToast]);
 
   const attendanceRate = useMemo(() => {
     if (!chamada) return 0;
@@ -159,13 +160,13 @@ export default function AttendanceEdit() {
       const { data: chamadaAtualizada } = await api.get<ChamadaResponse>(`/chamadas/${chamadaId}`);
       setRegistro(data);
       setChamada(chamadaAtualizada);
-      setFeedback({
+      showToast({
         type: "success",
         title: "Chamada salva",
         message: "Frequencia salva com sucesso.",
       });
     } catch {
-      setFeedback({
+      showToast({
         type: "error",
         title: "Nao foi possivel concluir",
         message: "Erro ao salvar frequência.",
@@ -185,13 +186,13 @@ export default function AttendanceEdit() {
         status: nextStatus,
       });
       setChamada(data);
-      setFeedback({
+      showToast({
         type: "success",
         title: "Status atualizado",
         message: nextStatus === "ATIVA" ? "Chamada ativada com sucesso." : "Chamada encerrada com sucesso.",
       });
     } catch {
-      setFeedback({
+      showToast({
         type: "error",
         title: "Nao foi possivel concluir",
         message: "Erro ao atualizar status da chamada.",
@@ -213,12 +214,6 @@ export default function AttendanceEdit() {
           </button>
 
           {loading && <p className="attendanceMessage">Carregando chamada...</p>}
-          {feedback && (
-            <FeedbackMessage
-              {...feedback}
-              onDismiss={() => setFeedback(null)}
-            />
-          )}
 
           {chamada && (
             <>
@@ -283,10 +278,7 @@ export default function AttendanceEdit() {
                       type="date"
                       value={selectedDate}
                       max={today}
-                      onChange={(event) => {
-                        setFeedback(null);
-                        setSelectedDate(event.target.value);
-                      }}
+                      onChange={(event) => setSelectedDate(event.target.value)}
                     />
                   </label>
                 </div>

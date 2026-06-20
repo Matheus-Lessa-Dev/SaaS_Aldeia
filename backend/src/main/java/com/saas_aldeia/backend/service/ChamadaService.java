@@ -99,6 +99,23 @@ public class ChamadaService {
         return toResponse(chamadaRepository.save(chamada));
     }
 
+    @Transactional
+    public void deletar(Long id, Usuario usuarioLogado) {
+        Chamada chamada = buscarChamada(id);
+        validarAcesso(chamada, usuarioLogado);
+
+        if (chamada.getStatus() == StatusChamada.ATIVA) {
+            throw new IllegalArgumentException("Apenas chamadas encerradas podem ser excluidas");
+        }
+
+        List<RegistroChamada> registros = registroRepository.findByChamadaId(id);
+        for (RegistroChamada registro : registros) {
+            presencaRepository.deleteAll(presencaRepository.findByRegistroId(registro.getId()));
+        }
+        registroRepository.deleteAll(registros);
+        chamadaRepository.delete(chamada);
+    }
+
     @Transactional(readOnly = true)
     public RegistroChamadaResponse buscarRegistro(Long chamadaId, LocalDate data, Usuario usuarioLogado) {
         Chamada chamada = buscarChamada(chamadaId);

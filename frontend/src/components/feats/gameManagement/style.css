@@ -41,6 +41,13 @@
   font-weight: 600;
 }
 
+.gameCardActions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-shrink: 0;
+}
+
 .gameCardStatus {
   display: inline-flex;
   width: fit-content;
@@ -109,6 +116,10 @@
 @media (max-width: 700px) {
   .gameCard {
     align-items: center;
+  }
+
+  .gameCardActions {
+    align-self: flex-end;
   }
 
   .gameCardTitle {

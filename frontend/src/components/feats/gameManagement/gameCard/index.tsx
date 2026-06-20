@@ -41,20 +41,6 @@ export default function GameCard(props: {
   return (
     <>
       <a href={props.href} className={`classCard gameCard${props.enabled ? "" : " gameCard--disabled"}`}>
-        <label
-          className="gameCardSwitch"
-          aria-label={props.enabled ? "Desabilitar jogo" : "Habilitar jogo"}
-          onClick={(event) => event.stopPropagation()}
-        >
-          <input
-            type="checkbox"
-            checked={props.enabled === true}
-            onChange={handleToggleChange}
-          />
-          <span className="gameCardSwitchTrack">
-            <span className="gameCardSwitchThumb" />
-          </span>
-        </label>
         <div className="cardContent">
           <span className={`gameCardStatus${props.enabled ? "" : " gameCardStatus--disabled"}`}>
             {props.enabled ? "Habilitado" : "Desabilitado"}
@@ -67,28 +53,45 @@ export default function GameCard(props: {
             </p>
           )}
         </div>
-        {props.onEdit && (
-          <button
-            type="button"
-            className="cardEditButton"
-            onClick={handleEditClick}
-            title="Editar jogo"
-            aria-label="Editar jogo"
+        <div className="gameCardActions">
+          <label
+            className="gameCardSwitch"
+            aria-label={props.enabled ? "Desabilitar jogo" : "Habilitar jogo"}
+            title={props.enabled ? "Desabilitar jogo" : "Habilitar jogo"}
+            onClick={(event) => event.stopPropagation()}
           >
-            <Edit size={18} />
-          </button>
-        )}
-        {props.onDelete && (
-          <button
-            type="button"
-            className="cardDeleteButton"
-            onClick={handleDeleteClick}
-            title="Deletar jogo"
-            aria-label="Deletar jogo"
-          >
-            <Trash size={18} />
-          </button>
-        )}
+            <input
+              type="checkbox"
+              checked={props.enabled === true}
+              onChange={handleToggleChange}
+            />
+            <span className="gameCardSwitchTrack">
+              <span className="gameCardSwitchThumb" />
+            </span>
+          </label>
+          {props.onEdit && (
+            <button
+              type="button"
+              className="cardEditButton"
+              onClick={handleEditClick}
+              title="Editar jogo"
+              aria-label="Editar jogo"
+            >
+              <Edit size={18} />
+            </button>
+          )}
+          {props.onDelete && (
+            <button
+              type="button"
+              className="cardDeleteButton"
+              onClick={handleDeleteClick}
+              title="Deletar jogo"
+              aria-label="Deletar jogo"
+            >
+              <Trash size={18} />
+            </button>
+          )}
+        </div>
       </a>
 
       {isConfirmOpen && (

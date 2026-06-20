@@ -1,9 +1,10 @@
 import { useEffect, type ReactNode } from 'react';
 import DefaultSidebar from '../../solos/sideBar/DefaultSidebar';
 import ActionBar from '../ActionBar';
-import FeedbackMessage, { type FeedbackType } from '../FeedbackMessage';
+import type { FeedbackType } from '../FeedbackMessage';
 import GenericMainList from '../../feats/genericMainList';
 import Header from '../Header';
+import { useToast } from '../../../context/ToastContext';
 import './style.css';
 import type { ManagementSortOption } from '../../../utils/managementSort';
 
@@ -43,6 +44,8 @@ export default function ManagementPageShell({
     feedback,
     children,
 }: ManagementPageShellProps) {
+    const { showToast } = useToast();
+
     useEffect(() => {
         document.body.classList.add(pageClassName);
 
@@ -50,6 +53,13 @@ export default function ManagementPageShell({
             document.body.classList.remove(pageClassName);
         };
     }, [pageClassName]);
+
+    useEffect(() => {
+        if (!feedback) return;
+
+        showToast(feedback);
+        feedback.onDismiss?.();
+    }, [feedback, showToast]);
 
     return (
         <div className={layoutClassName}>
@@ -66,7 +76,6 @@ export default function ManagementPageShell({
                         sortValue={sortValue}
                         onSortChange={onSortChange}
                     />
-                    {feedback && <FeedbackMessage {...feedback} />}
                     <GenericMainList props={{ title, itemsPerPage }}>
                         {children}
                     </GenericMainList>

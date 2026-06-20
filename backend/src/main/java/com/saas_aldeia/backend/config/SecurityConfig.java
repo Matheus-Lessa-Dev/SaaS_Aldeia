@@ -54,7 +54,7 @@ public class SecurityConfig {
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/auth/**",
+                                "/auth/login",
                                 "/error",
                                 "/swagger-ui.html",
                                 "/swagger-ui/**",
@@ -62,6 +62,9 @@ public class SecurityConfig {
                                 "/webjars/**")
                         .permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/register/admin").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/auth/register/aluno").hasAnyRole("ADMIN", "PROFESSOR")
+                        .requestMatchers(HttpMethod.POST, "/auth/register/professor").hasAnyRole("ADMIN", "PROFESSOR")
                         .requestMatchers("/admins/**").hasRole("ADMIN")
                         .requestMatchers("/alunos/me").hasRole("ALUNO")
                         .requestMatchers("/alunos/minha-turma").hasRole("ALUNO")

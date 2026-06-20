@@ -13,6 +13,10 @@ const Login = lazy(() => import("../pages/Login"));
 const AdminDashboard = lazy(
   () => import("../components/feats/adminDashboard/Dashboard"),
 );
+const AdminManagement = lazy(
+  () => import("../components/feats/adminManagement"),
+);
+const AdminCreatePage = lazy(() => import("../components/feats/adminNew"));
 const TeacherDashboard = lazy(
   () => import("../components/feats/teacherDashboard/Dashboard"),
 );
@@ -42,6 +46,9 @@ const AttendanceCreate = lazy(
 );
 const AttendanceEdit = lazy(
   () => import("../components/feats/attendanceManagement/AttendanceEdit"),
+);
+const AccountSettings = lazy(
+  () => import("../components/feats/accountSettings"),
 );
 
 function PrivateRoute({
@@ -129,6 +136,30 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute allowedRoles={[Role.Admin, Role.Teacher]}>
         <ClassManagement />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/admins",
+    element: (
+      <ProtectedRoute allowedRoles={[Role.Admin]}>
+        <AdminManagement />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/admins/novo",
+    element: (
+      <ProtectedRoute allowedRoles={[Role.Admin]}>
+        <AdminCreatePage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/admins/:id/editar",
+    element: (
+      <ProtectedRoute allowedRoles={[Role.Admin]}>
+        <AdminCreatePage />
       </ProtectedRoute>
     ),
   },
@@ -249,6 +280,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute allowedRoles={[Role.Admin, Role.Teacher]}>
         <AttendanceEdit />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/minha-conta",
+    element: (
+      <ProtectedRoute allowedRoles={[Role.Admin, Role.Teacher, Role.Student]}>
+        <AccountSettings />
       </ProtectedRoute>
     ),
   },

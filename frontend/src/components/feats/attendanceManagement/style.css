@@ -34,7 +34,7 @@
 }
 
 .attendance-create-page__card {
-  margin: var(--spacing-4) 1rem 0;
+  margin: var(--spacing-4) 0 0;
   padding: var(--spacing-4);
   border-radius: 12px;
   background: var(--surface);
@@ -589,11 +589,6 @@
 }
 
 @media (max-width: 900px) {
-  .attendance-create-page__card {
-    margin-left: 0;
-    margin-right: 0;
-  }
-
   .attendanceLayout,
   .attendanceRollCallHeader,
   .attendanceActions,

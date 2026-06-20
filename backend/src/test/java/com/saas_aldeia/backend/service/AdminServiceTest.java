@@ -5,12 +5,12 @@ import com.saas_aldeia.backend.exception.ResourceNotFoundException;
 import com.saas_aldeia.backend.model.Admin;
 import com.saas_aldeia.backend.model.TipoUsuario;
 import com.saas_aldeia.backend.repository.AdminRepository;
+import com.saas_aldeia.backend.repository.UsuarioRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,14 +18,13 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class AdminServiceTest {
 
     @Mock AdminRepository adminRepository;
-    @Mock PasswordEncoder passwordEncoder;
+    @Mock UsuarioRepository usuarioRepository;
     @InjectMocks AdminService adminService;
 
     @Test
@@ -43,21 +42,21 @@ class AdminServiceTest {
     }
 
     @Test
-    void atualizar_updatesFieldsAndEncodesPassword() {
+    void atualizar_updatesOnlyNameAndEmail() {
         Admin admin = admin(1L, "Antigo", "old@test.com", "oldHash");
         when(adminRepository.findById(1L)).thenReturn(Optional.of(admin));
-        when(passwordEncoder.encode("novaSenha")).thenReturn("newHash");
+        when(usuarioRepository.existsByEmailAndIdNot("new@test.com", 1L)).thenReturn(false);
         when(adminRepository.save(admin)).thenReturn(admin);
 
         var response = adminService.atualizar(1L, new AdminRequest("Novo", "new@test.com", "novaSenha"));
 
         assertThat(response.nome()).isEqualTo("Novo");
         assertThat(response.email()).isEqualTo("new@test.com");
-        assertThat(admin.getSenha()).isEqualTo("newHash");
+        assertThat(admin.getSenha()).isEqualTo("oldHash");
     }
 
     @Test
-    void atualizar_blankPassword_keepsCurrentPassword() {
+    void atualizar_withoutPassword_keepsCurrentPassword() {
         Admin admin = admin(1L, "Admin", "admin@test.com", "oldHash");
         when(adminRepository.findById(1L)).thenReturn(Optional.of(admin));
         when(adminRepository.save(admin)).thenReturn(admin);
@@ -65,7 +64,6 @@ class AdminServiceTest {
         adminService.atualizar(1L, new AdminRequest(null, null, " "));
 
         assertThat(admin.getSenha()).isEqualTo("oldHash");
-        verifyNoInteractions(passwordEncoder);
     }
 
     @Test

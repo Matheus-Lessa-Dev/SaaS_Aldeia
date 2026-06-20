@@ -7,6 +7,7 @@ import com.saas_aldeia.backend.model.TipoUsuario;
 import com.saas_aldeia.backend.model.Turma;
 import com.saas_aldeia.backend.repository.AlunoRepository;
 import com.saas_aldeia.backend.repository.TurmaRepository;
+import com.saas_aldeia.backend.repository.UsuarioRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -29,6 +30,7 @@ class AlunoServiceTest {
 
     @Mock AlunoRepository alunoRepository;
     @Mock TurmaRepository turmaRepository;
+    @Mock UsuarioRepository usuarioRepository;
     @Mock PasswordEncoder passwordEncoder;
     @InjectMocks AlunoService alunoService;
 
@@ -69,6 +71,7 @@ class AlunoServiceTest {
         Turma turma = turma(10L, "5A");
         when(alunoRepository.findById(1L)).thenReturn(Optional.of(aluno));
         when(turmaRepository.findById(10L)).thenReturn(Optional.of(turma));
+        when(usuarioRepository.existsByEmailAndIdNot("new@test.com", 1L)).thenReturn(false);
         when(passwordEncoder.encode("novaSenha")).thenReturn("newHash");
         when(alunoRepository.save(aluno)).thenReturn(aluno);
 

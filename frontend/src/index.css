@@ -68,6 +68,7 @@ body {
   color: var(--on-surface);
   background: var(--surface);
   position: relative;
+  overflow-y: scroll;
 }
 
 /* Recycled-paper grain overlay for subtle texture */

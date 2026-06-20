@@ -5,6 +5,7 @@ import com.saas_aldeia.backend.dto.AdminResponse;
 import com.saas_aldeia.backend.exception.ResourceNotFoundException;
 import com.saas_aldeia.backend.model.Admin;
 import com.saas_aldeia.backend.repository.AdminRepository;
+import com.saas_aldeia.backend.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import java.util.List;
 public class AdminService {
 
     private final AdminRepository adminRepository;
+    private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
 
     public List<AdminResponse> listar() {
@@ -32,7 +34,13 @@ public class AdminService {
         Admin admin = buscar(id);
 
         if (request.nome() != null)  admin.setNome(request.nome());
-        if (request.email() != null) admin.setEmail(request.email());
+        if (request.email() != null) {
+            String email = request.email().trim();
+            if (usuarioRepository.existsByEmailAndIdNot(email, admin.getId())) {
+                throw new IllegalArgumentException("Email ja cadastrado");
+            }
+            admin.setEmail(email);
+        }
         if (request.senha() != null && !request.senha().isBlank())
             admin.setSenha(passwordEncoder.encode(request.senha()));
 

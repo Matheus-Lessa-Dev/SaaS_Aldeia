@@ -8,7 +8,8 @@ function Invoke-SeedPost {
     param(
         [string]$Path,
         [hashtable]$Body,
-        [string]$Label
+        [string]$Label,
+        [hashtable]$Headers = @{}
     )
 
     $json = $Body | ConvertTo-Json -Depth 5
@@ -17,6 +18,7 @@ function Invoke-SeedPost {
         Invoke-RestMethod `
             -Method Post `
             -Uri "$ApiBaseUrl$Path" `
+            -Headers $Headers `
             -ContentType "application/json" `
             -Body $json | Out-Null
 
@@ -32,7 +34,7 @@ function Invoke-SeedPost {
             $responseMessage = $_.Exception.Message
         }
 
-        if ($statusCode -eq 400 -and $responseMessage -like "*Email*") {
+        if (($statusCode -eq 400 -or $statusCode -eq 409) -and $responseMessage -like "*Email*") {
             Write-Host "[SKIP] $Label ja existe"
             return
         }
@@ -83,14 +85,20 @@ function Get-ByName {
 
 Write-Host "Populando banco de desenvolvimento em $ApiBaseUrl"
 
-Invoke-SeedPost `
-    -Path "/auth/register/admin" `
-    -Label "admin@teste.com" `
+Write-Host ""
+Write-Host "Autenticando admin base..."
+
+$login = Invoke-SeedJson `
+    -Method "Post" `
+    -Path "/auth/login" `
     -Body @{
-        email = "admin@teste.com"
-        senha = "123123"
-        nome = "Administrador Aldeia"
+        email = "admin@base.com"
+        senha = "Aldeia@2026Base!"
     }
+
+$headers = @{
+    Authorization = "Bearer $($login.token)"
+}
 
 $professores = @(
     @{ nome = "Ana Ribeiro"; dataNascimento = "1986-01-12"; telefone = "(11) 90000-1001" },
@@ -112,6 +120,7 @@ for ($i = 0; $i -lt $professores.Count; $i++) {
     Invoke-SeedPost `
         -Path "/auth/register/professor" `
         -Label "professor$numero@aldeia.com" `
+        -Headers $headers `
         -Body @{
             email = "professor$numero@aldeia.com"
             nome = $professor.nome
@@ -143,6 +152,7 @@ for ($i = 0; $i -lt $nomesAlunos.Count; $i++) {
     Invoke-SeedPost `
         -Path "/auth/register/aluno" `
         -Label "aluno$numero@aldeia.com" `
+        -Headers $headers `
         -Body @{
             email = "aluno$numero@aldeia.com"
             nome = $nomesAlunos[$i]
@@ -153,21 +163,6 @@ for ($i = 0; $i -lt $nomesAlunos.Count; $i++) {
             telefoneResponsavel = "(11) 98888-$($numero)00"
             emailResponsavel = "responsavel$numero@aldeia.com"
         }
-}
-
-Write-Host ""
-Write-Host "Autenticando admin para criar turmas e chamadas..."
-
-$login = Invoke-SeedJson `
-    -Method "Post" `
-    -Path "/auth/login" `
-    -Body @{
-        email = "admin@teste.com"
-        senha = "123123"
-    }
-
-$headers = @{
-    Authorization = "Bearer $($login.token)"
 }
 
 $professoresCriados = @(Invoke-SeedJson -Method "Get" -Path "/professores" -Headers $headers)
@@ -290,7 +285,7 @@ foreach ($turma in $turmasCriadas) {
 
 Write-Host ""
 Write-Host "Seed finalizada."
-Write-Host "Admin: admin@teste.com / 123123"
+Write-Host "Admin base: admin@base.com / Aldeia@2026Base!"
 Write-Host "Professores e alunos usam senha inicial no formato ddMMyyyy da data de nascimento."
 Write-Host "Turmas criadas: Turma Alfa, Turma Beta, Turma Gama, Turma Delta."
 Write-Host "Chamadas criadas: 1 e 2 bimestre para cada turma."

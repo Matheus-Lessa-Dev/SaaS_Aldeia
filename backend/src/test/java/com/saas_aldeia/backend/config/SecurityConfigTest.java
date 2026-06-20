@@ -16,6 +16,9 @@ class SecurityConfigTest {
         ));
 
         assertThat(source).contains(".requestMatchers(\"/admins/**\").hasRole(\"ADMIN\")");
+        assertThat(source).contains(".requestMatchers(HttpMethod.POST, \"/auth/register/admin\").hasRole(\"ADMIN\")");
+        assertThat(source).contains(".requestMatchers(HttpMethod.POST, \"/auth/register/aluno\").hasAnyRole(\"ADMIN\", \"PROFESSOR\")");
+        assertThat(source).contains(".requestMatchers(HttpMethod.POST, \"/auth/register/professor\").hasAnyRole(\"ADMIN\", \"PROFESSOR\")");
         assertThat(source).contains(".requestMatchers(\"/alunos/me\").hasRole(\"ALUNO\")");
         assertThat(source).contains(".requestMatchers(\"/alunos/**\").hasAnyRole(\"ADMIN\", \"PROFESSOR\")");
         assertThat(source).contains(".requestMatchers(\"/professores/**\").hasAnyRole(\"ADMIN\", \"PROFESSOR\")");

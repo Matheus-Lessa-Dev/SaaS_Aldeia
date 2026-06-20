@@ -5,6 +5,7 @@ import {
   Gamepad2,
   LayoutDashboard,
   LogOut,
+  UserRoundCog,
 } from "lucide-react";
 import { useAuth } from "../../../hooks/useAuth";
 import "./sideBar.css";
@@ -78,6 +79,15 @@ function StudentSidebar() {
           <span className="sideBarUserEmail">{user?.email}</span>
           <span className="sideBarUserRole">{user?.role}</span>
         </div>
+        <NavLink
+          to="/minha-conta"
+          className={({ isActive }) =>
+            `sideBarFooterButton${isActive ? " active" : ""}`
+          }
+        >
+          <UserRoundCog size={18} aria-hidden="true" />
+          <span>Minha conta</span>
+        </NavLink>
         <button className="sideBarLogout" type="button" onClick={handleLogout}>
           <LogOut size={18} aria-hidden="true" />
           <span>Sair</span>

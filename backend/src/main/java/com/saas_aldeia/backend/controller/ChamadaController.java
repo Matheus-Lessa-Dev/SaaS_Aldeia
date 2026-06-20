@@ -61,6 +61,13 @@ public class ChamadaController {
         return ResponseEntity.ok(chamadaService.atualizarStatus(id, request.status(), usuarioLogado));
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletar(@PathVariable Long id,
+                                        @AuthenticationPrincipal Usuario usuarioLogado) {
+        chamadaService.deletar(id, usuarioLogado);
+        return ResponseEntity.noContent().build();
+    }
+
     @GetMapping("/{id}/registros")
     public ResponseEntity<RegistroChamadaResponse> buscarRegistro(
             @PathVariable Long id,

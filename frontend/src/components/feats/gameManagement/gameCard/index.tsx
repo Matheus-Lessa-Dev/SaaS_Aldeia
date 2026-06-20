@@ -42,10 +42,12 @@ export default function GameCard(props: {
     <>
       <a href={props.href} className={`classCard gameCard${props.enabled ? "" : " gameCard--disabled"}`}>
         <div className="cardContent">
-          <span className={`gameCardStatus${props.enabled ? "" : " gameCardStatus--disabled"}`}>
-            {props.enabled ? "Habilitado" : "Desabilitado"}
-          </span>
-          <h4 className="classCardTitle gameCardTitle">{props.name}</h4>
+          <div className="gameCardTitleRow">
+            <span className={`gameCardStatus${props.enabled ? "" : " gameCardStatus--disabled"}`}>
+              {props.enabled ? "Habilitado" : "Desabilitado"}
+            </span>
+            <h4 className="classCardTitle gameCardTitle">{props.name}</h4>
+          </div>
           {props.time && (
             <p className="classCardDescription gameCardDescription">
               <Clock3 size={14} aria-hidden="true" />

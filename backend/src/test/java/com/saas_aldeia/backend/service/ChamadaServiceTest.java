@@ -221,6 +221,32 @@ class ChamadaServiceTest {
                 .hasMessageContaining("Chamada não encontrada");
     }
 
+    @Test
+    void deletar_activeCall_throwsException() {
+        Chamada chamada = chamada(30L, turma(10L, "5A"), StatusChamada.ATIVA);
+        when(chamadaRepository.findById(30L)).thenReturn(Optional.of(chamada));
+
+        assertThatThrownBy(() -> chamadaService.deletar(30L, usuario(1L, TipoUsuario.ADMIN)))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Apenas chamadas encerradas podem ser excluidas");
+    }
+
+    @Test
+    void deletar_closedCall_deletesAttendanceRecordsAndCall() {
+        Chamada chamada = chamada(30L, turma(10L, "5A"), StatusChamada.ENCERRADA);
+        RegistroChamada registro = registro(40L, chamada, LocalDate.of(2026, 6, 17));
+        PresencaAluno presenca = presenca(50L, aluno(7L, "Ana", chamada.getTurma()), registro, StatusPresenca.PRESENTE);
+        when(chamadaRepository.findById(30L)).thenReturn(Optional.of(chamada));
+        when(registroRepository.findByChamadaId(30L)).thenReturn(List.of(registro));
+        when(presencaRepository.findByRegistroId(40L)).thenReturn(List.of(presenca));
+
+        chamadaService.deletar(30L, usuario(1L, TipoUsuario.ADMIN));
+
+        verify(presencaRepository).deleteAll(List.of(presenca));
+        verify(registroRepository).deleteAll(List.of(registro));
+        verify(chamadaRepository).delete(chamada);
+    }
+
     private static Chamada chamada(Long id, Turma turma, StatusChamada status) {
         Chamada chamada = new Chamada();
         chamada.setId(id);

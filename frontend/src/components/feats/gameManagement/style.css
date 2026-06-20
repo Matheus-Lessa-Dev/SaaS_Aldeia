@@ -24,11 +24,15 @@
   background: var(--surface-container);
 }
 
+.gameCardTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+}
+
 .gameCardTitle {
   max-width: 100%;
-  color: var(--primary);
-  font-size: 1.05rem;
-  font-weight: 700;
   line-height: 1.2;
 }
 
@@ -50,8 +54,8 @@
 
 .gameCardStatus {
   display: inline-flex;
+  flex-shrink: 0;
   width: fit-content;
-  margin-bottom: 0.2rem;
   border-radius: 999px;
   padding: 0.2rem 0.55rem;
   background: rgba(44, 103, 44, 0.1);

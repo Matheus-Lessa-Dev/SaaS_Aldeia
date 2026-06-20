@@ -1,0 +1,13 @@
+.adminManagementPage #root {
+  width: 100%;
+  max-width: none;
+  min-height: 100svh;
+  margin: 0;
+  padding: 0;
+  gap: 0;
+}
+
+.adminCardEmail {
+  color: var(--on-surface-muted);
+  font-size: 0.9rem;
+}

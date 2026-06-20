@@ -43,6 +43,9 @@ class ResourceControllersTest {
     @Test
     void adminController_delegatesCrudEndpoints() {
         AdminController controller = new AdminController(adminService);
+        Usuario adminBase = new Usuario();
+        adminBase.setId(99L);
+        adminBase.setEmail("admin@base.com");
         var response = new AdminResponse(1L, "Admin", "admin@test.com");
         var request = new AdminRequest("Admin", "admin@test.com", "senha");
         when(adminService.listar()).thenReturn(List.of(response));
@@ -50,9 +53,9 @@ class ResourceControllersTest {
         when(adminService.atualizar(1L, request)).thenReturn(response);
 
         assertThat(controller.listar().getBody()).containsExactly(response);
-        assertThat(controller.buscar(1L).getBody()).isEqualTo(response);
-        assertThat(controller.atualizar(1L, request).getBody()).isEqualTo(response);
-        assertThat(controller.deletar(1L).getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+        assertThat(controller.buscar(1L, adminBase).getBody()).isEqualTo(response);
+        assertThat(controller.atualizar(1L, adminBase, request).getBody()).isEqualTo(response);
+        assertThat(controller.deletar(1L, adminBase).getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
         verify(adminService).deletar(1L);
     }
 

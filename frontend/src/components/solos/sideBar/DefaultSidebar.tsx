@@ -7,6 +7,7 @@ import {
   GraduationCap,
   LayoutDashboard,
   LogOut,
+  ShieldCheck,
   UserRoundCog,
   Users,
 } from "lucide-react";
@@ -23,6 +24,12 @@ type NavItem = {
 
 const navItems: NavItem[] = [
   { label: "Dashboard", to: "/dashboard", icon: LayoutDashboard },
+  {
+    label: "Administradores",
+    to: "/admins",
+    icon: ShieldCheck,
+    roles: [Role.Admin],
+  },
   { label: "Turmas", to: "/turmas", icon: BookOpenCheck },
   {
     label: "Professores",

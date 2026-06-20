@@ -7,7 +7,6 @@ import com.saas_aldeia.backend.model.Admin;
 import com.saas_aldeia.backend.repository.AdminRepository;
 import com.saas_aldeia.backend.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +18,6 @@ public class AdminService {
 
     private final AdminRepository adminRepository;
     private final UsuarioRepository usuarioRepository;
-    private final PasswordEncoder passwordEncoder;
 
     public List<AdminResponse> listar() {
         return adminRepository.findAll().stream().map(this::toResponse).toList();
@@ -41,9 +39,6 @@ public class AdminService {
             }
             admin.setEmail(email);
         }
-        if (request.senha() != null && !request.senha().isBlank())
-            admin.setSenha(passwordEncoder.encode(request.senha()));
-
         return toResponse(adminRepository.save(admin));
     }
 

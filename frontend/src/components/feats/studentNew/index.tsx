@@ -125,7 +125,7 @@ useEffect(() => {
       if (isEditing) {
         await api.put(`/alunos/${id}`, payload)
       } else {
-        await api.post('/auth/register/aluno', { ...payload, senha: '123456' })
+        await api.post('/auth/register/aluno', payload)
       }
       navigate('/alunos', {
         state: {

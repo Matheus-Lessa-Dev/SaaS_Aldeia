@@ -6,7 +6,7 @@ Esta pasta contem scripts auxiliares para popular e testar o banco local.
 
 O script `seed-dev.ps1` cadastra dados iniciais para testar a aplicacao:
 
-- 1 admin
+- 1 admin base automatico
 - 10 professores
 - 40 alunos
 - 4 turmas com professores e alunos vinculados
@@ -41,8 +41,8 @@ powershell.exe -ExecutionPolicy Bypass -File scripts\seed-dev.ps1 -ApiBaseUrl "h
 Admin:
 
 ```text
-email: admin@teste.com
-senha: 123123
+email: admin@base.com
+senha: Aldeia@2026Base!
 ```
 
 Professores:

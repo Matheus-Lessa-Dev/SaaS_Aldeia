@@ -6,6 +6,7 @@ import com.saas_aldeia.backend.model.Professor;
 import com.saas_aldeia.backend.model.TipoUsuario;
 import com.saas_aldeia.backend.model.Turma;
 import com.saas_aldeia.backend.repository.ProfessorRepository;
+import com.saas_aldeia.backend.repository.UsuarioRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -27,6 +28,7 @@ import static org.mockito.Mockito.when;
 class ProfessorServiceTest {
 
     @Mock ProfessorRepository professorRepository;
+    @Mock UsuarioRepository usuarioRepository;
     @Mock PasswordEncoder passwordEncoder;
     @InjectMocks ProfessorService professorService;
 
@@ -50,6 +52,7 @@ class ProfessorServiceTest {
     void atualizar_updatesPasswordWhenProvided() {
         Professor professor = professor(1L, "Antiga", "old@test.com", "oldHash");
         when(professorRepository.findById(1L)).thenReturn(Optional.of(professor));
+        when(usuarioRepository.existsByEmailAndIdNot("new@test.com", 1L)).thenReturn(false);
         when(passwordEncoder.encode("novaSenha")).thenReturn("newHash");
         when(professorRepository.save(professor)).thenReturn(professor);
 

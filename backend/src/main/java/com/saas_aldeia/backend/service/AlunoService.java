@@ -6,6 +6,7 @@ import com.saas_aldeia.backend.exception.ResourceNotFoundException;
 import com.saas_aldeia.backend.model.Aluno;
 import com.saas_aldeia.backend.repository.AlunoRepository;
 import com.saas_aldeia.backend.repository.TurmaRepository;
+import com.saas_aldeia.backend.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ public class AlunoService {
 
     private final AlunoRepository alunoRepository;
     private final TurmaRepository turmaRepository;
+    private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
 
     public List<AlunoResponse> listar() {
@@ -57,7 +59,13 @@ public class AlunoService {
         if (request.nomeResponsavel() != null)     aluno.setNomeResponsavel(request.nomeResponsavel());
         if (request.telefoneResponsavel() != null) aluno.setTelefoneResponsavel(request.telefoneResponsavel());
         if (request.emailResponsavel() != null)    aluno.setEmailResponsavel(request.emailResponsavel());
-        if (request.email() != null)               aluno.setEmail(request.email());
+        if (request.email() != null) {
+            String email = request.email().trim();
+            if (usuarioRepository.existsByEmailAndIdNot(email, aluno.getId())) {
+                throw new IllegalArgumentException("Email ja cadastrado");
+            }
+            aluno.setEmail(email);
+        }
         if (request.senha() != null && !request.senha().isBlank())
             aluno.setSenha(passwordEncoder.encode(request.senha()));
         if (request.turmaId() != null)

@@ -5,6 +5,7 @@ import com.saas_aldeia.backend.exception.ResourceNotFoundException;
 import com.saas_aldeia.backend.model.Admin;
 import com.saas_aldeia.backend.model.TipoUsuario;
 import com.saas_aldeia.backend.repository.AdminRepository;
+import com.saas_aldeia.backend.repository.UsuarioRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -25,6 +26,7 @@ import static org.mockito.Mockito.when;
 class AdminServiceTest {
 
     @Mock AdminRepository adminRepository;
+    @Mock UsuarioRepository usuarioRepository;
     @Mock PasswordEncoder passwordEncoder;
     @InjectMocks AdminService adminService;
 
@@ -46,6 +48,7 @@ class AdminServiceTest {
     void atualizar_updatesFieldsAndEncodesPassword() {
         Admin admin = admin(1L, "Antigo", "old@test.com", "oldHash");
         when(adminRepository.findById(1L)).thenReturn(Optional.of(admin));
+        when(usuarioRepository.existsByEmailAndIdNot("new@test.com", 1L)).thenReturn(false);
         when(passwordEncoder.encode("novaSenha")).thenReturn("newHash");
         when(adminRepository.save(admin)).thenReturn(admin);
 

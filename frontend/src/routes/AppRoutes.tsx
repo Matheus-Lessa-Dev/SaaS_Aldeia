@@ -43,6 +43,9 @@ const AttendanceCreate = lazy(
 const AttendanceEdit = lazy(
   () => import("../components/feats/attendanceManagement/AttendanceEdit"),
 );
+const AccountSettings = lazy(
+  () => import("../components/feats/accountSettings"),
+);
 
 function PrivateRoute({
   children,
@@ -249,6 +252,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute allowedRoles={[Role.Admin, Role.Teacher]}>
         <AttendanceEdit />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/minha-conta",
+    element: (
+      <ProtectedRoute allowedRoles={[Role.Admin, Role.Teacher, Role.Student]}>
+        <AccountSettings />
       </ProtectedRoute>
     ),
   },

@@ -7,6 +7,7 @@ import {
   GraduationCap,
   LayoutDashboard,
   LogOut,
+  UserRoundCog,
   Users,
 } from "lucide-react";
 import { Role } from "../../../context/AuthContext";
@@ -27,7 +28,7 @@ const navItems: NavItem[] = [
     label: "Professores",
     to: "/professores",
     icon: GraduationCap,
-    roles: [Role.Admin],
+    roles: [Role.Admin, Role.Teacher],
   },
   { label: "Alunos", to: "/alunos", icon: Users },
   { label: "Jogos", to: "/jogos", icon: Gamepad2 },
@@ -94,6 +95,15 @@ function DefaultSidebar() {
           <span className="sideBarUserEmail">{user?.email}</span>
           <span className="sideBarUserRole">{user?.role}</span>
         </div>
+        <NavLink
+          to="/minha-conta"
+          className={({ isActive }) =>
+            `sideBarFooterButton${isActive ? " active" : ""}`
+          }
+        >
+          <UserRoundCog size={18} aria-hidden="true" />
+          <span>Minha conta</span>
+        </NavLink>
         <button className="sideBarLogout" type="button" onClick={handleLogout}>
           <LogOut size={18} aria-hidden="true" />
           <span>Sair</span>

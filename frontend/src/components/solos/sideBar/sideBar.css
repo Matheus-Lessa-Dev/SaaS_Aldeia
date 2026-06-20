@@ -120,6 +120,7 @@
   letter-spacing: 0.5px;
 }
 
+.sideBarFooterButton,
 .sideBarLogout {
   display: flex;
   align-items: center;
@@ -132,9 +133,12 @@
   color: #7D2B2B;
   font-size: 14px;
   cursor: pointer;
+  text-decoration: none;
   transition: background 0.15s;
 }
 
+.sideBarFooterButton:hover,
+.sideBarFooterButton.active,
 .sideBarLogout:hover {
   background-color: #EDE8E2;
 }

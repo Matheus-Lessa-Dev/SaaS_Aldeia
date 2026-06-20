@@ -8,7 +8,7 @@ interface LoginResponse {
   nome: string;
 }
 
-function mapRole(apiRole: string): Role {
+export function mapRole(apiRole: string): Role {
   switch (apiRole) {
     case 'ADMIN':     return Role.Admin;
     case 'PROFESSOR': return Role.Teacher;

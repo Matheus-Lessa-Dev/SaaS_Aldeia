@@ -6,7 +6,13 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { AlertCircle, CheckCircle2, Info, TriangleAlert, X } from "lucide-react";
+import {
+  AlertCircle,
+  CheckCircle2,
+  Info,
+  TriangleAlert,
+  X,
+} from "lucide-react";
 import type { FeedbackType } from "../components/shared/FeedbackMessage";
 import "./ToastContext.css";
 
@@ -41,18 +47,21 @@ export function ToastProvider({ children }: { children: ReactNode }) {
     setToasts((current) => current.filter((toast) => toast.id !== id));
   }, []);
 
-  const showToast = useCallback((toast: ToastInput) => {
-    const id = Date.now() + Math.random();
-    const nextToast: ToastItem = {
-      id,
-      type: toast.type ?? "info",
-      title: toast.title,
-      message: toast.message,
-    };
+  const showToast = useCallback(
+    (toast: ToastInput) => {
+      const id = Date.now() + Math.random();
+      const nextToast: ToastItem = {
+        id,
+        type: toast.type ?? "info",
+        title: toast.title,
+        message: toast.message,
+      };
 
-    setToasts((current) => [...current, nextToast].slice(-4));
-    window.setTimeout(() => dismissToast(id), 4800);
-  }, [dismissToast]);
+      setToasts((current) => [...current, nextToast].slice(-2));
+      window.setTimeout(() => dismissToast(id), 4800);
+    },
+    [dismissToast],
+  );
 
   const value = useMemo(() => ({ showToast }), [showToast]);
 
@@ -63,7 +72,11 @@ export function ToastProvider({ children }: { children: ReactNode }) {
         {toasts.map((toast) => {
           const Icon = icons[toast.type];
           return (
-            <div key={toast.id} className={`toast toast--${toast.type}`} role={toast.type === "error" ? "alert" : "status"}>
+            <div
+              key={toast.id}
+              className={`toast toast--${toast.type}`}
+              role={toast.type === "error" ? "alert" : "status"}
+            >
               <Icon className="toast__icon" size={18} aria-hidden="true" />
               <div className="toast__content">
                 {toast.title && <strong>{toast.title}</strong>}

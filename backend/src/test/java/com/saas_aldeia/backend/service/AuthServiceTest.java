@@ -152,6 +152,24 @@ class AuthServiceTest {
     }
 
     @Test
+    void login_adminReturnsRegisteredName() {
+        Admin admin = new Admin();
+        admin.setEmail("admin@test.com");
+        admin.setNome("Administrador Aldeia");
+        admin.setSenha("hashed");
+        admin.setTipo(TipoUsuario.ADMIN);
+        when(usuarioRepository.findByEmail("admin@test.com")).thenReturn(Optional.of(admin));
+        when(passwordEncoder.matches("senha123", "hashed")).thenReturn(true);
+        when(jwtService.generateToken(admin)).thenReturn("token");
+
+        var response = authService.login(new LoginRequest("admin@test.com", "senha123"));
+
+        assertThat(response.token()).isEqualTo("token");
+        assertThat(response.role()).isEqualTo("ADMIN");
+        assertThat(response.nome()).isEqualTo("Administrador Aldeia");
+    }
+
+    @Test
     void login_senhaErrada_throwsException() {
         Aluno aluno = new Aluno();
         aluno.setSenha("hashed");

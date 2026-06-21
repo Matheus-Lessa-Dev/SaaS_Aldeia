@@ -85,17 +85,38 @@ class ChamadaServiceTest {
     }
 
     @Test
-    void criar_classWithExistingCall_throwsException() {
+    void criar_classWithActiveCall_throwsException() {
         Turma turma = turma(10L, "5A");
         Usuario admin = usuario(1L, TipoUsuario.ADMIN);
         when(turmaRepository.findById(10L)).thenReturn(Optional.of(turma));
-        when(chamadaRepository.existsByTurmaId(10L)).thenReturn(true);
+        when(chamadaRepository.existsByTurmaIdAndStatus(10L, StatusChamada.ATIVA)).thenReturn(true);
 
         assertThatThrownBy(() -> chamadaService.criar(
                 new ChamadaRequest("Chamada 2", 10L, TipoPeriodoChamada.BIMESTRE, 1),
                 admin
         )).isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("Esta turma já possui uma chamada vinculada");
+                .hasMessageContaining("Esta turma já possui uma chamada ativa");
+    }
+
+    @Test
+    void criar_classWithoutActiveCall_allowsNewCall() {
+        Turma turma = turma(10L, "5A");
+        Usuario admin = usuario(1L, TipoUsuario.ADMIN);
+        when(turmaRepository.findById(10L)).thenReturn(Optional.of(turma));
+        when(chamadaRepository.existsByTurmaIdAndStatus(10L, StatusChamada.ATIVA)).thenReturn(false);
+        when(chamadaRepository.save(any(Chamada.class))).thenAnswer(invocation -> {
+            Chamada chamada = invocation.getArgument(0);
+            chamada.setId(21L);
+            return chamada;
+        });
+
+        var response = chamadaService.criar(
+                new ChamadaRequest("Chamada 2", 10L, TipoPeriodoChamada.BIMESTRE, 1),
+                admin
+        );
+
+        assertThat(response.id()).isEqualTo(21L);
+        assertThat(response.status()).isEqualTo(StatusChamada.ATIVA);
     }
 
     @Test
@@ -110,6 +131,30 @@ class ChamadaServiceTest {
             assertThat(item.id()).isEqualTo(30L);
             assertThat(item.nomeTurma()).isEqualTo("5A");
         });
+    }
+
+    @Test
+    void atualizarStatus_activateWhenClassAlreadyHasAnotherActiveCall_throwsException() {
+        Chamada chamada = chamada(30L, turma(10L, "5A"), StatusChamada.ENCERRADA);
+        Usuario admin = usuario(1L, TipoUsuario.ADMIN);
+        when(chamadaRepository.findById(30L)).thenReturn(Optional.of(chamada));
+        when(chamadaRepository.existsByTurmaIdAndStatusAndIdNot(10L, StatusChamada.ATIVA, 30L)).thenReturn(true);
+
+        assertThatThrownBy(() -> chamadaService.atualizarStatus(30L, StatusChamada.ATIVA, admin))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Esta turma já possui uma chamada ativa");
+    }
+
+    @Test
+    void atualizarStatus_closeCall_updatesStatus() {
+        Chamada chamada = chamada(30L, turma(10L, "5A"), StatusChamada.ATIVA);
+        Usuario admin = usuario(1L, TipoUsuario.ADMIN);
+        when(chamadaRepository.findById(30L)).thenReturn(Optional.of(chamada));
+        when(chamadaRepository.save(chamada)).thenReturn(chamada);
+
+        var result = chamadaService.atualizarStatus(30L, StatusChamada.ENCERRADA, admin);
+
+        assertThat(result.status()).isEqualTo(StatusChamada.ENCERRADA);
     }
 
     @Test

@@ -15,6 +15,7 @@ Estado atual percebido:
 - `alert()` nativo removido dos fluxos mapeados do frontend.
 - Feedback visual de sucesso implementado para cadastros, edicoes, exclusoes e algumas acoes diretas.
 - Estados vazios padronizados nas listagens de alunos, professores, administradores, turmas, jogos e chamadas.
+- Efeito visual de hover padronizado nos cards das listagens administrativas.
 - Testes especificos do `ChamadaService` implementados.
 - Build frontend, testes backend e ambiente Docker foram revalidados em 2026-06-21.
 
@@ -27,6 +28,7 @@ Implementado:
 - Perfis de usuario: admin, professor e aluno.
 - Rotas protegidas por perfil no frontend.
 - Filtro JWT no backend.
+- Login de admin retorna o nome cadastrado do administrador.
 - Mensagem visual padronizada para usuario/senha incorretos.
 - Validacao visual para e-mail mal formatado antes de chamar o backend.
 
@@ -175,18 +177,19 @@ Implementado:
 - Feedback visual padronizado para sucesso na criacao, edicao de status e salvamento de frequencia.
 - Endpoint para aluno consultar a propria frequencia.
 - Painel "Minha frequencia" na area de turma do aluno com percentual, totais e ultimos registros.
-- Regra de uma chamada por turma implementada no backend.
-- Tela de nova chamada exibe apenas turmas que ainda nao possuem chamada vinculada.
+- Regra de no maximo uma chamada ativa por turma implementada no backend.
+- Tela de nova chamada exibe apenas turmas que ainda nao possuem chamada ativa vinculada.
+- Reativacao de chamada encerrada bloqueada quando ja existe outra chamada ativa para a mesma turma.
 - Testes de service cobrindo criacao, acesso, registro por dia, bloqueio de chamada encerrada, aluno fora da turma e ordenacao alfabetica.
 - Testes de service cobrindo consulta de frequencia do aluno.
-- Teste de service cobrindo bloqueio de segunda chamada para a mesma turma.
+- Testes de service cobrindo bloqueio de segunda chamada ativa para a mesma turma, liberacao quando nao ha chamada ativa e bloqueio de reativacao duplicada.
 
 Pontos de atencao:
 - Adicionar dashboard/relatorio de presenca por turma.
 - Adicionar filtros por periodo e turma na visao analitica.
 - Avaliar se chamadas encerradas podem ser reabertas por professor ou apenas admin.
 - Revisar contadores agregados de presenca/falta/justificativa na listagem de chamadas para garantir que estao contando presencas por chamada corretamente.
-- Se houver dados antigos com mais de uma chamada na mesma turma, consolidar ou excluir duplicidades antes de considerar a base pronta para producao.
+- Se houver dados antigos com mais de uma chamada ativa na mesma turma, encerrar ou consolidar duplicidades antes de considerar a base pronta para producao.
 
 ### Feedback visual
 
@@ -249,7 +252,7 @@ Frontend:
 
 Backend:
 - Em 2026-06-21, `.\mvnw.cmd test` passou em `backend`.
-- Resultado atual: 80 testes executados, 0 falhas, 0 erros, 0 ignorados.
+- Resultado atual: 84 testes executados, 0 falhas, 0 erros, 0 ignorados.
 - Observacoes do teste: `JwtAuthFilter` ainda usa API depreciada e o Mockito emite aviso sobre carregamento dinamico de agent em JDK futuro.
 
 Docker:

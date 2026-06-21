@@ -24,6 +24,7 @@ type TurmaResponse = {
 type ChamadaResponse = {
   id: number;
   turmaId: number;
+  status: "ATIVA" | "ENCERRADA";
 };
 
 const periodOptionsByType: Record<TipoPeriodo, number[]> = {
@@ -58,8 +59,12 @@ export default function AttendanceCreate() {
           api.get<TurmaResponse[]>(turmasUrl),
           api.get<ChamadaResponse[]>("/chamadas"),
         ]);
-        const turmasComChamada = new Set(chamadasData.map((chamada) => chamada.turmaId));
-        setTurmas(turmasData.filter((turma) => !turmasComChamada.has(turma.id)));
+        const turmasComChamadaAtiva = new Set(
+          chamadasData
+            .filter((chamada) => chamada.status === "ATIVA")
+            .map((chamada) => chamada.turmaId),
+        );
+        setTurmas(turmasData.filter((turma) => !turmasComChamadaAtiva.has(turma.id)));
       } catch {
         showToast({
           type: "error",

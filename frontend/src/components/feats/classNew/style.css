@@ -17,7 +17,7 @@
 }
 
 .class-create-page__card .form-field__input--error {
-  box-shadow: inset 0 0 0 1px #c0392b;
+  box-shadow: inset 0 0 0 1px var(--danger);
 }
 
 .class-create-page__card select {
@@ -67,46 +67,46 @@
   justify-content: space-between;
   padding: 10px 14px;
   border-radius: 8px;
-  border: 1px solid #E8E4DF;
-  background: #fff;
+  border: 1px solid var(--outline-variant);
+  background: var(--surface-bright);
   font-size: 14px;
-  color: #444;
+  color: var(--on-surface);
   transition: all 0.15s;
 }
 
 .class-selection-item--selected {
-  background: #F0FFF4;
-  border-color: #68D391;
-  color: #276749;
+  background: var(--secondary-container);
+  border-color: var(--secondary);
+  color: var(--secondary);
 }
 
 .class-selection-btn {
   padding: 4px 12px;
   border-radius: 6px;
-  border: 1px solid #7D2B2B;
+  border: 1px solid var(--primary);
   background: transparent;
-  color: #7D2B2B;
+  color: var(--primary);
   font-size: 13px;
   cursor: pointer;
   transition: background 0.15s;
 }
 
 .class-selection-btn:hover {
-  background: #EDE8E2;
+  background: var(--surface-container);
 }
 
 .class-selection-btn--remove {
-  border-color: #68D391;
-  color: #276749;
+  border-color: var(--secondary);
+  color: var(--secondary);
 }
 
 .class-selection-btn--remove:hover {
-  background: #F0FFF4;
+  background: var(--secondary-container);
 }
 
 .class-empty-msg {
   font-size: 14px;
-  color: #999;
+  color: var(--on-surface-muted);
   text-align: center;
   padding: 16px 0;
 }

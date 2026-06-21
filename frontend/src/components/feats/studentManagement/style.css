@@ -30,8 +30,8 @@
 
 .studentManagementHeader button {
   padding: 8px 16px;
-  background-color: #7d2b2b;
-  color: #fff;
+  background-color: var(--primary);
+  color: var(--on-primary);
   border: none;
   border-radius: 20px;
   cursor: pointer;

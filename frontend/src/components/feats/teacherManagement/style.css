@@ -30,8 +30,8 @@
 
 .teacherManagementHeader button {
     padding: 8px 16px;
-    background-color: #7D2B2B;
-    color: #fff;
+    background-color: var(--primary);
+    color: var(--on-primary);
     border: none;
     border-radius: 20px;
     cursor: pointer;

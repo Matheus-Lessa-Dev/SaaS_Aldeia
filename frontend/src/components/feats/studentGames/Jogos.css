@@ -162,7 +162,7 @@
 .jogosGridThumb {
   width: 100%;
   height: 140px;
-  background: #4a4a4a;
+  background: var(--neutral-strong);
   background-size: cover;
   background-position: center;
 }
@@ -211,7 +211,7 @@
 }
 
 .jogosBtnJogarFull:hover {
-  background: color-mix(in srgb, var(--secondary) 86%, #000);
+  background: color-mix(in srgb, var(--secondary) 86%, var(--texture-dot));
 }
 
 .jogosBtnBloqueado {

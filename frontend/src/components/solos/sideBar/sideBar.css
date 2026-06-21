@@ -8,7 +8,7 @@
   z-index: 20;
   width: var(--sidebar-width);
   height: 100svh;
-  background-color: #f5f2ee;
+  background-color: var(--surface-container-low);
   display: flex;
   flex-direction: column;
   padding: 32px 0;
@@ -24,21 +24,21 @@
 
 .sideBarTitle {
   padding: 0 24px 32px;
-  border-bottom: 1px solid #e8e4df;
+  border-bottom: 1px solid var(--outline-variant);
   margin-bottom: 16px;
 }
 
 .sideBarTitle h1 {
   font-size: 18px;
   font-weight: 600;
-  color: #7d2b2b;
+  color: var(--primary);
   margin: 0;
 }
 
 .sideBarTitle h6 {
   font-size: 11px;
   letter-spacing: 1px;
-  color: #999;
+  color: var(--on-surface-muted);
   margin: 6px 0 0;
   text-transform: uppercase;
   font-weight: 400;
@@ -61,7 +61,7 @@
   border: none;
   border-radius: 0;
   background: transparent;
-  color: #444;
+  color: var(--on-surface);
   font-size: 15px;
   cursor: pointer;
   text-align: left;
@@ -74,26 +74,26 @@
 }
 
 .sideBarNavlink:focus-visible {
-  outline: 2px solid #7d2b2b;
+  outline: 2px solid var(--primary);
   outline-offset: 1px;
 }
 
 .sideBarNavlink:hover {
-  background-color: #ede8e2;
-  color: #7d2b2b;
+  background-color: var(--surface-container);
+  color: var(--primary);
 }
 
 .sideBarNavlink.active {
-  background-color: #ede8e2;
-  color: #7d2b2b;
-  border-right: 4px solid #7d2b2b;
+  background-color: var(--surface-container);
+  color: var(--primary);
+  border-right: 4px solid var(--primary);
   padding-left: 12px;
   padding-right: 16px;
 }
 
 .sideBarFooter {
   padding: 16px 24px;
-  border-top: 1px solid #e8e4df;
+  border-top: 1px solid var(--outline-variant);
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -107,7 +107,7 @@
 
 .sideBarUserEmail {
   font-size: 13px;
-  color: #444;
+  color: var(--on-surface);
   font-weight: 500;
   white-space: nowrap;
   overflow: hidden;
@@ -116,7 +116,7 @@
 
 .sideBarUserRole {
   font-size: 11px;
-  color: #999;
+  color: var(--on-surface-muted);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -128,10 +128,10 @@
   gap: 10px;
   width: 100%;
   padding: 10px 12px;
-  border: 1px solid #e8e4df;
+  border: 1px solid var(--outline-variant);
   border-radius: 8px;
   background: transparent;
-  color: #7d2b2b;
+  color: var(--primary);
   font-size: 14px;
   cursor: pointer;
   text-decoration: none;
@@ -141,5 +141,5 @@
 .sideBarFooterButton:hover,
 .sideBarFooterButton.active,
 .sideBarLogout:hover {
-  background-color: #ede8e2;
+  background-color: var(--surface-container);
 }

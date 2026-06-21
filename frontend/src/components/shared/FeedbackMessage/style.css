@@ -52,13 +52,13 @@
 }
 
 .feedback-message--error {
-  border-color: color-mix(in srgb, #c0392b 35%, var(--outline-variant));
-  background: color-mix(in srgb, #c0392b 8%, var(--surface));
+  border-color: color-mix(in srgb, var(--danger) 35%, var(--outline-variant));
+  background: color-mix(in srgb, var(--danger-container) 65%, var(--surface));
 }
 
 .feedback-message--error .feedback-message__icon,
 .feedback-message--error .feedback-message__content strong {
-  color: #a93226;
+  color: var(--danger);
 }
 
 .feedback-message--success {

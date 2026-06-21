@@ -48,7 +48,7 @@
   padding: 0.7em 1em;
   margin-left: 1em;
   margin-right: 1em;
-  background-color: white;
+  background-color: var(--surface-white);
   border: 1px solid transparent;
   border-radius: 12px;
   text-decoration: none;
@@ -132,7 +132,7 @@
   background-color: transparent;
   border: none;
   cursor: pointer;
-  color: #d32f2f;
+  color: var(--danger);
   padding: 0.5em;
   border-radius: 6px;
   transition: all 0.2s ease-in-out;
@@ -140,8 +140,8 @@
 }
 
 .cardDeleteButton:hover {
-  background-color: rgba(211, 47, 47, 0.08);
-  color: #c62828;
+  background-color: color-mix(in srgb, var(--danger) 8%, transparent);
+  color: var(--danger);
 }
 
 .cardDeleteButton:active {
@@ -223,8 +223,8 @@
 }
 
 .deleteConfirmConfirmButton {
-  background: #b3261e;
-  color: #fff;
+  background: var(--danger);
+  color: var(--on-primary);
 }
 
 .deleteConfirmCancelButton:hover,

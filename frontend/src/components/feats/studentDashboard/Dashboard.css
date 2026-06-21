@@ -69,7 +69,7 @@
 
 .studentDashboardGameCard {
 	flex: 1;
-    min-width: 24rem;
+    min-width: min(100%, 24rem);
 	padding: var(--spacing-4);
     background: var(--primary);
     border: 1px solid rgba(252, 249, 244, 0.18);
@@ -104,7 +104,7 @@
     font-size: clamp(1.9rem, 3vw, 2.8rem);
     max-width: 32rem;
     margin: 0;
-    color: #fcf9f4;
+    color: var(--on-primary);
     overflow-wrap: anywhere;
 }
 
@@ -136,12 +136,12 @@
 
 .studentDashboardCarouselDots span.active {
     width: 1.4rem;
-    background: #fcf9f4;
+    background: var(--on-primary);
 }
 
 .turmaCard {
-    flex: 0 1 24rem;
-    min-width: 34rem;
+    flex: 1 1 24rem;
+    min-width: min(100%, 24rem);
     min-height: 22rem;
     padding: var(--spacing-4);
     background: var(--surface);

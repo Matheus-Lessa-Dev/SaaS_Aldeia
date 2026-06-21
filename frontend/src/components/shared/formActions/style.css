@@ -22,8 +22,8 @@
 }
 
 .form-actions__cancel:hover {
-    background: #dc2626;
-    color: #fff;
+    background: var(--danger);
+    color: var(--on-primary);
 }
 
 .form-actions__cancel:active {

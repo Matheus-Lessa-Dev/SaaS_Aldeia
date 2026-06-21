@@ -17,7 +17,7 @@
 }
 
 .login-gradient {
-    background: linear-gradient(90deg, var(--primary) 0%, var(--primary-container) 60%, #db7556 100%);
+    background: linear-gradient(90deg, var(--primary) 0%, var(--primary-container) 60%, var(--login-accent) 100%);
 }
 
 .login-form-side {

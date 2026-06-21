@@ -87,7 +87,7 @@
   gap: 0.6rem;
   padding: 1rem;
   border-radius: 16px;
-  background: white;
+  background: var(--surface-white);
 }
 
 .gameCardHeader {
@@ -100,7 +100,7 @@
   align-items: center;
   padding: 0.25rem 0.65rem;
   border-radius: 999px;
-  background: rgba(125, 43, 43, 0.12);
+  background: color-mix(in srgb, var(--primary) 12%, transparent);
   color: var(--primary);
   font-size: 0.78rem;
   font-weight: 600;
@@ -171,8 +171,8 @@
   border: none;
   border-radius: 999px;
   padding: 0.8rem 1.1rem;
-  background: #2d7d4c;
-  color: #fff;
+  background: var(--secondary);
+  color: var(--on-primary);
   font-weight: 700;
   cursor: pointer;
   white-space: nowrap;
@@ -343,18 +343,18 @@
 }
 
 .frequencyStatus--presente {
-  background: rgba(45, 125, 76, 0.14);
-  color: #2d7d4c;
+  background: color-mix(in srgb, var(--success) 14%, transparent);
+  color: var(--success);
 }
 
 .frequencyStatus--falta {
-  background: rgba(125, 43, 43, 0.14);
+  background: color-mix(in srgb, var(--primary) 14%, transparent);
   color: var(--primary);
 }
 
 .frequencyStatus--justificada {
-  background: rgba(133, 100, 4, 0.14);
-  color: #856404;
+  background: color-mix(in srgb, var(--warning) 14%, transparent);
+  color: var(--warning);
 }
 
 @media (max-width: 900px) {

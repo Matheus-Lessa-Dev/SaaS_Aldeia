@@ -1,5 +1,5 @@
 .studentCard {
-  background-color: #fff;
+  background-color: var(--surface-white);
   border-radius: 8px;
   padding: 16px;
 }

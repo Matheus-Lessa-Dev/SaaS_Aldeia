@@ -15,7 +15,7 @@ Estado atual percebido:
 - `alert()` nativo removido dos fluxos mapeados do frontend.
 - Feedback visual de sucesso implementado para cadastros, edicoes, exclusoes e algumas acoes diretas.
 - Testes especificos do `ChamadaService` implementados.
-- Build frontend e testes backend passaram em validacoes anteriores; no ambiente atual ainda falta instalar dependencias do frontend e configurar Java/JDK para revalidar.
+- Build frontend, testes backend e ambiente Docker foram revalidados em 2026-06-21.
 
 ## Modulos existentes
 
@@ -234,26 +234,32 @@ Ainda nao ideal para producao sem:
 ## Ultimas validacoes conhecidas
 
 Frontend:
-- `npm.cmd run build` passou apos remocao do refresh token.
-- Na revisao de 2026-06-20, nao foi possivel reexecutar o build porque `frontend/node_modules` nao estava instalado e `tsc` nao estava disponivel no ambiente.
+- Em 2026-06-21, `npm.cmd run build` passou em `frontend`.
+- O build usou Vite 8.0.8 e gerou os artefatos em `frontend/dist`.
 
 Backend:
-- `.\mvnw.cmd test` passou anteriormente com 77 testes apos frequencia do aluno.
-- Na revisao de 2026-06-20, o codigo continha 79 metodos `@Test`, incluindo 12 em `ChamadaServiceTest`.
-- Na revisao de 2026-06-20, nao foi possivel reexecutar os testes porque `JAVA_HOME` nao estava configurado e `java`/`javac` nao estavam disponiveis no PATH.
+- Em 2026-06-21, `.\mvnw.cmd test` passou em `backend`.
+- Resultado atual: 79 testes executados, 0 falhas, 0 erros, 0 ignorados.
+- Observacoes do teste: `JwtAuthFilter` ainda usa API depreciada e o Mockito emite aviso sobre carregamento dinamico de agent em JDK futuro.
 
 Docker:
-- `docker-compose up --build` ja foi validado anteriormente.
-- Na revisao de 2026-06-20, `docker compose build` passou para backend e frontend.
-- Na revisao de 2026-06-20, `docker compose up -d` subiu `db`, `backend` e `frontend` com sucesso.
-- Na revisao de 2026-06-20, o frontend respondeu HTTP 200 em `http://localhost:3000`.
-- Na revisao de 2026-06-20, o Swagger respondeu HTTP 200 em `http://localhost:8080/swagger-ui/index.html`.
-- Na revisao de 2026-06-20, login do admin base funcionou via `POST /auth/login`.
+- Em 2026-06-21, `docker-compose up --build` reconstruiu/subiu o ambiente, mas o comando ficou anexado aos logs e bateu timeout local apos cerca de 124s.
+- Apos o timeout, `docker ps` confirmou os containers ativos:
+  - `react_frontend` em `0.0.0.0:3000->5173/tcp`
+  - `spring_backend` em `0.0.0.0:8080->8080/tcp`
+  - `db_projeto` em `0.0.0.0:5433->5432/tcp`, com status `healthy`
+- Em 2026-06-21, o frontend respondeu HTTP 200 em `http://localhost:3000`.
+- Em 2026-06-21, o Swagger respondeu HTTP 200 em `http://localhost:8080/swagger-ui/index.html`.
+- Em 2026-06-21, os logs do backend indicaram inicializacao com Java 17.0.19, Spring Boot 4.0.5 e Tomcat na porta 8080.
+- Em 2026-06-21, a revalidacao de login do admin base via comando local nao foi conclusiva: tentativas com `curl.exe` retornaram HTTP 400 por problema de payload/interpretacao do shell, e variantes com arquivo/PowerShell foram bloqueadas pelo sandbox. Revalidar manualmente pelo frontend ou por um cliente HTTP fora do sandbox.
 - Na revisao de 2026-06-20, `scripts/seed-dev.ps1` foi corrigido para lidar com arrays retornados pelo Windows PowerShell e validado com execucao repetida/idempotente.
 - Quando o ambiente estiver ativo, os servicos esperados sao:
   - frontend: porta `3000`
   - backend: porta `8080`
   - postgres: porta `5433`
+
+Ambiente local:
+- Os comandos executados pelo shell atual exibem aviso de `profile.ps1` bloqueado por Execution Policy do Windows PowerShell. O aviso nao impediu build, testes backend, `docker ps`, logs nem validacoes HTTP, mas polui a saida dos comandos.
 
 ## Observacoes para proximos chats
 

@@ -49,9 +49,15 @@
   margin-left: 1em;
   margin-right: 1em;
   background-color: white;
+  border: 1px solid transparent;
   border-radius: 12px;
   text-decoration: none;
   box-shadow: 0 8px 18px rgba(108, 71, 31, 0.08);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.classCard:hover {
+  border-color: var(--outline-variant);
 }
 
 .classesList .classCard:first-child {

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ArrowLeft, Check, Minus, Save } from "lucide-react";
+import axios from "axios";
 import { useRouteFeedback } from "../../../hooks/useRouteFeedback";
 import DefaultSidebar from "../../solos/sideBar/DefaultSidebar";
 import Header from "../../shared/Header";
@@ -191,11 +192,12 @@ export default function AttendanceEdit() {
         title: "Status atualizado",
         message: nextStatus === "ATIVA" ? "Chamada ativada com sucesso." : "Chamada encerrada com sucesso.",
       });
-    } catch {
+    } catch (error) {
+      const apiMessage = axios.isAxiosError(error) ? error.response?.data?.erro : undefined;
       showToast({
         type: "error",
         title: "Nao foi possivel concluir",
-        message: "Erro ao atualizar status da chamada.",
+        message: apiMessage ?? "Erro ao atualizar status da chamada.",
       });
     } finally {
       setUpdatingStatus(false);

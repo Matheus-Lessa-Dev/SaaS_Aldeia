@@ -87,7 +87,9 @@ export default function StudentManagement() {
     ? [<p key="students-error" className="classesListEmpty">{error}</p>]
     : loading
       ? []
-      : studentElements;
+      : studentElements.length === 0
+        ? [<p key="students-empty" className="classesListEmpty">Nenhum aluno encontrado.</p>]
+        : studentElements;
 
   return (
     <ManagementPageShell

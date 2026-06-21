@@ -83,7 +83,9 @@ export default function TeacherManagement() {
     ? [<p key="teachers-error" className="classesListEmpty">{error}</p>]
     : loading
       ? []
-      : teacherElements;
+      : teacherElements.length === 0
+        ? [<p key="teachers-empty" className="classesListEmpty">Nenhum professor encontrado.</p>]
+        : teacherElements;
 
   return (
     <ManagementPageShell

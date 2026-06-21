@@ -80,6 +80,10 @@ public class ChamadaService {
             }
         }
 
+        if (chamadaRepository.existsByTurmaIdAndStatus(turma.getId(), StatusChamada.ATIVA)) {
+            throw new IllegalArgumentException("Esta turma já possui uma chamada ativa");
+        }
+
         Chamada chamada = new Chamada();
         chamada.setNome(request.nome());
         chamada.setTurma(turma);
@@ -95,6 +99,14 @@ public class ChamadaService {
     public ChamadaResponse atualizarStatus(Long id, StatusChamada status, Usuario usuarioLogado) {
         Chamada chamada = buscarChamada(id);
         validarAcesso(chamada, usuarioLogado);
+        if (status == StatusChamada.ATIVA
+                && chamadaRepository.existsByTurmaIdAndStatusAndIdNot(
+                        chamada.getTurma().getId(),
+                        StatusChamada.ATIVA,
+                        chamada.getId()
+                )) {
+            throw new IllegalArgumentException("Esta turma já possui uma chamada ativa");
+        }
         chamada.setStatus(status);
         return toResponse(chamadaRepository.save(chamada));
     }

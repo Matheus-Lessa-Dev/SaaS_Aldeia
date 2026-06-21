@@ -89,7 +89,7 @@ function AccountSettings() {
       };
       const { data } = await api.put<ContaUpdateResponse>("/conta", payload);
       const updatedUser = {
-        id: data.email,
+        id: user?.id ?? 0,
         name: data.nome,
         email: data.email,
         role: mapRole(data.role),

@@ -119,7 +119,13 @@ export default function ClassManagement() {
       ]
     : loading
       ? []
-      : classesElements;
+      : classesElements.length === 0
+        ? [
+            <p key="classes-empty" className="classesListEmpty">
+              Nenhuma turma encontrada.
+            </p>,
+          ]
+        : classesElements;
 
   return (
     <ManagementPageShell

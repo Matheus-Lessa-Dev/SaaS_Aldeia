@@ -476,7 +476,10 @@
   background: #2c672c;
 }
 
-.attendanceStatusSwitch input:checked + .attendanceStatusSwitchTrack .attendanceStatusSwitchThumb {
+.attendanceStatusSwitch
+  input:checked
+  + .attendanceStatusSwitchTrack
+  .attendanceStatusSwitchThumb {
   transform: translateX(20px);
 }
 

@@ -12,7 +12,7 @@ export enum Role {
 }
 
 export interface User {
-  id: string;
+  id: number;
   name: string;
   email?: string;
   role: Role;
@@ -54,7 +54,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     window.addEventListener(AUTH_SESSION_EXPIRED_EVENT, handleExpiredSession);
     return () => {
-      window.removeEventListener(AUTH_SESSION_EXPIRED_EVENT, handleExpiredSession);
+      window.removeEventListener(
+        AUTH_SESSION_EXPIRED_EVENT,
+        handleExpiredSession,
+      );
     };
   }, []);
 

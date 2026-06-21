@@ -2,7 +2,10 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSearch } from "../../../hooks/useSearch";
 import { useRouteFeedback } from "../../../hooks/useRouteFeedback";
-import { sortManagementItems, type ManagementSortOption } from "../../../utils/managementSort";
+import {
+  sortManagementItems,
+  type ManagementSortOption,
+} from "../../../utils/managementSort";
 import ManagementPageShell from "../../shared/ManagementPageShell";
 import GameCard from "./gameCard";
 import api from "../../../services/api";
@@ -83,7 +86,9 @@ export default function GameManagement() {
 
   const handleToggleGame = async (gameInfo: GameInfo, enabled: boolean) => {
     setGames((prev) =>
-      prev.map((game) => (game.id === gameInfo.id ? { ...game, enabled } : game)),
+      prev.map((game) =>
+        game.id === gameInfo.id ? { ...game, enabled } : game,
+      ),
     );
 
     try {
@@ -97,12 +102,16 @@ export default function GameManagement() {
       setFeedback({
         type: "success",
         title: "Status atualizado",
-        message: enabled ? "Jogo ativado com sucesso." : "Jogo desativado com sucesso.",
+        message: enabled
+          ? "Jogo ativado com sucesso."
+          : "Jogo desativado com sucesso.",
       });
     } catch {
       setGames((prev) =>
         prev.map((game) =>
-          game.id === gameInfo.id ? { ...game, enabled: gameInfo.enabled } : game,
+          game.id === gameInfo.id
+            ? { ...game, enabled: gameInfo.enabled }
+            : game,
         ),
       );
       setFeedback({
@@ -127,7 +136,11 @@ export default function GameManagement() {
   ));
 
   const listElements = error
-    ? [<p key="games-error" className="classesListEmpty">{error}</p>]
+    ? [
+        <p key="games-error" className="classesListEmpty">
+          {error}
+        </p>,
+      ]
     : loading
       ? []
       : gameElements;
@@ -145,10 +158,14 @@ export default function GameManagement() {
       sortValue={sortOption}
       onSortChange={setSortOption}
       onAddClick={() => navigate("/jogos/novo")}
-      feedback={feedback ? {
-        ...feedback,
-        onDismiss: () => setFeedback(null),
-      } : undefined}
+      feedback={
+        feedback
+          ? {
+              ...feedback,
+              onDismiss: () => setFeedback(null),
+            }
+          : undefined
+      }
     >
       {listElements}
     </ManagementPageShell>

@@ -44,7 +44,7 @@ function Login() {
       const data = await loginRequest(email, senha);
 
       const user = {
-        id: data.email,
+        id: data.id,
         name: data.nome,
         email: data.email,
         role: data.role,
@@ -59,7 +59,8 @@ function Login() {
       setError(
         status === 401 || status === 403
           ? "Usuario ou senha incorretos. Verifique os dados e tente novamente."
-          : msg || "Nao foi possivel entrar agora. Tente novamente em instantes.",
+          : msg ||
+              "Nao foi possivel entrar agora. Tente novamente em instantes.",
       );
     } finally {
       setLoading(false);

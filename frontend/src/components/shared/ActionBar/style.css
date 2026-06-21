@@ -1,104 +1,118 @@
 .managementActionBar {
-    display: flex;
-    align-items: center;
-    gap: 1em;
-    flex: 1;
-    justify-content: space-between;
-    padding: var(--spacing-4) var(--spacing-4);
-    margin-top: var(--spacing-4);
-    background-color: var(--surface);
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(108, 71, 31, 0.06);
+  display: flex;
+  align-items: center;
+  gap: 1em;
+  flex: 1;
+  justify-content: space-between;
+  padding: var(--spacing-4) var(--spacing-4);
+  margin-top: var(--spacing-4);
+  background-color: var(--surface);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(108, 71, 31, 0.06);
 }
 
 .managementAddButton {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.45rem;
-    background: var(--primary);
-    color: var(--on-primary);
-    padding: 8px 16px;
-    border: none;
-    border-radius: 20px;
-    cursor: pointer;
-    font-weight: 500;
-    white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  background: var(--primary);
+  color: var(--on-primary);
+  padding: 8px 16px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 500;
+  white-space: nowrap;
 }
 
 .managementAddButton:hover {
-    filter: brightness(0.96);
+  filter: brightness(0.96);
 }
 
 .managementSearchContainer {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    box-sizing: border-box;
-    padding: 0.65rem 1rem;
-    border-radius: 9999px;
-    background: var(--surface);
-    border: 1px solid var(--outline-variant);
-    width: min(430px, 100%);
-    margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-sizing: border-box;
+  padding: 0.65rem 1rem;
+  border-radius: 9999px;
+  background: var(--surface);
+  border: 1px solid var(--outline-variant);
+  width: min(430px, 100%);
+  margin-left: auto;
+}
+
+.managementFilterContainer {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 0.65rem 0.9rem 0.65rem 1rem;
+  border-radius: 9999px;
+  background: var(--surface);
+  border: 1px solid var(--outline-variant);
+  color: var(--on-surface);
+  min-width: fit-content;
+  flex: 0 0 180px;
 }
 
 .managementSortContainer {
-    display: flex;
-    align-items: center;
-    box-sizing: border-box;
-    padding: 0.65rem 0.9rem 0.65rem 1rem;
-    border-radius: 9999px;
-    background: var(--surface);
-    border: 1px solid var(--outline-variant);
-    color: var(--on-surface);
-    min-width: 180px;
-    flex: 0 0 180px;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 0.65rem 0.9rem 0.65rem 1rem;
+  border-radius: 9999px;
+  background: var(--surface);
+  border: 1px solid var(--outline-variant);
+  color: var(--on-surface);
+  min-width: 180px;
+  flex: 0 0 180px;
 }
 
 .managementSearchIcon {
-    color: var(--on-surface-muted);
-    flex-shrink: 0;
+  color: var(--on-surface-muted);
+  flex-shrink: 0;
 }
 
 .managementSearchInput {
-    width: 100%;
-    min-width: 0;
-    padding: 0;
-    border: 0;
-    border-radius: 0;
-    background: transparent;
+  width: 100%;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
 }
 
 .managementSearchInput:focus {
-    border: 0;
-    outline: none;
+  border: 0;
+  outline: none;
 }
 
 .managementSortSelect {
-    width: 100%;
-    min-width: 0;
-    min-height: 1.5rem;
-    padding: 0.1rem 0.25rem;
-    border: 0;
-    background: transparent;
-    color: inherit;
-    font: inherit;
-    line-height: 1.35;
-    cursor: pointer;
+  width: 100%;
+  min-width: 0;
+  min-height: 1.5rem;
+  padding: 0.1rem 0.25rem;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  line-height: 1.35;
+  cursor: pointer;
 }
 
 .managementSortSelect:focus {
-    outline: none;
+  outline: none;
 }
 
 @media (max-width: 900px) {
-    .managementActionBar {
-        flex-wrap: wrap;
-    }
+  .managementActionBar {
+    flex-wrap: wrap;
+  }
 
-    .managementSortContainer {
-        width: 100%;
-        flex-basis: 100%;
-    }
+  .managementSortContainer,
+  .managementFilterContainer {
+    width: 100%;
+    flex-basis: 100%;
+  }
 }

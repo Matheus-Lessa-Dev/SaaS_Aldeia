@@ -143,7 +143,13 @@ export default function GameManagement() {
       ]
     : loading
       ? []
-      : gameElements;
+      : gameElements.length === 0
+        ? [
+            <p key="games-empty" className="classesListEmpty">
+              Nenhum jogo encontrado.
+            </p>,
+          ]
+        : gameElements;
 
   return (
     <ManagementPageShell

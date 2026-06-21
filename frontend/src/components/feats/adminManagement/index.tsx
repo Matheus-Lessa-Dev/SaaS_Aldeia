@@ -101,7 +101,9 @@ export default function AdminManagement() {
     ? [<p key="admins-error" className="classesListEmpty">{error}</p>]
     : loading
       ? []
-      : adminElements;
+      : adminElements.length === 0
+        ? [<p key="admins-empty" className="classesListEmpty">Nenhum administrador encontrado.</p>]
+        : adminElements;
 
   return (
     <ManagementPageShell

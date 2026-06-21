@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, CalendarRange, Layers3 } from "lucide-react";
+import axios from "axios";
 import DefaultSidebar from "../../solos/sideBar/DefaultSidebar";
 import Header from "../../shared/Header";
 import { FormActions } from "../../shared/formActions";
@@ -22,6 +23,8 @@ type TurmaResponse = {
 
 type ChamadaResponse = {
   id: number;
+  turmaId: number;
+  status: "ATIVA" | "ENCERRADA";
 };
 
 const periodOptionsByType: Record<TipoPeriodo, number[]> = {
@@ -52,8 +55,16 @@ export default function AttendanceCreate() {
     async function loadTurmas() {
       try {
         const turmasUrl = user?.role === Role.Teacher ? "/turmas/minhas" : "/turmas";
-        const { data } = await api.get<TurmaResponse[]>(turmasUrl);
-        setTurmas(data);
+        const [{ data: turmasData }, { data: chamadasData }] = await Promise.all([
+          api.get<TurmaResponse[]>(turmasUrl),
+          api.get<ChamadaResponse[]>("/chamadas"),
+        ]);
+        const turmasComChamadaAtiva = new Set(
+          chamadasData
+            .filter((chamada) => chamada.status === "ATIVA")
+            .map((chamada) => chamada.turmaId),
+        );
+        setTurmas(turmasData.filter((turma) => !turmasComChamadaAtiva.has(turma.id)));
       } catch {
         showToast({
           type: "error",
@@ -119,11 +130,12 @@ export default function AttendanceCreate() {
           },
         },
       });
-    } catch {
+    } catch (error) {
+      const apiMessage = axios.isAxiosError(error) ? error.response?.data?.erro : undefined;
       showToast({
         type: "error",
         title: "Nao foi possivel concluir",
-        message: "Erro ao criar chamada.",
+        message: apiMessage ?? "Erro ao criar chamada.",
       });
     } finally {
       setSaving(false);
@@ -193,7 +205,7 @@ export default function AttendanceCreate() {
 
             <FormSection title="Turma vinculada" icon={<Layers3 size={16} aria-hidden="true" />}>
               {turmas.length === 0 ? (
-                <p className="class-empty-msg">Nenhuma turma disponível.</p>
+                <p className="class-empty-msg">Nenhuma turma disponível para nova chamada.</p>
               ) : (
                 <div className="class-selection-list attendance-create-page__turma-list">
                   {turmas.map((turma) => {

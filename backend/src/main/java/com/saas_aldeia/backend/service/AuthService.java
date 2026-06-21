@@ -95,15 +95,19 @@ public class AuthService {
     }
 
     private String resolverNome(Usuario usuario) {
-        if (usuario instanceof Admin) {
-            return "Admin";
+        if (usuario instanceof Admin admin) {
+            return nomeOuEmail(admin.getNome(), usuario.getEmail());
         }
         if (usuario instanceof Professor professor) {
-            return professor.getNome();
+            return nomeOuEmail(professor.getNome(), usuario.getEmail());
         }
         if (usuario instanceof Aluno aluno) {
-            return aluno.getNome();
+            return nomeOuEmail(aluno.getNome(), usuario.getEmail());
         }
         return usuario.getEmail();
+    }
+
+    private String nomeOuEmail(String nome, String email) {
+        return nome == null || nome.isBlank() ? email : nome;
     }
 }

@@ -14,8 +14,10 @@ Estado atual percebido:
 - Toast global implementado para feedback apos navegacao.
 - `alert()` nativo removido dos fluxos mapeados do frontend.
 - Feedback visual de sucesso implementado para cadastros, edicoes, exclusoes e algumas acoes diretas.
+- Estados vazios padronizados nas listagens de alunos, professores, administradores, turmas, jogos e chamadas.
+- Efeito visual de hover padronizado nos cards das listagens administrativas.
 - Testes especificos do `ChamadaService` implementados.
-- Build frontend e testes backend passaram em validacoes anteriores; no ambiente atual ainda falta instalar dependencias do frontend e configurar Java/JDK para revalidar.
+- Build frontend, testes backend e ambiente Docker foram revalidados em 2026-06-21.
 
 ## Modulos existentes
 
@@ -26,6 +28,7 @@ Implementado:
 - Perfis de usuario: admin, professor e aluno.
 - Rotas protegidas por perfil no frontend.
 - Filtro JWT no backend.
+- Login de admin retorna o nome cadastrado do administrador.
 - Mensagem visual padronizada para usuario/senha incorretos.
 - Validacao visual para e-mail mal formatado antes de chamar o backend.
 
@@ -44,6 +47,7 @@ Situacao atual:
 - O seed de desenvolvimento faz login no admin base e usa token autenticado para popular dados.
 - A tela de cadastro de admin continua usando `/auth/register/admin`, agora como fluxo autenticado.
 - O gerenciamento de administradores existentes e restrito ao admin base (`admin@base.com` por padrao).
+- Mensagem de estado vazio na listagem quando nenhum administrador e encontrado.
 
 Configuracao atual:
 - Propriedades: `app.base-admin.email`, `app.base-admin.password`, `app.base-admin.name`.
@@ -96,6 +100,7 @@ Implementado:
 - Vinculo com turma.
 - Feedback visual padronizado para erros de cadastro, edicao e exclusao.
 - Feedback visual padronizado para sucesso em cadastro, edicao e exclusao.
+- Mensagem de estado vazio na listagem quando nenhum aluno e encontrado.
 
 Pontos de atencao:
 - Conferir validacoes de formulario.
@@ -109,6 +114,7 @@ Implementado:
 - Exclusao.
 - Feedback visual padronizado para erros de cadastro, edicao e exclusao.
 - Feedback visual padronizado para sucesso em cadastro, edicao e exclusao.
+- Mensagem de estado vazio na listagem quando nenhum professor e encontrado.
 
 Pontos de atencao:
 - Validar permissoes para professor editar dados sensiveis.
@@ -127,6 +133,7 @@ Implementado:
 - Area do aluno para visualizar turma.
 - Feedback visual padronizado para erros de cadastro, edicao e exclusao.
 - Feedback visual padronizado para sucesso em cadastro, edicao e exclusao.
+- Mensagem de estado vazio na listagem quando nenhuma turma e encontrada.
 
 Pontos de atencao:
 - Conferir responsividade.
@@ -144,6 +151,7 @@ Implementado:
 - Vinculo com turmas.
 - Feedback visual padronizado para erros de cadastro, edicao, exclusao e toggle.
 - Feedback visual padronizado para sucesso em cadastro, edicao, exclusao e toggle.
+- Mensagem de estado vazio na listagem quando nenhum jogo e encontrado.
 
 Pontos de atencao:
 - Conferir regra de exibicao para aluno: apenas jogos ativos e vinculados a turma.
@@ -169,14 +177,19 @@ Implementado:
 - Feedback visual padronizado para sucesso na criacao, edicao de status e salvamento de frequencia.
 - Endpoint para aluno consultar a propria frequencia.
 - Painel "Minha frequencia" na area de turma do aluno com percentual, totais e ultimos registros.
+- Regra de no maximo uma chamada ativa por turma implementada no backend.
+- Tela de nova chamada exibe apenas turmas que ainda nao possuem chamada ativa vinculada.
+- Reativacao de chamada encerrada bloqueada quando ja existe outra chamada ativa para a mesma turma.
 - Testes de service cobrindo criacao, acesso, registro por dia, bloqueio de chamada encerrada, aluno fora da turma e ordenacao alfabetica.
 - Testes de service cobrindo consulta de frequencia do aluno.
+- Testes de service cobrindo bloqueio de segunda chamada ativa para a mesma turma, liberacao quando nao ha chamada ativa e bloqueio de reativacao duplicada.
 
 Pontos de atencao:
 - Adicionar dashboard/relatorio de presenca por turma.
 - Adicionar filtros por periodo e turma na visao analitica.
 - Avaliar se chamadas encerradas podem ser reabertas por professor ou apenas admin.
 - Revisar contadores agregados de presenca/falta/justificativa na listagem de chamadas para garantir que estao contando presencas por chamada corretamente.
+- Se houver dados antigos com mais de uma chamada ativa na mesma turma, encerrar ou consolidar duplicidades antes de considerar a base pronta para producao.
 
 ### Feedback visual
 
@@ -234,26 +247,32 @@ Ainda nao ideal para producao sem:
 ## Ultimas validacoes conhecidas
 
 Frontend:
-- `npm.cmd run build` passou apos remocao do refresh token.
-- Na revisao de 2026-06-20, nao foi possivel reexecutar o build porque `frontend/node_modules` nao estava instalado e `tsc` nao estava disponivel no ambiente.
+- Em 2026-06-21, `npm.cmd run build` passou em `frontend`.
+- O build usou Vite 8.0.8 e gerou os artefatos em `frontend/dist`.
 
 Backend:
-- `.\mvnw.cmd test` passou anteriormente com 77 testes apos frequencia do aluno.
-- Na revisao de 2026-06-20, o codigo continha 79 metodos `@Test`, incluindo 12 em `ChamadaServiceTest`.
-- Na revisao de 2026-06-20, nao foi possivel reexecutar os testes porque `JAVA_HOME` nao estava configurado e `java`/`javac` nao estavam disponiveis no PATH.
+- Em 2026-06-21, `.\mvnw.cmd test` passou em `backend`.
+- Resultado atual: 84 testes executados, 0 falhas, 0 erros, 0 ignorados.
+- Observacoes do teste: `JwtAuthFilter` ainda usa API depreciada e o Mockito emite aviso sobre carregamento dinamico de agent em JDK futuro.
 
 Docker:
-- `docker-compose up --build` ja foi validado anteriormente.
-- Na revisao de 2026-06-20, `docker compose build` passou para backend e frontend.
-- Na revisao de 2026-06-20, `docker compose up -d` subiu `db`, `backend` e `frontend` com sucesso.
-- Na revisao de 2026-06-20, o frontend respondeu HTTP 200 em `http://localhost:3000`.
-- Na revisao de 2026-06-20, o Swagger respondeu HTTP 200 em `http://localhost:8080/swagger-ui/index.html`.
-- Na revisao de 2026-06-20, login do admin base funcionou via `POST /auth/login`.
+- Em 2026-06-21, `docker-compose up --build` reconstruiu/subiu o ambiente, mas o comando ficou anexado aos logs e bateu timeout local apos cerca de 124s.
+- Apos o timeout, `docker ps` confirmou os containers ativos:
+  - `react_frontend` em `0.0.0.0:3000->5173/tcp`
+  - `spring_backend` em `0.0.0.0:8080->8080/tcp`
+  - `db_projeto` em `0.0.0.0:5433->5432/tcp`, com status `healthy`
+- Em 2026-06-21, o frontend respondeu HTTP 200 em `http://localhost:3000`.
+- Em 2026-06-21, o Swagger respondeu HTTP 200 em `http://localhost:8080/swagger-ui/index.html`.
+- Em 2026-06-21, os logs do backend indicaram inicializacao com Java 17.0.19, Spring Boot 4.0.5 e Tomcat na porta 8080.
+- Em 2026-06-21, a revalidacao de login do admin base via comando local nao foi conclusiva: tentativas com `curl.exe` retornaram HTTP 400 por problema de payload/interpretacao do shell, e variantes com arquivo/PowerShell foram bloqueadas pelo sandbox. Revalidar manualmente pelo frontend ou por um cliente HTTP fora do sandbox.
 - Na revisao de 2026-06-20, `scripts/seed-dev.ps1` foi corrigido para lidar com arrays retornados pelo Windows PowerShell e validado com execucao repetida/idempotente.
 - Quando o ambiente estiver ativo, os servicos esperados sao:
   - frontend: porta `3000`
   - backend: porta `8080`
   - postgres: porta `5433`
+
+Ambiente local:
+- Os comandos executados pelo shell atual exibem aviso de `profile.ps1` bloqueado por Execution Policy do Windows PowerShell. O aviso nao impediu build, testes backend, `docker ps`, logs nem validacoes HTTP, mas polui a saida dos comandos.
 
 ## Observacoes para proximos chats
 

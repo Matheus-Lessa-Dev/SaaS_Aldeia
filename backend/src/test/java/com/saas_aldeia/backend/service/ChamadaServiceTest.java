@@ -85,6 +85,20 @@ class ChamadaServiceTest {
     }
 
     @Test
+    void criar_classWithExistingCall_throwsException() {
+        Turma turma = turma(10L, "5A");
+        Usuario admin = usuario(1L, TipoUsuario.ADMIN);
+        when(turmaRepository.findById(10L)).thenReturn(Optional.of(turma));
+        when(chamadaRepository.existsByTurmaId(10L)).thenReturn(true);
+
+        assertThatThrownBy(() -> chamadaService.criar(
+                new ChamadaRequest("Chamada 2", 10L, TipoPeriodoChamada.BIMESTRE, 1),
+                admin
+        )).isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Esta turma já possui uma chamada vinculada");
+    }
+
+    @Test
     void listar_professorReturnsOnlyTheirClassCalls() {
         Usuario professor = usuario(2L, TipoUsuario.PROFESSOR);
         Chamada chamada = chamada(30L, turma(10L, "5A"), StatusChamada.ATIVA);

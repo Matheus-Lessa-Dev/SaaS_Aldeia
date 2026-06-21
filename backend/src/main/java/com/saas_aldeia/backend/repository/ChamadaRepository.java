@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface ChamadaRepository extends JpaRepository<Chamada, Long> {
     List<Chamada> findByTurmaProfessoresId(Long professorId);
+    boolean existsByTurmaId(Long turmaId);
 }

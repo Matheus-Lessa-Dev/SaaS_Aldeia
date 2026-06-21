@@ -80,6 +80,10 @@ public class ChamadaService {
             }
         }
 
+        if (chamadaRepository.existsByTurmaId(turma.getId())) {
+            throw new IllegalArgumentException("Esta turma já possui uma chamada vinculada");
+        }
+
         Chamada chamada = new Chamada();
         chamada.setNome(request.nome());
         chamada.setTurma(turma);

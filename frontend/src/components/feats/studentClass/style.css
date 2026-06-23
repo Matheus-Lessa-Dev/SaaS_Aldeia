@@ -197,13 +197,7 @@
 }
 
 .frequencyPanel {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
   margin: 0 clamp(1.2rem, 2vw, var(--spacing-8)) var(--spacing-4);
-  padding: var(--spacing-4);
-  border-radius: var(--border-radius);
-  background: var(--surface-container);
 }
 
 .frequencySummary {

@@ -42,6 +42,13 @@ public class ChamadaController {
         return ResponseEntity.ok(chamadaService.buscarFrequenciaAluno(usuarioLogado));
     }
 
+    @GetMapping("/alunos/{alunoId}/frequencia")
+    public ResponseEntity<FrequenciaAlunoResponse> buscarFrequenciaDoAluno(
+            @PathVariable Long alunoId,
+            @AuthenticationPrincipal Usuario usuarioLogado) {
+        return ResponseEntity.ok(chamadaService.buscarFrequenciaAlunoPorId(alunoId, usuarioLogado));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<ChamadaResponse> buscar(@PathVariable Long id,
                                                   @AuthenticationPrincipal Usuario usuarioLogado) {

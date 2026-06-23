@@ -40,6 +40,16 @@
   color: var(--on-surface-muted);
 }
 
+.student-create-page__frequency {
+  margin-top: var(--spacing-4);
+}
+
+.student-create-page__frequency h3 {
+  margin-bottom: 1rem;
+  font-size: clamp(1.2rem, 2vw, 1.6rem);
+  color: var(--on-surface);
+}
+
 @media (max-width: 900px) {
   .student-create-page__card {
     margin: 0;

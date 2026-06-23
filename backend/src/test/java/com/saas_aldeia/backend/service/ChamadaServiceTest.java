@@ -184,6 +184,55 @@ class ChamadaServiceTest {
     }
 
     @Test
+    void buscarFrequenciaAlunoPorId_adminReturnsStudentFrequency() {
+        Usuario admin = usuario(1L, TipoUsuario.ADMIN);
+        Turma turma = turma(10L, "5A");
+        Aluno aluno = aluno(7L, "Ana", turma);
+        Chamada chamada = chamada(30L, turma, StatusChamada.ATIVA);
+        PresencaAluno presente = presenca(1L, aluno, registro(40L, chamada, LocalDate.of(2026, 6, 17)), StatusPresenca.PRESENTE);
+        when(alunoRepository.findById(7L)).thenReturn(Optional.of(aluno));
+        when(presencaRepository.findFrequenciaByAlunoId(7L)).thenReturn(List.of(presente));
+
+        var result = chamadaService.buscarFrequenciaAlunoPorId(7L, admin);
+
+        assertThat(result.totalRegistros()).isEqualTo(1);
+        assertThat(result.presentes()).isEqualTo(1);
+        assertThat(result.percentualPresenca()).isEqualTo(100);
+    }
+
+    @Test
+    void buscarFrequenciaAlunoPorId_teacherFromStudentClassReturnsFrequency() {
+        Professor professor = professor(2L);
+        Turma turma = turma(10L, "5A");
+        turma.setProfessores(new ArrayList<>(List.of(professor)));
+        Aluno aluno = aluno(7L, "Ana", turma);
+        Chamada chamada = chamada(30L, turma, StatusChamada.ATIVA);
+        PresencaAluno falta = presenca(1L, aluno, registro(40L, chamada, LocalDate.of(2026, 6, 17)), StatusPresenca.FALTA);
+        when(alunoRepository.findById(7L)).thenReturn(Optional.of(aluno));
+        when(presencaRepository.findFrequenciaByAlunoId(7L)).thenReturn(List.of(falta));
+
+        var result = chamadaService.buscarFrequenciaAlunoPorId(7L, professor);
+
+        assertThat(result.totalRegistros()).isEqualTo(1);
+        assertThat(result.faltas()).isEqualTo(1);
+        assertThat(result.percentualPresenca()).isZero();
+    }
+
+    @Test
+    void buscarFrequenciaAlunoPorId_teacherOutsideStudentClassIsDenied() {
+        Professor professorDaTurma = professor(2L);
+        Usuario outroProfessor = usuario(3L, TipoUsuario.PROFESSOR);
+        Turma turma = turma(10L, "5A");
+        turma.setProfessores(new ArrayList<>(List.of(professorDaTurma)));
+        Aluno aluno = aluno(7L, "Ana", turma);
+        when(alunoRepository.findById(7L)).thenReturn(Optional.of(aluno));
+
+        assertThatThrownBy(() -> chamadaService.buscarFrequenciaAlunoPorId(7L, outroProfessor))
+                .isInstanceOf(AccessDeniedException.class)
+                .hasMessageContaining("Professor não vinculado");
+    }
+
+    @Test
     void buscarRegistro_withoutSavedRecord_returnsStudentsSortedAlphabeticallyAsPresent() {
         Turma turma = turma(10L, "5A");
         Chamada chamada = chamada(30L, turma, StatusChamada.ATIVA);
@@ -355,6 +404,13 @@ class ChamadaServiceTest {
         usuario.setId(id);
         usuario.setTipo(tipo);
         return usuario;
+    }
+
+    private static Professor professor(Long id) {
+        Professor professor = new Professor();
+        professor.setId(id);
+        professor.setTipo(TipoUsuario.PROFESSOR);
+        return professor;
     }
 }
 

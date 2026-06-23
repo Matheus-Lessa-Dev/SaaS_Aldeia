@@ -8,6 +8,9 @@ import { FormField } from '../../shared/formField'
 import { FormSection } from '../../shared/formSection'
 import Header from '../../shared/Header'
 import api from '../../../services/api'
+import StudentFrequencyPanel, {
+  type FrequenciaAlunoResponse,
+} from '../../shared/StudentFrequencyPanel'
 import '../../shared/ManagementPageShell/style.css'
 import './style.css'
 
@@ -49,14 +52,22 @@ export default function StudentCreatePage() {
   const [formState, setFormState] = useState<StudentFormState>(emptyForm)
   const [formErrors, setFormErrors] = useState<StudentFormErrors>({})
   const [feedback, setFeedback] = useState('')
+  const [frequencia, setFrequencia] = useState<FrequenciaAlunoResponse | null>(null)
+  const [frequencyLoading, setFrequencyLoading] = useState(isEditing)
+  const [frequencyError, setFrequencyError] = useState('')
 
   // Se for edição, busca os dados do aluno e preenche o form
 useEffect(() => {
   if (!isEditing) return
 
   async function fetchAluno() {
+    setFrequencyLoading(true)
     try {
-      const { data } = await api.get(`/alunos/${id}`)
+      const [alunoResponse, frequenciaResponse] = await Promise.all([
+        api.get(`/alunos/${id}`),
+        api.get<FrequenciaAlunoResponse>(`/chamadas/alunos/${id}/frequencia`).catch(() => null),
+      ])
+      const { data } = alunoResponse
 
       const [firstName, ...rest] = (data.nome as string).split(' ')
 
@@ -72,10 +83,17 @@ useEffect(() => {
         guardianPhone: data.telefoneResponsavel ?? '',
         guardianEmail: data.emailResponsavel ?? '',  // ✅ agora retorna
       })
+      if (frequenciaResponse) {
+        setFrequencia(frequenciaResponse.data)
+        setFrequencyError('')
+      } else {
+        setFrequencyError('Erro ao carregar frequência do aluno.')
+      }
     } catch {
       setFeedback('Erro ao carregar dados do aluno.')
     } finally {
       setLoadingData(false)
+      setFrequencyLoading(false)
     }
   }
 
@@ -207,6 +225,18 @@ useEffect(() => {
               submitLabel={isEditing ? 'Salvar alterações' : 'Cadastrar aluno'}
               loading={isSubmitting}
             />
+
+            {isEditing && (
+              <section className="student-create-page__frequency" aria-label="Frequência do aluno">
+                <h3>Frequência do aluno</h3>
+                <StudentFrequencyPanel
+                  frequencia={frequencia}
+                  loading={frequencyLoading}
+                  error={frequencyError}
+                  ariaLabel="Frequência do aluno"
+                />
+              </section>
+            )}
           </section>
         </main>
       </div>

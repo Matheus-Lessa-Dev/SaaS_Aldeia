@@ -40,7 +40,33 @@ public class ChamadaService {
             throw new AccessDeniedException("Apenas alunos podem acessar a propria frequencia");
         }
 
-        List<PresencaAluno> presencas = presencaRepository.findFrequenciaByAlunoId(usuarioLogado.getId());
+        return montarFrequenciaAluno(usuarioLogado.getId());
+    }
+
+    @Transactional(readOnly = true)
+    public FrequenciaAlunoResponse buscarFrequenciaAlunoPorId(Long alunoId, Usuario usuarioLogado) {
+        Aluno aluno = alunoRepository.findById(alunoId)
+                .orElseThrow(() -> new ResourceNotFoundException("Aluno não encontrado"));
+
+        if (usuarioLogado.getTipo() == TipoUsuario.ALUNO) {
+            throw new AccessDeniedException("Alunos podem acessar apenas a propria frequencia");
+        }
+
+        if (usuarioLogado.getTipo() == TipoUsuario.PROFESSOR) {
+            boolean professorDaTurma = aluno.getTurma() != null
+                    && aluno.getTurma().getProfessores() != null
+                    && aluno.getTurma().getProfessores().stream()
+                            .anyMatch(professor -> professor.getId().equals(usuarioLogado.getId()));
+            if (!professorDaTurma) {
+                throw new AccessDeniedException("Professor não vinculado à turma do aluno");
+            }
+        }
+
+        return montarFrequenciaAluno(aluno.getId());
+    }
+
+    private FrequenciaAlunoResponse montarFrequenciaAluno(Long alunoId) {
+        List<PresencaAluno> presencas = presencaRepository.findFrequenciaByAlunoId(alunoId);
         long presentes = presencas.stream().filter(p -> p.getStatus() == StatusPresenca.PRESENTE).count();
         long faltas = presencas.stream().filter(p -> p.getStatus() == StatusPresenca.FALTA).count();
         long justificadas = presencas.stream().filter(p -> p.getStatus() == StatusPresenca.JUSTIFICADA).count();

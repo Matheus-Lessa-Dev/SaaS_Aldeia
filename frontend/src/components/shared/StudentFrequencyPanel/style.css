@@ -1,0 +1,202 @@
+.student-frequency-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: var(--spacing-4);
+  border-radius: var(--border-radius);
+  background: var(--surface-container);
+}
+
+.student-frequency-panel__state {
+  margin: 0;
+  color: var(--on-surface-muted);
+  line-height: 1.5;
+}
+
+.student-frequency-panel__summary {
+  display: grid;
+  grid-template-columns: minmax(min(100%, 14rem), 0.8fr) 2fr;
+  gap: 1rem;
+  align-items: stretch;
+}
+
+.student-frequency-panel__percent {
+  display: flex;
+  min-height: 11rem;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0.75rem;
+  border: 1px solid var(--outline-variant);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--on-surface);
+  box-shadow: 0 4px 12px rgba(108, 71, 31, 0.06);
+  padding: var(--spacing-4);
+}
+
+.student-frequency-panel__percent > span {
+  color: var(--primary);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.student-frequency-panel__percent strong {
+  color: var(--on-surface);
+  font-size: clamp(2.6rem, 4vw, 4rem);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.student-frequency-panel__percent small {
+  color: var(--on-surface-muted);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.student-frequency-panel__counters {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.student-frequency-panel__counters div {
+  display: flex;
+  min-height: 8rem;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 0.75rem;
+  border: 1px solid var(--outline-variant);
+  border-radius: 12px;
+  background: var(--surface);
+  box-shadow: 0 4px 12px rgba(108, 71, 31, 0.06);
+  padding: var(--spacing-4);
+}
+
+.student-frequency-panel__counters strong {
+  order: 2;
+  color: var(--on-surface);
+  font-size: clamp(2rem, 3vw, 3rem);
+  line-height: 1;
+}
+
+.student-frequency-panel__counters span {
+  order: 1;
+  color: var(--primary);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.student-frequency-panel__list .classesListContainer {
+  margin: 0;
+  padding: 0;
+}
+
+.student-frequency-panel__list .classesListHeader {
+  margin-top: 0.25rem;
+}
+
+.student-frequency-panel__list .classesListTitle {
+  font-size: clamp(1.2rem, 2vw, 1.6rem);
+}
+
+.student-frequency-panel__list .classesList {
+  background: var(--surface);
+  border: 1px solid var(--outline-variant);
+}
+
+.student-frequency-panel__list .classesListControls {
+  padding-right: 0.25rem;
+}
+
+.student-frequency-panel__record {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-left: 1em;
+  margin-right: 1em;
+  border: 1px solid var(--outline-variant);
+  border-radius: 12px;
+  background: var(--surface-bright);
+  padding: 0.9rem 1rem;
+  min-width: 0;
+}
+
+.classesList .student-frequency-panel__record:first-child {
+  margin-top: var(--spacing-4);
+}
+
+.classesList .student-frequency-panel__record:last-child {
+  margin-bottom: var(--spacing-4);
+}
+
+.student-frequency-panel__record-content {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.student-frequency-panel__record strong {
+  overflow: hidden;
+  color: var(--on-surface);
+  font-size: 0.95rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.student-frequency-panel__record span {
+  color: var(--on-surface-muted);
+  font-size: 0.85rem;
+}
+
+.student-frequency-panel__status {
+  flex: 0 0 auto;
+  border-radius: 999px;
+  padding: 0.35rem 0.7rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.student-frequency-panel__status--presente {
+  background: color-mix(in srgb, var(--success) 14%, transparent);
+  color: var(--success);
+}
+
+.student-frequency-panel__status--falta {
+  background: color-mix(in srgb, var(--primary) 14%, transparent);
+  color: var(--primary);
+}
+
+.student-frequency-panel__status--justificada {
+  background: color-mix(in srgb, var(--warning) 14%, transparent);
+  color: var(--warning);
+}
+
+@media (max-width: 900px) {
+  .student-frequency-panel__summary {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .student-frequency-panel__counters {
+    grid-template-columns: 1fr;
+  }
+
+  .student-frequency-panel__record {
+    align-items: flex-start;
+    flex-direction: column;
+    margin-left: 0.75rem;
+    margin-right: 0.75rem;
+  }
+
+  .student-frequency-panel__status {
+    align-self: flex-start;
+  }
+}

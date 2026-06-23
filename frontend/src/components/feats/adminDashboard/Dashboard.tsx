@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { GraduationCap, Users, BookOpen } from "lucide-react";
+import { CalendarCheck, GraduationCap, Users, BookOpen } from "lucide-react";
 import Sidebar from "../../solos/sideBar/DefaultSidebar";
 import Calendario from "../../solos/calendario/Calendario";
 import api from "../../../services/api";
@@ -61,6 +61,27 @@ function CountUp({ value, isReady }: CountUpProps) {
   }, [isReady, value]);
 
   return <>{displayValue}</>;
+}
+
+function AdminDashboardBanner({ className = "" }: { className?: string }) {
+  return (
+    <section className={`bannerPlaceholder dashboardCardBanner ${className}`}>
+      <div className="dashboardBannerIcon">
+        <CalendarCheck size={26} aria-hidden="true" />
+      </div>
+      <div className="dashboardBannerContent">
+        <span>Rotina do dia</span>
+        <h2>Chamadas de hoje</h2>
+        <p>
+          Acompanhe rapidamente as turmas com frequencia pendente ou chamadas ja
+          registradas.
+        </p>
+      </div>
+      <a className="dashboardBannerButton" href="/chamadas">
+        Ver chamadas
+      </a>
+    </section>
+  );
 }
 
 function AdminDashboard() {
@@ -131,6 +152,7 @@ function AdminDashboard() {
                 </div>
               );
             })}
+            <AdminDashboardBanner className="dashboardCardBanner--mobile" />
           </div>
           {totalsError && (
             <p className="dashboardError" role="alert">
@@ -138,7 +160,7 @@ function AdminDashboard() {
             </p>
           )}
           <div className="dashboardContentBottom">
-            <div className="bannerPlaceholder"></div>
+            <AdminDashboardBanner className="dashboardCardBanner--desktop" />
             <Calendario />
           </div>
         </main>

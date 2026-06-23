@@ -55,6 +55,14 @@ export default function StudentClass() {
   const [error, setError] = useState("");
 
   useEffect(() => {
+    document.body.classList.add("studentClassRootPage");
+
+    return () => {
+      document.body.classList.remove("studentClassRootPage");
+    };
+  }, []);
+
+  useEffect(() => {
     let isMounted = true;
 
     async function fetchClassData() {

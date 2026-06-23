@@ -16,8 +16,14 @@ Estado atual percebido:
 - Feedback visual de sucesso implementado para cadastros, edicoes, exclusoes e algumas acoes diretas.
 - Estados vazios padronizados nas listagens de alunos, professores, administradores, turmas, jogos e chamadas.
 - Efeito visual de hover padronizado nos cards das listagens administrativas.
+- Rodada ampla de responsividade aplicada no frontend para sidebar, shells, dashboards, listagens, formularios, chamadas, jogos e area do aluno.
+- Sidebar mobile ajustada para abrir por botao de menu no header, com slide lateral e fechamento ao clicar fora.
+- Acesso pelo celular na rede local validado via IP da maquina (`http://192.168.0.118:3000` no ambiente atual).
+- Frontend ajustado para resolver a API pelo mesmo host da pagina quando acessado por IP de rede local, mantendo `localhost` para uso no PC.
+- CORS do backend ajustado para permitir origens de desenvolvimento em redes privadas locais.
+- Responsividade mobile refinada nas telas `/novo`, em "Minha conta" e no login.
 - Testes especificos do `ChamadaService` implementados.
-- Build frontend, testes backend e ambiente Docker foram revalidados em 2026-06-21.
+- Build frontend, testes backend e ambiente Docker foram revalidados em 2026-06-23.
 
 ## Modulos existentes
 
@@ -31,6 +37,8 @@ Implementado:
 - Login de admin retorna o nome cadastrado do administrador.
 - Mensagem visual padronizada para usuario/senha incorretos.
 - Validacao visual para e-mail mal formatado antes de chamar o backend.
+- Login validado tambem por celular na rede local apos ajuste da base da API e CORS.
+- Tela de login mobile centralizada, sem scroll vertical indesejado e com faixa visual compacta.
 
 Pontos de atencao:
 - Revisar expiracao do token em fluxos longos.
@@ -224,20 +232,21 @@ Bom para:
 - Piloto controlado.
 - Validacao com usuario.
 - Evolucao incremental.
+- Teste manual de responsividade em celular na rede local.
 
 Ainda nao ideal para producao sem:
 - Revisao completa de permissoes.
 - Mais testes de regra de negocio.
 - Tratamento padronizado de avisos.
-- Revisao responsiva.
 - Teste manual completo por perfil.
+- Revisao responsiva complementar em tablets e diferentes tamanhos de celular.
 
 ## Pendencias recomendadas antes de considerar producao
 
 1. Revisar configuracao do admin base em producao e remover credenciais padrao dos ambientes publicados.
 2. Revisar permissoes backend por perfil.
 3. Padronizar mensagens de aviso com `FeedbackMessage` ou toast global.
-4. Revisar responsividade das telas principais.
+4. Testar responsividade complementar em tablets e outros tamanhos de celular para confirmar ajustes visuais finos.
 5. Conferir fluxos de exclusao e confirmacao.
 6. Criar relatorio/dashboard de presencas.
 7. Padronizar estados vazios.
@@ -247,24 +256,24 @@ Ainda nao ideal para producao sem:
 ## Ultimas validacoes conhecidas
 
 Frontend:
-- Em 2026-06-21, `npm.cmd run build` passou em `frontend`.
+- Em 2026-06-23, `npm.cmd run build` passou em `frontend` apos ajustes de acesso mobile, responsividade de formularios/minha conta e login mobile.
 - O build usou Vite 8.0.8 e gerou os artefatos em `frontend/dist`.
 
 Backend:
-- Em 2026-06-21, `.\mvnw.cmd test` passou em `backend`.
+- Em 2026-06-23, `.\mvnw.cmd test` passou em `backend` apos ajuste de CORS para rede local.
 - Resultado atual: 84 testes executados, 0 falhas, 0 erros, 0 ignorados.
 - Observacoes do teste: `JwtAuthFilter` ainda usa API depreciada e o Mockito emite aviso sobre carregamento dinamico de agent em JDK futuro.
 
 Docker:
-- Em 2026-06-21, `docker-compose up --build` reconstruiu/subiu o ambiente, mas o comando ficou anexado aos logs e bateu timeout local apos cerca de 124s.
-- Apos o timeout, `docker ps` confirmou os containers ativos:
+- Em 2026-06-23, `docker-compose up --build -d` reconstruiu/subiu o ambiente em modo destacado apos os ajustes de frontend/backend.
+- `docker ps` confirmou os containers ativos:
   - `react_frontend` em `0.0.0.0:3000->5173/tcp`
   - `spring_backend` em `0.0.0.0:8080->8080/tcp`
   - `db_projeto` em `0.0.0.0:5433->5432/tcp`, com status `healthy`
-- Em 2026-06-21, o frontend respondeu HTTP 200 em `http://localhost:3000`.
-- Em 2026-06-21, o Swagger respondeu HTTP 200 em `http://localhost:8080/swagger-ui/index.html`.
-- Em 2026-06-21, os logs do backend indicaram inicializacao com Java 17.0.19, Spring Boot 4.0.5 e Tomcat na porta 8080.
-- Em 2026-06-21, a revalidacao de login do admin base via comando local nao foi conclusiva: tentativas com `curl.exe` retornaram HTTP 400 por problema de payload/interpretacao do shell, e variantes com arquivo/PowerShell foram bloqueadas pelo sandbox. Revalidar manualmente pelo frontend ou por um cliente HTTP fora do sandbox.
+- Em 2026-06-23, o frontend respondeu HTTP 200 em `http://localhost:3000`.
+- Em 2026-06-23, o Swagger respondeu HTTP 200 em `http://localhost:8080/swagger-ui/index.html`.
+- Em 2026-06-23, preflight CORS para origem `http://192.168.0.118:3000` respondeu 200 com `Access-Control-Allow-Origin`.
+- Em 2026-06-23, login e navegacao inicial foram validados manualmente pelo celular acessando `http://192.168.0.118:3000`.
 - Na revisao de 2026-06-20, `scripts/seed-dev.ps1` foi corrigido para lidar com arrays retornados pelo Windows PowerShell e validado com execucao repetida/idempotente.
 - Quando o ambiente estiver ativo, os servicos esperados sao:
   - frontend: porta `3000`

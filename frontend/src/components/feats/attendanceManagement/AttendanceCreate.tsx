@@ -147,7 +147,7 @@ export default function AttendanceCreate() {
       <DefaultSidebar />
       <div className="attendanceMain">
         <Header />
-        <main className="managementContent">
+        <main className="managementContent formPageContent">
           <button type="button" className="attendanceBackButton" onClick={() => navigate("/chamadas")}>
             <ArrowLeft size={16} aria-hidden="true" />
             Voltar

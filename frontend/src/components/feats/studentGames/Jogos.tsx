@@ -18,6 +18,14 @@ function AlunoJogos() {
     const [error, setError] = useState('')
 
     useEffect(() => {
+        document.body.classList.add('studentGamesRootPage')
+
+        return () => {
+            document.body.classList.remove('studentGamesRootPage')
+        }
+    }, [])
+
+    useEffect(() => {
         async function fetchJogos() {
             try {
                 const { data } = await api.get<JogoResponse[]>('/jogos/minha-turma')

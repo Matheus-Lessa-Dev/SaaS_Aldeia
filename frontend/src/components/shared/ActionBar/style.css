@@ -110,9 +110,20 @@
     flex-wrap: wrap;
   }
 
+  .managementAddButton,
+  .managementSearchContainer {
+    width: 100%;
+  }
+
   .managementSortContainer,
   .managementFilterContainer {
     width: 100%;
     flex-basis: 100%;
+  }
+}
+
+@media (max-width: 560px) {
+  .managementActionBar {
+    padding: 1rem;
   }
 }

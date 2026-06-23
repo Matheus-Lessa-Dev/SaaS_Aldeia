@@ -128,7 +128,7 @@ export default function AdminCreatePage() {
       <div className="managementMain">
         <Header />
 
-        <main className="managementContent">
+        <main className="managementContent formPageContent">
           <section className="admin-create-page__card" aria-label="Formulario de cadastro de administrador">
             <h2 className="admin-create-page__title">
               {isEditing ? "Editar Administrador" : "Cadastrar Novo Administrador"}

@@ -187,7 +187,7 @@ export default function GameCreatePage() {
       <div className="managementMain">
         <Header />
 
-        <main className="managementContent">
+        <main className="managementContent formPageContent">
           <section className="game-create-page__card" aria-label="Formulario de cadastro de jogo">
             <h2 className="game-create-page__title">
               {isEditing ? "Editar Jogo" : "Cadastrar Novo Jogo"}

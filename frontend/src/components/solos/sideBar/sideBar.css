@@ -2,13 +2,17 @@
   --sidebar-width: 280px;
 }
 
+.sideBarBackdrop {
+  display: none;
+}
+
 .sideBar {
   position: fixed;
   inset: 0 auto 0 0;
   z-index: 20;
   width: var(--sidebar-width);
   height: 100svh;
-  background-color: #f5f2ee;
+  background-color: var(--surface-container-low);
   display: flex;
   flex-direction: column;
   padding: 32px 0;
@@ -24,21 +28,21 @@
 
 .sideBarTitle {
   padding: 0 24px 32px;
-  border-bottom: 1px solid #e8e4df;
+  border-bottom: 1px solid var(--outline-variant);
   margin-bottom: 16px;
 }
 
 .sideBarTitle h1 {
   font-size: 18px;
   font-weight: 600;
-  color: #7d2b2b;
+  color: var(--primary);
   margin: 0;
 }
 
 .sideBarTitle h6 {
   font-size: 11px;
   letter-spacing: 1px;
-  color: #999;
+  color: var(--on-surface-muted);
   margin: 6px 0 0;
   text-transform: uppercase;
   font-weight: 400;
@@ -61,7 +65,7 @@
   border: none;
   border-radius: 0;
   background: transparent;
-  color: #444;
+  color: var(--on-surface);
   font-size: 15px;
   cursor: pointer;
   text-align: left;
@@ -74,26 +78,26 @@
 }
 
 .sideBarNavlink:focus-visible {
-  outline: 2px solid #7d2b2b;
+  outline: 2px solid var(--primary);
   outline-offset: 1px;
 }
 
 .sideBarNavlink:hover {
-  background-color: #ede8e2;
-  color: #7d2b2b;
+  background-color: var(--surface-container);
+  color: var(--primary);
 }
 
 .sideBarNavlink.active {
-  background-color: #ede8e2;
-  color: #7d2b2b;
-  border-right: 4px solid #7d2b2b;
+  background-color: var(--surface-container);
+  color: var(--primary);
+  border-right: 4px solid var(--primary);
   padding-left: 12px;
   padding-right: 16px;
 }
 
 .sideBarFooter {
   padding: 16px 24px;
-  border-top: 1px solid #e8e4df;
+  border-top: 1px solid var(--outline-variant);
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -107,7 +111,7 @@
 
 .sideBarUserEmail {
   font-size: 13px;
-  color: #444;
+  color: var(--on-surface);
   font-weight: 500;
   white-space: nowrap;
   overflow: hidden;
@@ -116,7 +120,7 @@
 
 .sideBarUserRole {
   font-size: 11px;
-  color: #999;
+  color: var(--on-surface-muted);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -128,10 +132,10 @@
   gap: 10px;
   width: 100%;
   padding: 10px 12px;
-  border: 1px solid #e8e4df;
+  border: 1px solid var(--outline-variant);
   border-radius: 8px;
   background: transparent;
-  color: #7d2b2b;
+  color: var(--primary);
   font-size: 14px;
   cursor: pointer;
   text-decoration: none;
@@ -141,5 +145,89 @@
 .sideBarFooterButton:hover,
 .sideBarFooterButton.active,
 .sideBarLogout:hover {
-  background-color: #ede8e2;
+  background-color: var(--surface-container);
+}
+
+@media (max-width: 900px) {
+  .sideBarBackdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 39;
+    display: block;
+    border: 0;
+    background: rgba(28, 28, 25, 0.42);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--easing-standard);
+  }
+
+  .sideBar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    z-index: 40;
+    width: min(82vw, var(--sidebar-width));
+    height: 100svh;
+    max-height: 100svh;
+    padding: 1.4rem 0;
+    box-shadow: 18px 0 36px rgba(28, 28, 25, 0.18);
+    transform: translateX(-105%);
+    transition: transform var(--easing-standard);
+  }
+
+  .sideBar + * {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .sideBarTitle {
+    padding: 0 1rem 1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .sideBarNavlinks {
+    flex: 0 1 auto;
+    padding: 0 0.75rem;
+  }
+
+  .sideBarNavlink {
+    border-radius: 10px;
+    padding: 0.75rem 0.85rem;
+  }
+
+  .sideBarNavlink.active {
+    border-right: 0;
+    box-shadow: inset 3px 0 0 var(--primary);
+    padding-left: 0.85rem;
+    padding-right: 0.85rem;
+  }
+
+  .sideBarFooter {
+    padding: 0.85rem 1rem 0;
+    margin-top: 0.75rem;
+  }
+
+  body.sidebarMobileOpen {
+    overflow: hidden;
+  }
+
+  body.sidebarMobileOpen .sideBar {
+    transform: translateX(0);
+  }
+
+  body.sidebarMobileOpen .sideBarBackdrop {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+@media (max-width: 560px) {
+  .sideBarTitle h1 {
+    font-size: 1rem;
+  }
+
+  .sideBarNavlink,
+  .sideBarFooterButton,
+  .sideBarLogout {
+    font-size: 0.88rem;
+  }
 }

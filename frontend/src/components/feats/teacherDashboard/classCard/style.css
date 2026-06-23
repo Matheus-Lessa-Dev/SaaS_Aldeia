@@ -1,13 +1,14 @@
 .teacherDashboardClassCard {
   display: flex;
   flex-direction: column;
-  background-color: white;
+  background-color: var(--surface-white);
   border-radius: var(--border-radius);
   padding: var(--spacing-4);
-  box-shadow: var(--box-shadow);
+  box-shadow: var(--ambient-shadow);
   border-radius: 1em;
   gap: var(--spacing-2);
   text-decoration: none;
+  min-width: 0;
 }
 
 .teacherDashboardClassCardTitle {

@@ -151,7 +151,7 @@ useEffect(() => {
       <div className="managementMain">
         <Header />
 
-        <main className="managementContent">
+        <main className="managementContent formPageContent">
           <section className="student-create-page__card" aria-label="Formulario de cadastro de aluno">
             <h2 className="student-create-page__title">
               {isEditing ? 'Editar Aluno' : 'Cadastrar Novo Aluno'}

@@ -38,6 +38,7 @@
   border-radius: 12px;
   gap: 1em;
   box-shadow: 0 4px 12px rgba(108, 71, 31, 0.06);
+  min-width: 0;
 }
 
 .classCard {
@@ -48,12 +49,13 @@
   padding: 0.7em 1em;
   margin-left: 1em;
   margin-right: 1em;
-  background-color: white;
+  background-color: var(--surface-white);
   border: 1px solid transparent;
   border-radius: 12px;
   text-decoration: none;
   box-shadow: 0 8px 18px rgba(108, 71, 31, 0.08);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  min-width: 0;
 }
 
 .classCard:hover {
@@ -123,6 +125,8 @@
   flex-direction: column;
   gap: 0.35em;
   flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .cardDeleteButton {
@@ -132,7 +136,7 @@
   background-color: transparent;
   border: none;
   cursor: pointer;
-  color: #d32f2f;
+  color: var(--danger);
   padding: 0.5em;
   border-radius: 6px;
   transition: all 0.2s ease-in-out;
@@ -140,8 +144,8 @@
 }
 
 .cardDeleteButton:hover {
-  background-color: rgba(211, 47, 47, 0.08);
-  color: #c62828;
+  background-color: color-mix(in srgb, var(--danger) 8%, transparent);
+  color: var(--danger);
 }
 
 .cardDeleteButton:active {
@@ -223,8 +227,8 @@
 }
 
 .deleteConfirmConfirmButton {
-  background: #b3261e;
-  color: #fff;
+  background: var(--danger);
+  color: var(--on-primary);
 }
 
 .deleteConfirmCancelButton:hover,
@@ -265,7 +269,69 @@
     flex-direction: column;
   }
 
+  .classesListContainer {
+    margin-left: 0;
+    margin-right: 0;
+    padding: 0.75rem;
+  }
+
+  .classCard {
+    align-items: flex-start;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    gap: 0.75rem;
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .classesList {
+    gap: 0.75rem;
+    padding: 0.75rem;
+  }
+
+  .classesList .classCard:first-child,
+  .classesList .classCard:last-child {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  .cardContent {
+    grid-column: 1 / -1;
+  }
+
+  .cardEditButton,
+  .cardDeleteButton,
+  .attendanceCardActions {
+    align-self: end;
+    justify-self: end;
+  }
+
+  .cardEditButton {
+    grid-column: 2;
+  }
+
+  .cardDeleteButton {
+    grid-column: 3;
+  }
+
+  .attendanceCardActions {
+    grid-column: 1 / -1;
+    display: inline-flex;
+    justify-content: flex-end;
+    width: 100%;
+  }
+
   .classesListPageSize {
     justify-content: space-between;
+  }
+
+  .deleteConfirmActions {
+    flex-direction: column-reverse;
+  }
+
+  .deleteConfirmCancelButton,
+  .deleteConfirmConfirmButton {
+    width: 100%;
   }
 }

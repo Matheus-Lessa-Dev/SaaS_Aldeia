@@ -4,11 +4,21 @@
     background: var(--surface-container-low);
 }
 
+#root:has(.managementPageLayout) {
+    width: 100%;
+    max-width: none;
+    min-height: 100svh;
+    margin: 0;
+    padding: 0;
+    gap: 0;
+}
+
 .managementMain {
     flex: 1;
     display: flex;
     flex-direction: column;
     min-height: 100svh;
+    min-width: 0;
     background: var(--surface-container-low);
 }
 
@@ -21,8 +31,8 @@
 
 .managementHeader button {
     padding: 8px 16px;
-    background-color: #7D2B2B;
-    color: #fff;
+    background-color: var(--primary);
+    color: var(--on-primary);
     border: none;
     border-radius: 20px;
     cursor: pointer;
@@ -31,6 +41,7 @@
 .managementContent {
     flex: 1;
     padding: 0 clamp(1.2rem, 2vw, var(--spacing-8)) var(--spacing-4);
+    min-width: 0;
 }
 
 .managementContent .classesListContainer {
@@ -46,6 +57,27 @@
     .managementHeader {
         flex-direction: column;
         align-items: stretch;
+    }
+
+    .managementContent {
+        padding: 0 1rem 1rem;
+    }
+
+    .managementContent.formPageContent {
+        padding: 0 0 1rem;
+    }
+
+    .managementContent.formPageContent > :is(
+        .admin-create-page__card,
+        .attendance-create-page__card,
+        .class-create-page__card,
+        .game-create-page__card,
+        .student-create-page__card,
+        .teacher-create-page__card
+    ) {
+        margin-top: 0;
+        border-radius: 0;
+        box-shadow: none;
     }
 
     .managementAddButton {

@@ -12,7 +12,7 @@
 }
 
 .form-field__required {
-    color: #c0392b;
+    color: var(--danger);
     margin-left: 2px;
 }
 
@@ -42,11 +42,11 @@
 }
 
 .form-field__input--error {
-    border-bottom-color: #c0392b;
+    border-bottom-color: var(--danger);
     background: var(--surface-container-highest);
 }
 
 .form-field__error-message {
     font-size: 0.75rem;
-    color: #c0392b;
+    color: var(--danger);
 }

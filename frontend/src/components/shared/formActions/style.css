@@ -22,8 +22,8 @@
 }
 
 .form-actions__cancel:hover {
-    background: #dc2626;
-    color: #fff;
+    background: var(--danger);
+    color: var(--on-primary);
 }
 
 .form-actions__cancel:active {
@@ -58,4 +58,16 @@
 .form-actions__cancel:disabled {
     opacity: 0.6;
     cursor: not-allowed;
+}
+
+@media (max-width: 560px) {
+    .form-actions {
+        flex-direction: column-reverse;
+    }
+
+    .form-actions__cancel,
+    .form-actions__submit {
+        width: 100%;
+        justify-content: center;
+    }
 }

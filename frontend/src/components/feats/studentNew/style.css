@@ -17,7 +17,7 @@
 }
 
 .student-create-page__card .form-field__input--error {
-  box-shadow: inset 0 0 0 1px #c0392b;
+  box-shadow: inset 0 0 0 1px var(--danger);
 }
 
 .student-create-page__card select {
@@ -38,4 +38,12 @@
 .student-create-page__subtitle {
   margin: 0.4rem 0 1.2rem;
   color: var(--on-surface-muted);
+}
+
+@media (max-width: 900px) {
+  .student-create-page__card {
+    margin: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
 }

@@ -16,6 +16,12 @@
     gap: 0;
 }
 
+.rdp-month {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .rdp-nav {
     display: flex;
     align-items: center;
@@ -58,20 +64,22 @@
     font-size: 1rem;
     font-weight: 600;
     color: var(--on-surface);
-    letter-spacing: -0.01em;
+    letter-spacing: 0;
     text-transform: capitalize;
 }
 
 /* Cabeçalho dos dias da semana */
 .rdp-weekdays {
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
+    grid-template-columns: repeat(7, 2.2rem);
+    gap: 2px;
     margin-bottom: 0.4rem;
 }
 
 .rdp-weekday {
     text-align: center;
     font-size: 0.75rem;
+    line-height: 1;
     font-weight: 600;
     color: var(--on-surface-muted);
     padding: 0.3rem 0;
@@ -88,7 +96,7 @@
 
 .rdp-week {
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
+    grid-template-columns: repeat(7, 2.2rem);
     gap: 2px;
 }
 
@@ -96,6 +104,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    line-height: 1;
 }
 
 .rdp-day_button {
@@ -106,6 +115,7 @@
     background: transparent;
     font-family: var(--font-body);
     font-size: 0.875rem;
+    line-height: 1;
     color: var(--on-surface);
     cursor: pointer;
     transition: background-color var(--easing-standard), color var(--easing-standard), transform var(--easing-standard);

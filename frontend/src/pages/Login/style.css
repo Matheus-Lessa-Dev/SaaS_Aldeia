@@ -1,9 +1,24 @@
 .login-page {
     min-height: 100svh;
+    height: 100svh;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: var(--spacing-8);
+    overflow: hidden;
+}
+
+#root:has(.login-page) {
+    width: 100%;
+    max-width: none;
+    min-height: 100svh;
+    margin: 0;
+    padding: 0;
+    gap: 0;
+}
+
+body:has(.login-page) {
+    overflow: hidden;
 }
 
 .login-container {
@@ -17,7 +32,7 @@
 }
 
 .login-gradient {
-    background: linear-gradient(90deg, var(--primary) 0%, var(--primary-container) 60%, #db7556 100%);
+    background: linear-gradient(90deg, var(--primary) 0%, var(--primary-container) 60%, var(--login-accent) 100%);
 }
 
 .login-form-side {
@@ -114,16 +129,102 @@
 
 @media (max-width: 768px) {
     .login-page {
-        padding: var(--spacing-4);
+        padding: 1rem;
+        background:
+            linear-gradient(180deg, color-mix(in srgb, var(--tertiary-container) 42%, transparent), transparent 46%),
+            var(--surface-container-low);
     }
 
     .login-container {
         grid-template-columns: 1fr;
-        width: 100%;
+        grid-template-rows: auto 1fr;
+        width: min(100%, 26rem);
+        min-height: auto;
+        max-height: calc(100svh - 2rem);
         border-radius: var(--roundedness-lg);
+        background: var(--surface);
     }
 
     .login-gradient {
-        display: none;
+        display: block;
+        min-height: 5.25rem;
+        background: var(--primary);
+    }
+
+    .login-form-side {
+        justify-content: center;
+        padding: 1.25rem;
+        min-height: 0;
+    }
+
+    .login-form-side h2 {
+        font-size: 1.65rem;
+    }
+
+    .login-form-side p {
+        margin-bottom: 1.1rem;
+        font-size: 0.9rem;
+    }
+
+    .login-field {
+        margin-bottom: 0.9rem;
+    }
+
+    .input-wrapper input {
+        padding: 0.72rem 0;
+    }
+
+    .login-button {
+        min-height: 2.9rem;
+    }
+}
+
+@media (max-width: 420px) {
+    .login-page {
+        padding: 0.85rem;
+    }
+
+    .login-form-side {
+        padding: 1rem;
+    }
+
+    .login-gradient {
+        min-height: 4.5rem;
+    }
+}
+
+@media (max-height: 640px) and (max-width: 768px) {
+    .login-container {
+        max-height: calc(100svh - 1rem);
+    }
+
+    .login-gradient {
+        min-height: 3.5rem;
+    }
+
+    .login-form-side {
+        padding: 0.85rem 1rem;
+    }
+
+    .login-form-side h2 {
+        font-size: 1.35rem;
+    }
+
+    .login-form-side p {
+        margin-bottom: 0.75rem;
+        font-size: 0.84rem;
+    }
+
+    .login-field {
+        margin-bottom: 0.65rem;
+    }
+
+    .input-wrapper input {
+        padding: 0.58rem 0;
+    }
+
+    .login-button {
+        min-height: 2.55rem;
+        padding: 0.7rem;
     }
 }

@@ -135,7 +135,7 @@ export default function TeacherCreatePage() {
       <div className="managementMain">
         <Header />
 
-        <main className="managementContent">
+        <main className="managementContent formPageContent">
           <section className="teacher-create-page__card" aria-label="Formulario de cadastro de professor">
             <h2 className="teacher-create-page__title">
               {isEditing ? 'Editar Professor' : 'Cadastrar Novo Professor'}

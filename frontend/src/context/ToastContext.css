@@ -74,12 +74,12 @@
 }
 
 .toast--error {
-  border-left-color: #b3261e;
+  border-left-color: var(--danger);
 }
 
 .toast--error .toast__icon,
 .toast--error .toast__content strong {
-  color: #a93226;
+  color: var(--danger);
 }
 
 .toast--warning {

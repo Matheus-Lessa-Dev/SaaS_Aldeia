@@ -10,6 +10,19 @@
   --secondary: #3b6934;
   --secondary-container: #d8e5d5;
   --tertiary: #6c471f;
+  --tertiary-container: #efe1d0;
+  --danger: #b3261e;
+  --danger-container: #f9dedc;
+  --success: #2c672c;
+  --success-container: #e7f2e5;
+  --warning: #856404;
+  --warning-container: #fff4ce;
+  --neutral-strong: #4a4a4a;
+  --neutral-muted: #666666;
+  --switch-track: #b8b1aa;
+  --surface-white: #ffffff;
+  --login-accent: #db7556;
+  --texture-dot: #000000;
 
   /* Tonal surfaces */
   --surface: #fcf9f4;
@@ -79,8 +92,8 @@ body::before {
   pointer-events: none;
   opacity: 0.02;
   background-image:
-    radial-gradient(circle at 15% 25%, #000 0.4px, transparent 0.9px),
-    radial-gradient(circle at 75% 70%, #000 0.45px, transparent 1px);
+    radial-gradient(circle at 15% 25%, var(--texture-dot) 0.4px, transparent 0.9px),
+    radial-gradient(circle at 75% 70%, var(--texture-dot) 0.45px, transparent 1px);
   background-size:
     7px 7px,
     9px 9px;
@@ -106,12 +119,12 @@ h4 {
 
 h1 {
   font-size: var(--display-lg);
-  letter-spacing: -0.03em;
+  letter-spacing: 0;
 }
 
 h2 {
   font-size: var(--display-md);
-  letter-spacing: -0.02em;
+  letter-spacing: 0;
 }
 
 p {

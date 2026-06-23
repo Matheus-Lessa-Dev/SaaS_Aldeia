@@ -19,8 +19,9 @@
     flex-direction: column;
     min-height: 100svh;
     flex: 1;
-    overflow: hidden;
+    overflow: visible;
     background: var(--surface-container-low);
+    min-width: 0;
 }
 
 .alunoDashboardHeader {
@@ -46,6 +47,7 @@
 .alunoDashboardContent {
     flex: 1;
     padding: var(--spacing-4) clamp(1.2rem, 2vw, var(--spacing-8));
+    min-width: 0;
 }
 
 .welcomeSection h1 {
@@ -62,14 +64,14 @@
 
 .dashboardCardsArea {
     margin-top: var(--spacing-8);
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr));
     gap: 16px;
-    flex-wrap: wrap;
 }
 
 .studentDashboardGameCard {
-	flex: 1;
-    min-width: 24rem;
+    min-width: 0;
+    min-width: min(100%, 24rem);
 	padding: var(--spacing-4);
     background: var(--primary);
     border: 1px solid rgba(252, 249, 244, 0.18);
@@ -104,7 +106,7 @@
     font-size: clamp(1.9rem, 3vw, 2.8rem);
     max-width: 32rem;
     margin: 0;
-    color: #fcf9f4;
+    color: var(--on-primary);
     overflow-wrap: anywhere;
 }
 
@@ -136,12 +138,12 @@
 
 .studentDashboardCarouselDots span.active {
     width: 1.4rem;
-    background: #fcf9f4;
+    background: var(--on-primary);
 }
 
 .turmaCard {
-    flex: 0 1 24rem;
-    min-width: 34rem;
+    min-width: 0;
+    min-width: min(100%, 24rem);
     min-height: 22rem;
     padding: var(--spacing-4);
     background: var(--surface);
@@ -190,10 +192,28 @@
 
     .dashboardCardsArea {
         margin-top: var(--spacing-4);
-        flex-direction: column;
     }
 
     .alunoDashboardHeader {
         justify-content: flex-start;
+    }
+}
+
+@media (max-width: 560px) {
+    .alunoDashboardContent {
+        padding: 0 1rem 1rem;
+    }
+
+    .welcomeSection h1 {
+        font-size: clamp(2rem, 10vw, 2.6rem);
+    }
+
+    .turmaCard,
+    .studentDashboardGameCard {
+        min-height: 16rem;
+    }
+
+    .turmaCard h2 {
+        font-size: clamp(2rem, 12vw, 3rem);
     }
 }

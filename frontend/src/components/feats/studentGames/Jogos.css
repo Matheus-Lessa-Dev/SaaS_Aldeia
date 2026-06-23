@@ -2,6 +2,15 @@
    PAGINA: AlunoJogos
    =========================== */
 
+.studentGamesRootPage #root {
+  width: 100%;
+  max-width: none;
+  min-height: 100svh;
+  margin: 0;
+  padding: 0;
+  gap: 0;
+}
+
 .jogosPage {
   display: flex;
   min-height: 100svh;
@@ -146,7 +155,7 @@
 /* GRID */
 .jogosGrid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
   gap: 16px;
 }
 
@@ -240,21 +249,41 @@
 
 /* RESPONSIVO */
 @media (max-width: 900px) {
-  .jogosGrid {
-    grid-template-columns: repeat(2, 1fr);
+  .jogosPage {
+    flex-direction: column;
+  }
+
+  .jogossidebar {
+    position: static;
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    padding: 1rem 0;
+  }
+
+  .jogossidebarNav {
+    padding: 0 0.75rem;
+  }
+
+  .jogossidebarLink {
+    border-radius: 10px;
   }
 }
 
 @media (max-width: 600px) {
-  .jogossidebar {
-    display: none;
+  .jogosContent {
+    padding: 0 1rem 1rem;
   }
 
-  .jogosContent {
-    padding: 20px 16px;
+  .jogosPageHeader {
+    margin-bottom: 1rem;
   }
 
   .jogosGrid {
-    grid-template-columns: 1fr;
+    gap: 0.85rem;
+  }
+
+  .jogosGridCard {
+    border-radius: 12px;
   }
 }

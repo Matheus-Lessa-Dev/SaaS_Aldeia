@@ -120,11 +120,20 @@
 
 @media (max-width: 700px) {
   .gameCard {
-    align-items: center;
+    gap: 0.85rem;
+  }
+
+  .gameCardTitleRow {
+    align-items: flex-start;
+    flex-direction: column;
   }
 
   .gameCardActions {
-    align-self: flex-end;
+    grid-column: 1 / -1;
+    justify-self: end;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    width: auto;
   }
 
   .gameCardTitle {

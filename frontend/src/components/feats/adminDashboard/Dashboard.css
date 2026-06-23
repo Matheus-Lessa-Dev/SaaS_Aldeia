@@ -19,9 +19,10 @@
   flex-direction: column;
   min-height: 100svh;
   flex: 1;
-  overflow: hidden;
+  overflow: visible;
   box-shadow: none;
   background: var(--surface-container-low);
+  min-width: 0;
 }
 
 .dashboardHeader {
@@ -49,6 +50,7 @@
 .dashboardContent {
   flex: 1;
   padding: var(--spacing-4) clamp(1.2rem, 2vw, var(--spacing-8));
+  min-width: 0;
 }
 
 .dashboardContent h1 {
@@ -62,14 +64,13 @@
 
 .dashboardContentCards {
   margin-top: var(--spacing-4);
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
   gap: 16px;
-  flex-wrap: wrap;
 }
 
 .dashboardCard {
-  flex: 1;
-  min-width: 220px;
+  min-width: 0;
   padding: var(--spacing-4);
   background: var(--surface);
   border: 1px solid var(--outline-variant);
@@ -118,6 +119,7 @@
 
 .bannerPlaceholder {
   flex: 1;
+  width: 100%;
   min-height: 22rem;
   align-self: flex-start;
   position: relative;
@@ -150,5 +152,107 @@
 
   .dashboardContentBottom {
     align-items: stretch;
+  }
+
+  .bannerPlaceholder {
+    align-self: stretch;
+    width: 100%;
+  }
+
+  .dashboardHeader {
+    justify-content: flex-start;
+  }
+}
+
+.dashboardCardBanner {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1rem;
+  min-width: 0;
+  padding: var(--spacing-4);
+  color: var(--on-primary);
+}
+
+.dashboardCardBanner > * {
+  position: relative;
+  z-index: 1;
+}
+
+.dashboardBannerIcon {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 999px;
+  background: rgba(252, 249, 244, 0.16);
+  color: var(--on-primary);
+}
+
+.dashboardBannerContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.dashboardBannerContent span {
+  color: rgba(252, 249, 244, 0.86);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.dashboardBannerContent h2 {
+  color: var(--on-primary);
+  font-size: clamp(1.45rem, 3vw, 2rem);
+}
+
+.dashboardBannerContent p {
+  max-width: 34rem;
+  color: rgba(252, 249, 244, 0.9);
+}
+
+.dashboardBannerButton {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.5rem;
+  padding: 0.65rem 1rem;
+  border-radius: 999px;
+  background: var(--surface-bright);
+  color: var(--primary);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.dashboardCardBanner--mobile {
+  display: none;
+}
+
+@media (max-width: 560px) {
+  .dashboardContent {
+    padding: 1rem;
+  }
+
+  .dashboardContentCards {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboardCardBanner--mobile {
+    display: flex;
+  }
+
+  .dashboardCardBanner--desktop {
+    display: none;
+  }
+
+  .bannerPlaceholder {
+    min-height: 14rem;
+  }
+
+  .dashboardBannerButton {
+    width: 100%;
   }
 }

@@ -190,7 +190,7 @@ export default function ClassCreatePage() {
             <div className="managementMain">
                 <Header />
 
-                <main className="managementContent">
+                <main className="managementContent formPageContent">
                     <section className="class-create-page__card" aria-label="Formulario de cadastro de turma">
                         <h2 className="class-create-page__title">
                             {isEditing ? 'Editar Turma' : 'Cadastrar Nova Turma'}

@@ -72,6 +72,8 @@
   font-size: 14px;
   color: var(--on-surface);
   transition: all 0.15s;
+  gap: 0.75rem;
+  min-width: 0;
 }
 
 .class-selection-item--selected {
@@ -112,7 +114,24 @@
 }
 
 @media (max-width: 900px) {
+  .class-create-page__card {
+    margin: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
   .class-create-page__people-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .class-selection-item {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .class-selection-btn {
+    width: 100%;
   }
 }

@@ -1,5 +1,15 @@
+.studentClassRootPage #root {
+  width: 100%;
+  max-width: none;
+  min-height: 100svh;
+  margin: 0;
+  padding: 0;
+  gap: 0;
+}
+
 .studentClassPage {
   display: flex;
+  min-width: 0;
 }
 
 .studentClassLayout {
@@ -7,9 +17,10 @@
   flex-direction: column;
   min-height: 100svh;
   flex: 1;
-  overflow: hidden;
+  overflow: visible;
   box-shadow: none;
   background: var(--surface-container-low);
+  min-width: 0;
 }
 
 .mainContent {
@@ -17,12 +28,13 @@
   flex-direction: row;
   gap: clamp(1rem, 2vw, var(--spacing-4));
   padding: 0 clamp(1.2rem, 2vw, var(--spacing-8)) var(--spacing-4);
+  min-width: 0;
 }
 
 .classContent {
-  flex: 1;
   border-radius: 1em;
-  flex: 1 0 65%;
+  flex: 1 1 65%;
+  min-width: 0;
 }
 
 .classContentList {
@@ -68,7 +80,8 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  flex: 1 0 30%;
+  flex: 1 1 30%;
+  min-width: min(100%, 18rem);
 }
 
 .gamesAsideContentList {
@@ -195,7 +208,7 @@
 
 .frequencySummary {
   display: grid;
-  grid-template-columns: minmax(14rem, 0.8fr) 2fr;
+  grid-template-columns: minmax(min(100%, 14rem), 0.8fr) 2fr;
   gap: 1rem;
   align-items: stretch;
 }
@@ -304,6 +317,7 @@
   border-radius: 12px;
   background: var(--surface-bright);
   padding: 0.9rem 1rem;
+  min-width: 0;
 }
 
 .classesList .frequencyRecord:first-child {
@@ -358,17 +372,28 @@
 }
 
 @media (max-width: 900px) {
+  .studentClassPage {
+    flex-direction: column;
+  }
+
   .mainContent {
     flex-direction: column;
+    padding: 0 1rem 1rem;
   }
 
   .gamesAside {
     flex-basis: auto;
+    min-width: 0;
   }
 
   .studentClassHeader {
     align-items: flex-start;
     flex-direction: column;
+    padding: 0 1rem;
+  }
+
+  .frequencyPanel {
+    margin: 0 1rem 1rem;
   }
 
   .frequencyCounters {
@@ -381,6 +406,28 @@
 }
 
 @media (max-width: 560px) {
+  .mainContent {
+    padding: 0 1rem 1rem;
+  }
+
+  .studentClassHeader {
+    padding: 0 1rem;
+  }
+
+  .title {
+    font-size: clamp(2rem, 10vw, 2.8rem);
+  }
+
+  .classContent h3,
+  .gamesAside h3 {
+    font-size: clamp(1.5rem, 8vw, 2rem);
+  }
+
+  .frequencyToggleButton {
+    width: 100%;
+    margin-bottom: 0.75rem;
+  }
+
   .frequencyCounters {
     grid-template-columns: 1fr;
   }
@@ -388,5 +435,11 @@
   .frequencyRecord {
     align-items: flex-start;
     flex-direction: column;
+    margin-left: 0.75rem;
+    margin-right: 0.75rem;
+  }
+
+  .frequencyStatus {
+    align-self: flex-start;
   }
 }

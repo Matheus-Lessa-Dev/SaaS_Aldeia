@@ -28,72 +28,93 @@ function StudentSidebar() {
   const { logout, user } = useAuth();
   const navigate = useNavigate();
 
+  function closeMobileSidebar() {
+    document.body.classList.remove("sidebarMobileOpen");
+    window.dispatchEvent(new Event("sidebar:close"));
+  }
+
   function handleLogout() {
+    closeMobileSidebar();
     logout();
     navigate("/login");
   }
 
   return (
-    <aside className="sideBar" aria-label="Navegacao principal">
-      <div className="sideBarTitle">
-        <h1>Portal Aldeia</h1>
-        <h6>Educacao</h6>
-      </div>
+    <>
+      <button
+        type="button"
+        className="sideBarBackdrop"
+        aria-label="Fechar menu de navegacao"
+        onClick={closeMobileSidebar}
+      />
+      <aside className="sideBar" aria-label="Navegacao principal">
+        <div className="sideBarTitle">
+          <h1>Portal Aldeia</h1>
+          <h6>Educacao</h6>
+        </div>
 
-      <nav className="sideBarNavlinks">
-        {typedNavItems.map((item) => {
-          const Icon = item.icon;
-          const content = (
-            <>
-              <Icon
-                className="sideBarNavlinkIcon"
-                size={20}
-                aria-hidden="true"
-              />
-              <span>{item.label}</span>
-            </>
-          );
-          if (item.to) {
+        <nav className="sideBarNavlinks">
+          {typedNavItems.map((item) => {
+            const Icon = item.icon;
+            const content = (
+              <>
+                <Icon
+                  className="sideBarNavlinkIcon"
+                  size={20}
+                  aria-hidden="true"
+                />
+                <span>{item.label}</span>
+              </>
+            );
+            if (item.to) {
+              return (
+                <NavLink
+                  key={item.label}
+                  to={item.to}
+                  onClick={closeMobileSidebar}
+                  className={({ isActive }) =>
+                    `sideBarNavlink${isActive ? " active" : ""}`
+                  }
+                >
+                  {content}
+                </NavLink>
+              );
+            }
             return (
-              <NavLink
+              <button
                 key={item.label}
-                to={item.to}
-                className={({ isActive }) =>
-                  `sideBarNavlink${isActive ? " active" : ""}`
-                }
+                className="sideBarNavlink"
+                type="button"
+                onClick={closeMobileSidebar}
               >
                 {content}
-              </NavLink>
+              </button>
             );
-          }
-          return (
-            <button key={item.label} className="sideBarNavlink" type="button">
-              {content}
-            </button>
-          );
-        })}
-      </nav>
+          })}
+        </nav>
 
-      <div className="sideBarFooter">
-        <div className="sideBarUser">
-          <span className="sideBarUserEmail">{user?.email}</span>
-          <span className="sideBarUserRole">{user?.role}</span>
+        <div className="sideBarFooter">
+          <div className="sideBarUser">
+            <span className="sideBarUserEmail">{user?.email}</span>
+            <span className="sideBarUserRole">{user?.role}</span>
+          </div>
+          <NavLink
+            to="/minha-conta"
+            onClick={closeMobileSidebar}
+            className={({ isActive }) =>
+              `sideBarFooterButton${isActive ? " active" : ""}`
+            }
+          >
+            <UserRoundCog size={18} aria-hidden="true" />
+            <span>Minha conta</span>
+          </NavLink>
+          <button className="sideBarLogout" type="button" onClick={handleLogout}>
+            <LogOut size={18} aria-hidden="true" />
+            <span>Sair</span>
+          </button>
         </div>
-        <NavLink
-          to="/minha-conta"
-          className={({ isActive }) =>
-            `sideBarFooterButton${isActive ? " active" : ""}`
-          }
-        >
-          <UserRoundCog size={18} aria-hidden="true" />
-          <span>Minha conta</span>
-        </NavLink>
-        <button className="sideBarLogout" type="button" onClick={handleLogout}>
-          <LogOut size={18} aria-hidden="true" />
-          <span>Sair</span>
-        </button>
-      </div>
-    </aside>
+      </aside>
+    </>
   );
 }
 

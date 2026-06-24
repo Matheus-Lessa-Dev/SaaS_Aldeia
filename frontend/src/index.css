@@ -92,8 +92,16 @@ body::before {
   pointer-events: none;
   opacity: 0.02;
   background-image:
-    radial-gradient(circle at 15% 25%, var(--texture-dot) 0.4px, transparent 0.9px),
-    radial-gradient(circle at 75% 70%, var(--texture-dot) 0.45px, transparent 1px);
+    radial-gradient(
+      circle at 15% 25%,
+      var(--texture-dot) 0.4px,
+      transparent 0.9px
+    ),
+    radial-gradient(
+      circle at 75% 70%,
+      var(--texture-dot) 0.45px,
+      transparent 1px
+    );
   background-size:
     7px 7px,
     9px 9px;
@@ -199,7 +207,7 @@ select:focus {
 
 input:disabled {
   background: var(--surface-container);
-  color: var(--on-surface-muted);
+  color: var(--on-surface-muted) !important;
 }
 
 .surface-low {

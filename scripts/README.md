@@ -10,7 +10,9 @@ O script `seed-dev.ps1` cadastra dados iniciais para testar a aplicacao:
 - 10 professores
 - 40 alunos
 - 4 turmas com professores e alunos vinculados
+- 5 jogos vinculados a turmas, incluindo 1 jogo inativo
 - 8 chamadas, sendo 2 chamadas por turma
+- lancamentos de frequencia com presencas, faltas e justificativas
 
 ## Pre-requisitos
 
@@ -69,6 +71,18 @@ Turma Gama
 Turma Delta
 ```
 
+Jogos:
+
+```text
+Memoria dos Saberes
+Trilha Matematica
+Quiz de Leitura
+Desafio de Logica
+Atividade Arquivada
+```
+
+O jogo "Atividade Arquivada" fica inativo para demonstrar que o perfil aluno enxerga apenas jogos habilitados vinculados a sua turma.
+
 Chamadas:
 
 ```text
@@ -82,6 +96,14 @@ Frequencia 1 Bimestre - Turma Delta
 Frequencia 2 Bimestre - Turma Delta
 ```
 
+Para cada turma, a chamada do 1 bimestre fica encerrada e a chamada do 2 bimestre fica ativa. Isso respeita a regra de uma chamada ativa por turma e deixa a demonstracao pronta para:
+
+- listar chamadas com dados preenchidos;
+- abrir uma chamada ativa e mostrar lancamentos recentes;
+- abrir uma chamada encerrada e mostrar bloqueio de edicao;
+- consultar frequencia individual do aluno por admin/professor;
+- consultar "Minha frequencia" pelo perfil aluno.
+
 ## Reexecutar
 
-O script pode ser executado mais de uma vez. Quando um email, turma ou chamada ja existir, ele pula o cadastro e continua. Os vinculos de alunos nas turmas sao reaplicados a cada execucao.
+O script pode ser executado mais de uma vez. Quando um email, turma ou chamada ja existir, ele reaproveita o registro e continua. Os vinculos de alunos nas turmas, os vinculos de jogos e os lancamentos das chamadas ativas sao reaplicados a cada execucao.

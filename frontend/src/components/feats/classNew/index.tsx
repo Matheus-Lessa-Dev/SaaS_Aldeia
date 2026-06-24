@@ -58,18 +58,15 @@ export default function ClassCreatePage() {
   const [professores, setProfessores] = useState<ProfessorOption[]>([]);
   const [selectedProfessores, setSelectedProfessores] = useState<number[]>([]);
 
-  // Lista unificada de alunos: sem turma + alunos já nessa turma (edição)
   const [alunos, setAlunos] = useState<AlunoOption[]>([]);
   const [selectedAlunos, setSelectedAlunos] = useState<number[]>([]);
 
   const {
-    searchTerm: alunosSearch,
     setSearchTerm: setAlunosSearch,
     filteredItems: alunosFiltrados,
   } = useSearch(alunos.map((a) => ({ name: a.nome, id: a.id })));
 
   const {
-    searchTerm: professoresSearch,
     setSearchTerm: setProfessoresSearch,
     filteredItems: professoresFiltrados,
   } = useSearch(professores.map((a) => ({ name: a.nome, id: a.id })));
@@ -77,7 +74,6 @@ export default function ClassCreatePage() {
   useEffect(() => {
     async function fetchTudo() {
       try {
-        // Busca professores e alunos sem turma em paralelo
         const [profRes, alunosSemTurmaRes] = await Promise.all([
           api.get<{ id: number; nome: string }[]>("/professores"),
           api.get<{ id: number; nome: string }[]>("/alunos/sem-turma"),
@@ -95,7 +91,6 @@ export default function ClassCreatePage() {
         }));
 
         if (isEditing) {
-          // Busca dados da turma e alunos já vinculados
           const [turmaRes, alunosTurmaRes] = await Promise.all([
             api.get<TurmaResponse>(`/turmas/${id}`),
             api.get<{ id: number; nome: string }[]>(`/alunos?turmaId=${id}`),
@@ -115,7 +110,6 @@ export default function ClassCreatePage() {
           }));
           setSelectedAlunos(alunosDaTurma.map((a) => a.id));
 
-          // Adiciona alunos da turma na lista sem duplicar
           const idsExistentes = new Set(listaAlunos.map((a) => a.id));
           const alunosExtras = alunosDaTurma.filter(
             (a) => !idsExistentes.has(a.id),

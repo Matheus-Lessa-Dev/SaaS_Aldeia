@@ -156,9 +156,7 @@ body:has(.login-page) {
 
   .login-gradient {
     display: none;
-    /* min-height: 5.25rem;
-    background: var(--primary); */
-  }
+    }
 
   .login-form-side {
     justify-content: center;

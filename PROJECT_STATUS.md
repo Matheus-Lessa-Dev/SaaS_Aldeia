@@ -2,14 +2,16 @@
 
 ## Status geral
 
-O SaaS Aldeia esta em fase final de MVP/prototipo funcional.
+O SaaS Aldeia esta em fase final de MVP funcional, com estrutura principal pronta, fluxos principais implementados, estilizacao geral concluida e responsividade implementada. Antes da entrega, resta principalmente a validacao manual final dos layouts e dos fluxos por perfil.
 
 Estado atual percebido:
 - Estrutura principal pronta.
 - Fluxos principais implementados.
-- UI em processo de padronizacao.
-- Modulo de chamada criado em nivel funcional inicial.
+- Estilizacao geral concluida.
+- Responsividade implementada nos principais fluxos.
+- Modulo de chamadas/frequencia em estado funcional consolidado para o escopo atual.
 - Frequencia do aluno disponivel na area de turma do aluno.
+- Frequencia individual do aluno disponivel para consulta por admin e professor no cadastro do aluno.
 - Componente compartilhado de feedback visual implementado.
 - Toast global implementado para feedback apos navegacao.
 - `alert()` nativo removido dos fluxos mapeados do frontend.
@@ -24,6 +26,14 @@ Estado atual percebido:
 - Responsividade mobile refinada nas telas `/novo`, em "Minha conta" e no login.
 - Testes especificos do `ChamadaService` implementados.
 - Build frontend, testes backend e ambiente Docker foram revalidados em 2026-06-23.
+
+## Regra de negocio do perfil professor
+
+No contexto do SaaS Aldeia, o professor possui autonomia ampliada e atua de forma semelhante a um coordenador pedagogico/operacional.
+
+Por essa regra funcional, o acesso do professor a fluxos administrativos nao deve ser tratado automaticamente como falha de permissao. A revisao de permissoes para producao continua recomendada, mas considerando essa decisao de negocio.
+
+Fluxos sensiveis, como chamadas e frequencia, continuam tendo validacoes especificas no backend.
 
 ## Modulos existentes
 
@@ -84,8 +94,8 @@ Implementado:
 - Relacao com turmas.
 
 Pontos de atencao:
-- Professor ja possui restricoes em fluxos relevantes, mas ainda vale revisar todos os endpoints para garantir que veja/manipule apenas turmas vinculadas.
 - Adicionar atalhos uteis: chamadas, turmas e jogos.
+- Revisar seguranca/permissoes antes de producao, preservando a regra de autonomia ampliada do professor.
 
 ### Dashboard aluno
 
@@ -106,6 +116,7 @@ Implementado:
 - Edicao.
 - Exclusao.
 - Vinculo com turma.
+- Consulta individual de frequencia do aluno por admin e professor, com registros de presenca, falta, justificativa e chamada relacionada.
 - Feedback visual padronizado para erros de cadastro, edicao e exclusao.
 - Feedback visual padronizado para sucesso em cadastro, edicao e exclusao.
 - Mensagem de estado vazio na listagem quando nenhum aluno e encontrado.
@@ -125,8 +136,8 @@ Implementado:
 - Mensagem de estado vazio na listagem quando nenhum professor e encontrado.
 
 Pontos de atencao:
-- Validar permissoes para professor editar dados sensiveis.
-- Conferir se professor pode gerenciar outros professores ou se isso deve ser apenas admin.
+- Validar regras finais para edicao de dados sensiveis em ambiente produtivo.
+- Revisar seguranca/permissoes para producao, considerando que o professor tem autonomia ampliada no contexto do projeto.
 
 ### Turmas
 
@@ -145,7 +156,7 @@ Implementado:
 
 Pontos de atencao:
 - Conferir responsividade.
-- Garantir cobertura completa para professor manipular apenas suas turmas em todos os endpoints, se essa for a regra final.
+- Revisar regras finais de seguranca/permissoes para producao, sem tratar a autonomia ampliada do professor como erro funcional.
 
 ### Jogos
 
@@ -185,6 +196,8 @@ Implementado:
 - Feedback visual padronizado para sucesso na criacao, edicao de status e salvamento de frequencia.
 - Endpoint para aluno consultar a propria frequencia.
 - Painel "Minha frequencia" na area de turma do aluno com percentual, totais e ultimos registros.
+- Consulta individual de frequencia do aluno por admin e professor no cadastro do aluno.
+- Exibicao de registros de presenca, falta, justificativa e chamada relacionada na consulta individual de frequencia.
 - Regra de no maximo uma chamada ativa por turma implementada no backend.
 - Tela de nova chamada exibe apenas turmas que ainda nao possuem chamada ativa vinculada.
 - Reativacao de chamada encerrada bloqueada quando ja existe outra chamada ativa para a mesma turma.
@@ -193,8 +206,9 @@ Implementado:
 - Testes de service cobrindo bloqueio de segunda chamada ativa para a mesma turma, liberacao quando nao ha chamada ativa e bloqueio de reativacao duplicada.
 
 Pontos de atencao:
-- Adicionar dashboard/relatorio de presenca por turma.
-- Adicionar filtros por periodo e turma na visao analitica.
+- A consulta individual de frequencia por aluno ja foi implementada para o escopo atual.
+- Relatorios analiticos gerais por turma ficam fora do escopo da entrega atual e podem evoluir futuramente.
+- Adicionar filtros por periodo e turma em uma futura visao analitica, caso ela seja priorizada.
 - Avaliar se chamadas encerradas podem ser reabertas por professor ou apenas admin.
 - Revisar contadores agregados de presenca/falta/justificativa na listagem de chamadas para garantir que estao contando presencas por chamada corretamente.
 - Se houver dados antigos com mais de uma chamada ativa na mesma turma, encerrar ou consolidar duplicidades antes de considerar a base pronta para producao.
@@ -229,13 +243,14 @@ Pontos de atencao:
 
 Bom para:
 - Demonstracao.
+- Entrega academica.
 - Piloto controlado.
 - Validacao com usuario.
 - Evolucao incremental.
 - Teste manual de responsividade em celular na rede local.
 
 Ainda nao ideal para producao sem:
-- Revisao completa de permissoes.
+- Revisao de seguranca/permissoes para ambiente produtivo.
 - Mais testes de regra de negocio.
 - Tratamento padronizado de avisos.
 - Teste manual completo por perfil.
@@ -243,15 +258,34 @@ Ainda nao ideal para producao sem:
 
 ## Pendencias recomendadas antes de considerar producao
 
-1. Revisar configuracao do admin base em producao e remover credenciais padrao dos ambientes publicados.
-2. Revisar permissoes backend por perfil.
-3. Padronizar mensagens de aviso com `FeedbackMessage` ou toast global.
-4. Testar responsividade complementar em tablets e outros tamanhos de celular para confirmar ajustes visuais finos.
-5. Conferir fluxos de exclusao e confirmacao.
-6. Criar relatorio/dashboard de presencas.
-7. Padronizar estados vazios.
-8. Testar fluxo completo como admin, professor e aluno.
-9. Revalidar build frontend e testes backend em ambiente com dependencias instaladas e JDK configurado.
+1. Testar fluxo completo como admin, professor e aluno.
+2. Validar layout e responsividade nos principais fluxos.
+3. Revalidar build frontend e testes backend em ambiente com dependencias instaladas e JDK configurado.
+4. Revisar configuracao do admin base em ambiente publicado e remover credenciais padrao.
+5. Evoluir relatorios analiticos gerais por turma como melhoria futura.
+6. Revisar seguranca/permissoes para producao, preservando a regra de autonomia ampliada do professor.
+
+## Deploy opcional para demonstracao online
+
+A entrega pode ser apresentada com o sistema rodando localmente, usando Docker ou os servicos executados diretamente na maquina de apresentacao.
+
+Caso seja necessario disponibilizar uma demonstracao online gratuita ou de baixo custo, uma estrutura viavel para o escopo atual seria:
+
+- Frontend React/Vite hospedado na Vercel.
+- Backend Spring Boot hospedado no Render.
+- Banco PostgreSQL hospedado no Neon.
+
+Fluxo esperado:
+
+```txt
+Vercel frontend -> Render backend -> Neon PostgreSQL
+```
+
+Nessa estrutura, o frontend deve apontar para a URL publica do backend por variavel de ambiente, por exemplo `VITE_API_URL`. O backend deve receber a URL do banco e demais segredos por variaveis de ambiente, como `DATABASE_URL`, `JWT_SECRET` e configuracoes do admin base.
+
+Tambem seria necessario configurar CORS no backend para aceitar a origem publica do frontend.
+
+Essa alternativa e adequada para demonstracao, entrega academica e piloto controlado, mas nao substitui uma revisao de producao com dominio proprio, HTTPS, backups, monitoramento e revisao de seguranca/permissoes.
 
 ## Ultimas validacoes conhecidas
 

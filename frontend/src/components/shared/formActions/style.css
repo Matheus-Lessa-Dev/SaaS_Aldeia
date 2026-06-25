@@ -11,22 +11,12 @@
     padding: 0.7rem 1.25rem;
     border-radius: var(--roundedness-lg);
     border: none;
-    background: transparent;
-    color: var(--on-surface-muted);
+    background: var(--danger);
+    color: var(--on-primary);
     font-size: 0.9rem;
     font-family: inherit;
     font-weight: 500;
     cursor: pointer;
-    transition: background-color var(--easing-standard), color var(--easing-standard);
-}
-
-.form-actions__cancel:hover {
-    background: var(--danger);
-    color: var(--on-primary);
-}
-
-.form-actions__cancel:active {
-    transform: scale(0.98);
 }
 
 .form-actions__submit {

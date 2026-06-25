@@ -43,7 +43,7 @@ export default function ClassManagement() {
   const [error, setError] = useState("");
   const { feedback, setFeedback } = useRouteFeedback();
   const [filterValue, setFilterValue] = useState<ClassFilter>(
-    ClassFilter.MY_CLASSES,
+    ClassFilter.ALL,
   );
   const [sortOption, setSortOption] = useState<ManagementSortOption>("nameAsc");
 
@@ -153,8 +153,8 @@ export default function ClassManagement() {
         setFilterValue(value as ClassFilter);
       }}
       filterValueOptions={[
-        { value: ClassFilter.MY_CLASSES, label: "Minhas turmas" },
         { value: ClassFilter.ALL, label: "Todas as turmas" },
+        { value: ClassFilter.MY_CLASSES, label: "Minhas turmas" },
       ]}
     >
       {listElements}

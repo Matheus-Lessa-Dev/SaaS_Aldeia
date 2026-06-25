@@ -3,7 +3,6 @@
 :root {
   color-scheme: light;
 
-  /* Core palette */
   --primary: #87361d;
   --primary-container: #b45435;
   --on-primary: #fcf9f4;
@@ -24,20 +23,17 @@
   --login-accent: #db7556;
   --texture-dot: #000000;
 
-  /* Tonal surfaces */
   --surface: #fcf9f4;
   --surface-container-low: #f6f3ee;
   --surface-container: #f0ede8;
   --surface-container-highest: #e5e2dd;
   --surface-bright: #fefcf8;
 
-  /* Text and subtle strokes */
   --on-surface: #1c1c19;
   --on-surface-muted: #59574f;
   --outline-variant: rgba(108, 71, 31, 0.22);
   --ghost-border: rgba(108, 71, 31, 0.15);
 
-  /* Typography */
   --font-display: "Epilogue", sans-serif;
   --font-body: "Be Vietnam Pro", sans-serif;
   --font-mono:
@@ -48,7 +44,6 @@
   --display-md: 2.25rem;
   --body-md: 1rem;
 
-  /* Spacing and radius */
   --spacing-2: 0.7rem;
   --spacing-4: 1.4rem;
   --spacing-8: 2.8rem;
@@ -58,7 +53,6 @@
 
   --border-radius: 1em;
 
-  /* Depth and motion */
   --ambient-shadow: 0 12px 32px rgba(135, 54, 29, 0.06);
   --easing-standard: 200ms ease-in-out;
 }
@@ -84,7 +78,6 @@ body {
   overflow-y: scroll;
 }
 
-/* Recycled-paper grain overlay for subtle texture */
 body::before {
   content: "";
   position: fixed;
@@ -92,8 +85,16 @@ body::before {
   pointer-events: none;
   opacity: 0.02;
   background-image:
-    radial-gradient(circle at 15% 25%, var(--texture-dot) 0.4px, transparent 0.9px),
-    radial-gradient(circle at 75% 70%, var(--texture-dot) 0.45px, transparent 1px);
+    radial-gradient(
+      circle at 15% 25%,
+      var(--texture-dot) 0.4px,
+      transparent 0.9px
+    ),
+    radial-gradient(
+      circle at 75% 70%,
+      var(--texture-dot) 0.45px,
+      transparent 1px
+    );
   background-size:
     7px 7px,
     9px 9px;
@@ -199,7 +200,7 @@ select:focus {
 
 input:disabled {
   background: var(--surface-container);
-  color: var(--on-surface-muted);
+  color: var(--on-surface-muted) !important;
 }
 
 .surface-low {

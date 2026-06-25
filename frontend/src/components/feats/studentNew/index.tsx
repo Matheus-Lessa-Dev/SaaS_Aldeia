@@ -56,7 +56,6 @@ export default function StudentCreatePage() {
   const [frequencyLoading, setFrequencyLoading] = useState(isEditing)
   const [frequencyError, setFrequencyError] = useState('')
 
-  // Se for edição, busca os dados do aluno e preenche o form
 useEffect(() => {
   if (!isEditing) return
 
@@ -74,14 +73,14 @@ useEffect(() => {
       setFormState({
         name: firstName ?? '',
         surname: rest.join(' ') ?? '',
-        birthDate: data.dataNascimento ?? '',        // ✅ agora retorna
-        addressStreet: data.rua ?? '',               // ✅ agora retorna
+        birthDate: data.dataNascimento ?? '',
+        addressStreet: data.rua ?? '',
         email: data.email ?? '',
-        addressComplement: data.complemento ?? '',   // ✅ agora retorna
+        addressComplement: data.complemento ?? '',
         guardianName: data.nomeResponsavel?.split(' ')[0] ?? '',
         guardianSurname: data.nomeResponsavel?.split(' ').slice(1).join(' ') ?? '',
         guardianPhone: data.telefoneResponsavel ?? '',
-        guardianEmail: data.emailResponsavel ?? '',  // ✅ agora retorna
+        guardianEmail: data.emailResponsavel ?? '',
       })
       if (frequenciaResponse) {
         setFrequencia(frequenciaResponse.data)

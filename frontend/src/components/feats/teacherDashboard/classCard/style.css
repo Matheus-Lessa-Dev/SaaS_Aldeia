@@ -1,14 +1,19 @@
 .teacherDashboardClassCard {
   display: flex;
   flex-direction: column;
-  background-color: var(--surface-white);
-  border-radius: var(--border-radius);
+  background: var(--surface-white);
+  border: 1px solid transparent;
+  border-radius: 12px;
   padding: var(--spacing-4);
-  box-shadow: var(--ambient-shadow);
-  border-radius: 1em;
+  box-shadow: 0 8px 18px rgba(108, 71, 31, 0.08);
   gap: var(--spacing-2);
   text-decoration: none;
   min-width: 0;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.teacherDashboardClassCard:hover {
+  border-color: var(--outline-variant);
 }
 
 .teacherDashboardClassCardTitle {

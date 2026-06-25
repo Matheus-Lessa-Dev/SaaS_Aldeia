@@ -196,14 +196,19 @@
 }
 
 .dashboardClassesCountCard {
-  background-color: var(--surface);
+  background: var(--surface);
   flex: 1;
-  padding: 1.5em;
-  border-radius: 1em;
+  padding: var(--spacing-4);
+  border: 1px solid var(--outline-variant);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(108, 71, 31, 0.06);
   align-self: stretch;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 16px;
 }
-
 .dashboardClassesCountCard span {
   font-size: 1.2em;
   color: var(--primary);
@@ -236,6 +241,13 @@
   font-size: 2em;
   margin-bottom: 1em;
   margin-top: 1em;
+}
+.dashboardClassesListContainer {
+  background: var(--surface);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(108, 71, 31, 0.06);
+  padding: var(--spacing-4);
+  min-width: 0;
 }
 .classesGrid {
   display: grid;

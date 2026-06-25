@@ -73,14 +73,14 @@ class AuthServiceTest {
         when(jwtService.generateToken(any())).thenReturn("token");
 
         var response = authService.registerAluno(new RegisterAlunoRequest(
-                "aluno@test.com",       // email
-                "João",                 // nome
-                DATA_NASCIMENTO_ALUNO,  // dataNascimento
-                "Rua A",                // rua
-                "Casa 1",               // complemento
-                "Responsável",          // nomeResponsavel
-                "(44) 99999-9999",      // telefoneResponsavel
-                "resp@email.com"        // emailResponsavel
+                "aluno@test.com",
+                "João",
+                DATA_NASCIMENTO_ALUNO,
+                "Rua A",
+                "Casa 1",
+                "Responsável",
+                "(44) 99999-9999",
+                "resp@email.com"
         ));
 
         assertThat(response.token()).isEqualTo("token");
@@ -119,12 +119,12 @@ class AuthServiceTest {
         when(jwtService.generateToken(any())).thenReturn("token");
 
         var response = authService.registerProfessor(new RegisterProfessorRequest(
-                "prof@test.com",            // email
-                "Maria",                    // nome
-                DATA_NASCIMENTO_PROFESSOR,  // dataNascimento
-                "Rua B",                    // rua
-                "Apto 2",                   // complemento
-                "(44) 98888-0000"           // telefone
+                "prof@test.com",
+                "Maria",
+                DATA_NASCIMENTO_PROFESSOR,
+                "Rua B",
+                "Apto 2",
+                "(44) 98888-0000"
         ));
 
         assertThat(response.token()).isEqualTo("token");

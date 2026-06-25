@@ -125,8 +125,8 @@ function AccountSettings() {
         <main className="accountContent">
           <section className="accountCard">
             <div className="accountHeader">
-            <h1>Minha conta</h1>
-            <p>Gerencie seus dados de acesso ao Portal Aldeia.</p>
+              <h1>Minha conta</h1>
+              <p>Gerencie seus dados de acesso ao Portal Aldeia.</p>
             </div>
 
             <form className="accountForm" onSubmit={handleSubmit}>
@@ -140,10 +140,10 @@ function AccountSettings() {
               )}
 
               <div className="accountInfo" role="note">
-                <strong>Senha atual obrigatoria</strong>
+                <strong>Senha atual obrigatória</strong>
                 <span>
-                  Informe sua senha atual para salvar qualquer alteracao. A nova senha
-                  não precisa ser preenchida para salvar as alterações.
+                  Informe sua senha atual para salvar qualquer alteração. A nova
+                  senha não precisa ser preenchida para salvar as alterações.
                 </span>
               </div>
 
@@ -165,13 +165,7 @@ function AccountSettings() {
                 <span>E-mail</span>
                 <div>
                   <Mail size={18} aria-hidden="true" />
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(event) => setEmail(event.target.value)}
-                    disabled={loading || saving}
-                    required
-                  />
+                  <input type="email" value={email} disabled required />
                 </div>
               </label>
 

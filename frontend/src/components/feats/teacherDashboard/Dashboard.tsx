@@ -136,8 +136,10 @@ function TeacherDashboard() {
           </div>
           <div className="dashboardClasses">
             <h1>Turmas</h1>
-            <div className="classesGrid">
-              {classesContent}
+            <div className="dashboardClassesListContainer">
+              <div className="classesGrid">
+                {classesContent}
+              </div>
             </div>
           </div>
         </main>

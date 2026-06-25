@@ -11,7 +11,6 @@
     display: inline-block;
 }
 
-/* Header: navegação de mês */
 .rdp-months {
     gap: 0;
 }
@@ -68,7 +67,6 @@
     text-transform: capitalize;
 }
 
-/* Cabeçalho dos dias da semana */
 .rdp-weekdays {
     display: grid;
     grid-template-columns: repeat(7, 2.2rem);
@@ -87,7 +85,6 @@
     letter-spacing: 0.04em;
 }
 
-/* Grid de dias */
 .rdp-weeks {
     display: flex;
     flex-direction: column;
@@ -130,14 +127,12 @@
     transform: scale(1.08);
 }
 
-/* Dia de hoje */
 .rdp-today .rdp-day_button {
     font-weight: 700;
     color: var(--primary);
     border: 1.5px solid var(--outline-variant);
 }
 
-/* Dia selecionado */
 .rdp-selected .rdp-day_button {
     background: var(--primary);
     color: var(--on-primary);
@@ -150,13 +145,11 @@
     transform: scale(1.08);
 }
 
-/* Dias fora do mês */
 .rdp-outside .rdp-day_button {
     color: var(--on-surface-muted);
     opacity: 0.4;
 }
 
-/* Dias desabilitados */
 .rdp-disabled .rdp-day_button {
     opacity: 0.25;
     cursor: not-allowed;

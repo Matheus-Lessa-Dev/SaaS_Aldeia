@@ -112,6 +112,72 @@ function Get-ByName {
     return Expand-SeedItems -Items $Items | Where-Object { $_.nome -eq $Name } | Select-Object -First 1
 }
 
+function Get-DemoAttendanceStatus {
+    param(
+        [int]$AlunoIndex,
+        [int]$DataIndex
+    )
+
+    $pattern = ($AlunoIndex + ($DataIndex * 2)) % 10
+
+    if ($pattern -eq 2) {
+        return @{
+            status = "FALTA"
+            observacao = "Ausencia registrada para demonstracao."
+        }
+    }
+
+    if ($pattern -eq 5) {
+        return @{
+            status = "JUSTIFICADA"
+            observacao = "Falta justificada pelo responsavel."
+        }
+    }
+
+    return @{
+        status = "PRESENTE"
+        observacao = ""
+    }
+}
+
+function Save-DemoAttendance {
+    param(
+        [object]$Chamada,
+        [array]$AlunosIds,
+        [array]$Datas,
+        [hashtable]$Headers
+    )
+
+    if ($Chamada.status -eq "ENCERRADA") {
+        Write-Host "[SKIP] Lancamentos de $($Chamada.nome): chamada encerrada"
+        return
+    }
+
+    for ($dataIndex = 0; $dataIndex -lt $Datas.Count; $dataIndex++) {
+        $presencas = @()
+
+        for ($alunoIndex = 0; $alunoIndex -lt $AlunosIds.Count; $alunoIndex++) {
+            $attendance = Get-DemoAttendanceStatus -AlunoIndex $alunoIndex -DataIndex $dataIndex
+            $presencas += @{
+                alunoId = [long]$AlunosIds[$alunoIndex]
+                status = $attendance.status
+                observacao = $attendance.observacao
+            }
+        }
+
+        Invoke-SeedJson `
+            -Method "Put" `
+            -Path "/chamadas/$($Chamada.id)/registros" `
+            -Headers $Headers `
+            -Body @{
+                data = $Datas[$dataIndex]
+                presencas = $presencas
+            } | Out-Null
+
+        Write-Host "[OK] Lancamento $($Chamada.nome) em $($Datas[$dataIndex])"
+    }
+}
+
 Write-Host "Populando banco de desenvolvimento em $ApiBaseUrl"
 
 Write-Host ""
@@ -200,7 +266,7 @@ $alunosCriados = @(Invoke-SeedJson -Method "Get" -Path "/alunos" -Headers $heade
 $turmasSeed = @(
     @{
         nome = "Turma Alfa"
-        periodo = "Manhã"
+        periodo = "Manha"
         professoresEmails = @("professor01@aldeia.com", "professor02@aldeia.com")
         alunosEmails = @("aluno01@aldeia.com", "aluno02@aldeia.com", "aluno03@aldeia.com", "aluno04@aldeia.com", "aluno05@aldeia.com", "aluno06@aldeia.com", "aluno07@aldeia.com", "aluno08@aldeia.com", "aluno09@aldeia.com", "aluno10@aldeia.com")
     },
@@ -212,7 +278,7 @@ $turmasSeed = @(
     },
     @{
         nome = "Turma Gama"
-        periodo = "Manhã"
+        periodo = "Manha"
         professoresEmails = @("professor05@aldeia.com", "professor06@aldeia.com")
         alunosEmails = @("aluno21@aldeia.com", "aluno22@aldeia.com", "aluno23@aldeia.com", "aluno24@aldeia.com", "aluno25@aldeia.com", "aluno26@aldeia.com", "aluno27@aldeia.com", "aluno28@aldeia.com", "aluno29@aldeia.com", "aluno30@aldeia.com")
     },
@@ -225,7 +291,7 @@ $turmasSeed = @(
 )
 
 $turmasExistentes = @(Invoke-SeedJson -Method "Get" -Path "/turmas" -Headers $headers)
-$turmasCriadas = @()
+$turmasDemo = @()
 
 foreach ($turmaSeed in $turmasSeed) {
     $professoresIds = @(
@@ -269,22 +335,113 @@ foreach ($turmaSeed in $turmasSeed) {
         } | Out-Null
 
     Write-Host "[OK] Alunos vinculados em $($turmaSeed.nome)"
-    $turmasCriadas += $turma
+    $turmasDemo += [pscustomobject]@{
+        turma = $turma
+        alunosIds = $alunosIds
+    }
+}
+
+$jogosSeed = @(
+    @{
+        nome = "Memoria dos Saberes"
+        tempo = 15
+        linkUrl = "https://wordwall.net/pt"
+        imgUrl = ""
+        habilitado = $true
+        turmas = @("Turma Alfa", "Turma Beta")
+    },
+    @{
+        nome = "Trilha Matematica"
+        tempo = 20
+        linkUrl = "https://www.mathplayground.com/"
+        imgUrl = ""
+        habilitado = $true
+        turmas = @("Turma Alfa", "Turma Gama")
+    },
+    @{
+        nome = "Quiz de Leitura"
+        tempo = 10
+        linkUrl = "https://kahoot.com/"
+        imgUrl = ""
+        habilitado = $true
+        turmas = @("Turma Beta", "Turma Delta")
+    },
+    @{
+        nome = "Desafio de Logica"
+        tempo = 25
+        linkUrl = "https://www.coolmathgames.com/"
+        imgUrl = ""
+        habilitado = $true
+        turmas = @("Turma Gama", "Turma Delta")
+    },
+    @{
+        nome = "Atividade Arquivada"
+        tempo = 15
+        linkUrl = "https://example.com/atividade-arquivada"
+        imgUrl = ""
+        habilitado = $false
+        turmas = @("Turma Alfa", "Turma Beta", "Turma Gama", "Turma Delta")
+    }
+)
+
+$jogosExistentes = @(Invoke-SeedJson -Method "Get" -Path "/jogos" -Headers $headers)
+
+foreach ($jogoSeed in $jogosSeed) {
+    $turmasIds = @(
+        foreach ($turmaNome in $jogoSeed.turmas) {
+            $turmaDemo = $turmasDemo | Where-Object { $_.turma.nome -eq $turmaNome } | Select-Object -First 1
+            if ($null -ne $turmaDemo) { [long]$turmaDemo.turma.id }
+        }
+    )
+
+    $jogo = Get-ByName -Items $jogosExistentes -Name $jogoSeed.nome
+    $jogoBody = @{
+        nome = $jogoSeed.nome
+        tempo = $jogoSeed.tempo
+        linkUrl = $jogoSeed.linkUrl
+        imgUrl = $jogoSeed.imgUrl
+        habilitado = $jogoSeed.habilitado
+        turmasIds = $turmasIds
+    }
+
+    if ($null -eq $jogo) {
+        $jogo = Invoke-SeedJson `
+            -Method "Post" `
+            -Path "/jogos" `
+            -Headers $headers `
+            -Body $jogoBody
+
+        $jogosExistentes += $jogo
+        Write-Host "[OK] Jogo $($jogoSeed.nome)"
+    } else {
+        Invoke-SeedJson `
+            -Method "Put" `
+            -Path "/jogos/$($jogo.id)" `
+            -Headers $headers `
+            -Body $jogoBody | Out-Null
+
+        Write-Host "[OK] Jogo atualizado: $($jogoSeed.nome)"
+    }
 }
 
 $chamadasExistentes = @(Invoke-SeedJson -Method "Get" -Path "/chamadas" -Headers $headers)
 
-foreach ($turma in $turmasCriadas) {
+foreach ($turmaDemo in $turmasDemo) {
+    $turma = $turmaDemo.turma
     $chamadasTurma = @(
         @{
             nome = "Frequencia 1 Bimestre - $($turma.nome)"
             tipoPeriodo = "BIMESTRE"
             numeroPeriodo = 1
+            statusFinal = "ENCERRADA"
+            datas = @("2026-06-15", "2026-06-16", "2026-06-17", "2026-06-18")
         },
         @{
             nome = "Frequencia 2 Bimestre - $($turma.nome)"
             tipoPeriodo = "BIMESTRE"
             numeroPeriodo = 2
+            statusFinal = "ATIVA"
+            datas = @("2026-06-22", "2026-06-23")
         }
     )
 
@@ -293,22 +450,39 @@ foreach ($turma in $turmasCriadas) {
 
         if ($null -ne $chamada) {
             Write-Host "[SKIP] Chamada $($chamadaSeed.nome) ja existe"
-            continue
+        } else {
+            $chamada = Invoke-SeedJson `
+                -Method "Post" `
+                -Path "/chamadas" `
+                -Headers $headers `
+                -Body @{
+                    nome = $chamadaSeed.nome
+                    turmaId = [long]$turma.id
+                    tipoPeriodo = $chamadaSeed.tipoPeriodo
+                    numeroPeriodo = $chamadaSeed.numeroPeriodo
+                }
+
+            $chamadasExistentes += $chamada
+            Write-Host "[OK] Chamada $($chamadaSeed.nome)"
         }
 
-        $novaChamada = Invoke-SeedJson `
-            -Method "Post" `
-            -Path "/chamadas" `
-            -Headers $headers `
-            -Body @{
-                nome = $chamadaSeed.nome
-                turmaId = [long]$turma.id
-                tipoPeriodo = $chamadaSeed.tipoPeriodo
-                numeroPeriodo = $chamadaSeed.numeroPeriodo
-            }
+        Save-DemoAttendance `
+            -Chamada $chamada `
+            -AlunosIds $turmaDemo.alunosIds `
+            -Datas $chamadaSeed.datas `
+            -Headers $headers
 
-        $chamadasExistentes += $novaChamada
-        Write-Host "[OK] Chamada $($chamadaSeed.nome)"
+        if ($chamadaSeed.statusFinal -eq "ENCERRADA" -and $chamada.status -ne "ENCERRADA") {
+            $chamada = Invoke-SeedJson `
+                -Method "Put" `
+                -Path "/chamadas/$($chamada.id)/status" `
+                -Headers $headers `
+                -Body @{
+                    status = "ENCERRADA"
+                }
+
+            Write-Host "[OK] Chamada encerrada: $($chamadaSeed.nome)"
+        }
     }
 }
 
@@ -317,4 +491,5 @@ Write-Host "Seed finalizada."
 Write-Host "Admin base: admin@base.com / Aldeia@2026Base!"
 Write-Host "Professores e alunos usam senha inicial no formato ddMMyyyy da data de nascimento."
 Write-Host "Turmas criadas: Turma Alfa, Turma Beta, Turma Gama, Turma Delta."
-Write-Host "Chamadas criadas: 1 e 2 bimestre para cada turma."
+Write-Host "Chamadas criadas: 1 bimestre encerrado e 2 bimestre ativo para cada turma."
+Write-Host "Lancamentos de frequencia criados com presencas, faltas e justificativas para demonstracao."

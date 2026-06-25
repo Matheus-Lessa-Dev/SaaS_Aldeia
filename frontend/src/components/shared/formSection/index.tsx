@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { Search } from "lucide-react";
 import "./style.css";
 
 type FormSectionProps = {
@@ -25,12 +26,15 @@ export function FormSection({
         </legend>
       )}
       {searchable && (
-        <input
-          type="text"
-          placeholder="Buscar..."
-          className="form-section__search-input"
-          onChange={(e) => onSearch?.(e.target.value)}
-        />
+        <div className="form-section__search-container">
+          <Search size={16} className="form-section__search-icon" aria-hidden="true" />
+          <input
+            type="text"
+            placeholder="Buscar..."
+            className="form-section__search-input"
+            onChange={(e) => onSearch?.(e.target.value)}
+          />
+        </div>
       )}
       <div className="form-section__grid">{children}</div>
     </fieldset>

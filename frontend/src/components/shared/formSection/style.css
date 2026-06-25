@@ -38,8 +38,36 @@
   gap: 1rem;
 }
 
+.form-section__search-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-sizing: border-box;
+  width: min(430px, 100%);
+  padding: 0.65rem 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid var(--outline-variant);
+  border-radius: 9999px;
+  background: var(--surface);
+}
+
+.form-section__search-icon {
+  color: var(--on-surface-muted);
+  flex-shrink: 0;
+}
+
 .form-section__search-input {
-  margin-bottom: 8px;
+  width: 100%;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.form-section__search-input:focus {
+  border: 0;
+  outline: none;
 }
 
 @media (max-width: 600px) {
